@@ -1,0 +1,26 @@
+{
+  "name": "cryptoaml-mvp",
+  "version": "1.0.0",
+  "description": "SaaS de detecção de lavagem de dinheiro em criptomoedas",
+  "scripts": {
+    "install:all": "cd backend && npm install && cd ../frontend && npm install && cd ../ml-service && pip install -r requirements.txt",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:ml": "cd ml-service && uvicorn main:app --reload",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "db:migrate": "cd backend && npx prisma migrate dev",
+    "db:studio": "cd backend && npx prisma studio",
+    "db:seed": "cd backend && npx prisma db seed"
+  },
+  "keywords": [
+    "aml",
+    "crypto",
+    "blockchain",
+    "compliance",
+    "saas"
+  ],
+  "author": "CryptoAML Team",
+  "license": "PROPRIETARY"
+}

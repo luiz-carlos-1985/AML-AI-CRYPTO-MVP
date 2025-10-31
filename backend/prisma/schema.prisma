@@ -1,0 +1,152 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password      String
+  name          String
+  company       String?
+  plan          Plan     @default(STARTER)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  wallets       Wallet[]
+  alerts        Alert[]
+  reports       Report[]
+  apiKeys       ApiKey[]
+}
+
+model Wallet {
+  id            String   @id @default(uuid())
+  address       String   @unique
+  blockchain    Blockchain
+  label         String?
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isMonitored   Boolean  @default(true)
+  riskScore     Float    @default(0)
+  riskLevel     RiskLevel @default(LOW)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  transactions  Transaction[]
+  alerts        Alert[]
+}
+
+model Transaction {
+  id            String   @id @default(uuid())
+  hash          String   @unique
+  walletId      String
+  wallet        Wallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  blockchain    Blockchain
+  fromAddress   String
+  toAddress     String
+  amount        Float
+  timestamp     DateTime
+  riskScore     Float
+  riskLevel     RiskLevel
+  flags         String[]
+  analyzed      Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  
+  alerts        Alert[]
+}
+
+model Alert {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  walletId      String?
+  wallet        Wallet?  @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  transactionId String?
+  transaction   Transaction? @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  type          AlertType
+  severity      RiskLevel
+  title         String
+  description   String
+  isRead        Boolean  @default(false)
+  isResolved    Boolean  @default(false)
+  createdAt     DateTime @default(now())
+}
+
+model Report {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type          ReportType
+  format        ReportFormat
+  startDate     DateTime
+  endDate       DateTime
+  fileUrl       String?
+  status        ReportStatus @default(PENDING)
+  createdAt     DateTime @default(now())
+}
+
+model ApiKey {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  key           String   @unique
+  name          String
+  isActive      Boolean  @default(true)
+  lastUsed      DateTime?
+  createdAt     DateTime @default(now())
+}
+
+enum Plan {
+  STARTER
+  GROWTH
+  ENTERPRISE
+}
+
+enum Blockchain {
+  BITCOIN
+  ETHEREUM
+  POLYGON
+  SOLANA
+  BNB_CHAIN
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum AlertType {
+  HIGH_RISK_TRANSACTION
+  SUSPICIOUS_PATTERN
+  MIXER_DETECTED
+  BLACKLISTED_ADDRESS
+  UNUSUAL_VOLUME
+  RAPID_MOVEMENT
+}
+
+enum ReportType {
+  DAILY
+  WEEKLY
+  MONTHLY
+  CUSTOM
+}
+
+enum ReportFormat {
+  PDF
+  CSV
+  JSON
+}
+
+enum ReportStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}

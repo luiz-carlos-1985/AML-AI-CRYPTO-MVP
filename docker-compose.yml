@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: cryptoaml-db
+    environment:
+      POSTGRES_USER: cryptoaml
+      POSTGRES_PASSWORD: cryptoaml123
+      POSTGRES_DB: cryptoaml
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - cryptoaml-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: cryptoaml-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - cryptoaml-network
+
+  backend:
+    build: ./backend
+    container_name: cryptoaml-backend
+    environment:
+      DATABASE_URL: postgresql://cryptoaml:cryptoaml123@postgres:5432/cryptoaml
+      REDIS_HOST: redis
+      ML_SERVICE_URL: http://ml-service:8000
+      NODE_ENV: production
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+      - redis
+      - ml-service
+    networks:
+      - cryptoaml-network
+
+  ml-service:
+    build: ./ml-service
+    container_name: cryptoaml-ml
+    ports:
+      - "8000:8000"
+    networks:
+      - cryptoaml-network
+
+  frontend:
+    build: ./frontend
+    container_name: cryptoaml-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - cryptoaml-network
+
+volumes:
+  postgres_data:
+
+networks:
+  cryptoaml-network:
+    driver: bridge
