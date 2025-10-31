@@ -43,69 +43,83 @@ const Reports = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Reports</h1>
+        <h1 className="text-3xl font-bold text-white">Reports</h1>
         <button
           onClick={() => setShowModal(true)}
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-green-600"
+          className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-xl text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 shadow-lg shadow-emerald-500/30 transition-all duration-200 transform hover:scale-105"
         >
           <FileText className="w-4 h-4 mr-2" />
           Generate Report
         </button>
       </div>
 
-      <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 shadow-2xl overflow-hidden rounded-2xl">
+        <table className="min-w-full divide-y divide-slate-700/50">
+          <thead className="bg-slate-900/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">
                 Type
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">
                 Format
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">
                 Period
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">
                 Status
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="divide-y divide-slate-700/50">
             {reports.map((report) => (
-              <tr key={report.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <tr key={report.id} className="hover:bg-slate-700/30 transition-all duration-200">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-white font-medium">
                   {report.type}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
                   {report.format}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-400">
                   {format(new Date(report.startDate), 'MMM dd')} - {format(new Date(report.endDate), 'MMM dd, yyyy')}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 py-1 text-xs rounded ${
-                    report.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
-                    report.status === 'PROCESSING' ? 'bg-yellow-100 text-yellow-800' :
-                    report.status === 'FAILED' ? 'bg-red-100 text-red-800' :
-                    'bg-gray-100 text-gray-800'
+                  <span className={`px-3 py-1 text-xs rounded-lg font-medium ${
+                    report.status === 'COMPLETED' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                    report.status === 'PROCESSING' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
+                    report.status === 'FAILED' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
+                    'bg-slate-700/50 text-slate-300 border border-slate-600/50'
                   }`}>
                     {report.status}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
                   {report.status === 'COMPLETED' && report.fileUrl && (
-                    <a
-                      href={report.fileUrl}
-                      download
-                      className="text-primary hover:text-green-600 inline-flex items-center"
+                    <button
+                      onClick={async () => {
+                        try {
+                          const response = await api.get(report.fileUrl, { responseType: 'blob' });
+                          const url = window.URL.createObjectURL(new Blob([response.data]));
+                          const link = document.createElement('a');
+                          link.href = url;
+                          link.setAttribute('download', `report-${report.id}.${report.format.toLowerCase()}`);
+                          document.body.appendChild(link);
+                          link.click();
+                          link.remove();
+                          window.URL.revokeObjectURL(url);
+                          toast.success('Download started');
+                        } catch (error) {
+                          toast.error('Download failed');
+                        }
+                      }}
+                      className="text-emerald-400 hover:text-emerald-300 inline-flex items-center font-medium transition-all duration-200 cursor-pointer"
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
-                    </a>
+                    </button>
                   )}
                 </td>
               </tr>
@@ -115,16 +129,16 @@ const Reports = () => {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h2 className="text-xl font-bold mb-4">Generate Report</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="backdrop-blur-xl bg-slate-800/90 border border-slate-700/50 rounded-2xl p-8 max-w-md w-full shadow-2xl">
+            <h2 className="text-2xl font-bold mb-6 text-white">Generate Report</h2>
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Report Type</label>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Report Type</label>
                 <select
                   value={formData.type}
                   onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
                 >
                   <option value="DAILY">Daily</option>
                   <option value="WEEKLY">Weekly</option>
@@ -133,11 +147,11 @@ const Reports = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Format</label>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Format</label>
                 <select
                   value={formData.format}
                   onChange={(e) => setFormData({ ...formData, format: e.target.value })}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
                 >
                   <option value="PDF">PDF</option>
                   <option value="CSV">CSV</option>
@@ -145,36 +159,36 @@ const Reports = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Start Date</label>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Start Date</label>
                 <input
                   type="date"
                   required
                   value={formData.startDate}
                   onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">End Date</label>
+                <label className="block text-sm font-medium text-slate-300 mb-2">End Date</label>
                 <input
                   type="date"
                   required
                   value={formData.endDate}
                   onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
                 />
               </div>
-              <div className="flex space-x-3">
+              <div className="flex space-x-3 pt-2">
                 <button
                   type="submit"
-                  className="flex-1 bg-primary text-white py-2 px-4 rounded-md hover:bg-green-600"
+                  className="flex-1 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white py-3 px-4 rounded-xl hover:from-emerald-600 hover:to-emerald-700 font-medium shadow-lg shadow-emerald-500/30 transition-all duration-200 transform hover:scale-105"
                 >
                   Generate
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300"
+                  className="flex-1 bg-slate-700/50 text-slate-300 py-3 px-4 rounded-xl hover:bg-slate-700 font-medium transition-all duration-200"
                 >
                   Cancel
                 </button>

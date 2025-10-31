@@ -48,11 +48,11 @@ const Alerts = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Alerts</h1>
+        <h1 className="text-3xl font-bold text-white">Alerts</h1>
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+          className="px-4 py-2 bg-slate-800/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
         >
           <option value="all">All Alerts</option>
           <option value="unread">Unread</option>
@@ -64,37 +64,37 @@ const Alerts = () => {
         {alerts.map((alert) => (
           <div
             key={alert.id}
-            className={`bg-white shadow rounded-lg p-6 border-l-4 ${
-              alert.severity === 'LOW' ? 'border-green-500' :
-              alert.severity === 'MEDIUM' ? 'border-yellow-500' :
-              alert.severity === 'HIGH' ? 'border-red-500' :
-              'border-red-900'
+            className={`backdrop-blur-xl bg-slate-800/50 border-l-4 rounded-2xl p-6 shadow-2xl transition-all duration-200 hover:scale-[1.01] ${
+              alert.severity === 'LOW' ? 'border-emerald-500 hover:shadow-emerald-500/20' :
+              alert.severity === 'MEDIUM' ? 'border-amber-500 hover:shadow-amber-500/20' :
+              alert.severity === 'HIGH' ? 'border-red-500 hover:shadow-red-500/20' :
+              'border-red-600 hover:shadow-red-600/20'
             }`}
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <div className="flex items-center space-x-2">
-                  <h3 className="text-lg font-semibold text-gray-900">{alert.title}</h3>
-                  <span className={`px-2 py-1 text-xs rounded ${
-                    alert.severity === 'LOW' ? 'bg-green-100 text-green-800' :
-                    alert.severity === 'MEDIUM' ? 'bg-yellow-100 text-yellow-800' :
-                    alert.severity === 'HIGH' ? 'bg-red-100 text-red-800' :
-                    'bg-red-900 text-white'
+                <div className="flex items-center space-x-3 flex-wrap gap-2">
+                  <h3 className="text-lg font-semibold text-white">{alert.title}</h3>
+                  <span className={`px-3 py-1 text-xs rounded-lg font-medium ${
+                    alert.severity === 'LOW' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                    alert.severity === 'MEDIUM' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
+                    alert.severity === 'HIGH' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
+                    'bg-red-600/30 text-red-300 border border-red-600/50'
                   }`}>
                     {alert.severity}
                   </span>
                   {!alert.isRead && (
-                    <span className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-800">
+                    <span className="px-3 py-1 text-xs rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 font-medium animate-pulse">
                       NEW
                     </span>
                   )}
                 </div>
-                <p className="mt-2 text-sm text-gray-600">{alert.description}</p>
-                <div className="mt-2 text-xs text-gray-500">
+                <p className="mt-3 text-sm text-slate-300 leading-relaxed">{alert.description}</p>
+                <div className="mt-3 text-xs text-slate-400">
                   {format(new Date(alert.createdAt), 'MMM dd, yyyy HH:mm')}
                 </div>
                 {alert.wallet && (
-                  <div className="mt-2 text-xs text-gray-500 font-mono">
+                  <div className="mt-2 text-xs text-slate-400 font-mono bg-slate-900/50 px-3 py-1 rounded-lg inline-block">
                     Wallet: {alert.wallet.address}
                   </div>
                 )}
@@ -103,7 +103,7 @@ const Alerts = () => {
                 {!alert.isRead && (
                   <button
                     onClick={() => markAsRead(alert.id)}
-                    className="text-blue-600 hover:text-blue-800"
+                    className="p-2 rounded-lg text-blue-400 hover:text-blue-300 hover:bg-blue-500/20 transition-all duration-200"
                     title="Mark as read"
                   >
                     <CheckCircle className="w-5 h-5" />
@@ -112,7 +112,7 @@ const Alerts = () => {
                 {!alert.isResolved && (
                   <button
                     onClick={() => markAsResolved(alert.id)}
-                    className="text-green-600 hover:text-green-800"
+                    className="p-2 rounded-lg text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/20 transition-all duration-200"
                     title="Resolve"
                   >
                     <XCircle className="w-5 h-5" />

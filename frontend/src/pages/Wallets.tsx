@@ -53,41 +53,41 @@ const Wallets = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Wallets</h1>
+        <h1 className="text-3xl font-bold text-white">Wallets</h1>
         <button
           onClick={() => setShowModal(true)}
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-green-600"
+          className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-xl text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 shadow-lg shadow-emerald-500/30 transition-all duration-200 transform hover:scale-105"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Wallet
         </button>
       </div>
 
-      <div className="bg-white shadow overflow-hidden sm:rounded-md">
-        <ul className="divide-y divide-gray-200">
+      <div className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 shadow-2xl overflow-hidden rounded-2xl">
+        <ul className="divide-y divide-slate-700/50">
           {wallets.map((wallet) => (
-            <li key={wallet.id} className="px-6 py-4 hover:bg-gray-50">
+            <li key={wallet.id} className="px-6 py-5 hover:bg-slate-700/30 transition-all duration-200">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <div className="flex items-center">
-                    <p className="text-sm font-medium text-gray-900">{wallet.label || 'Unnamed Wallet'}</p>
-                    <span className="ml-2 px-2 py-1 text-xs rounded bg-gray-100 text-gray-800">
+                  <div className="flex items-center space-x-3">
+                    <p className="text-base font-semibold text-white">{wallet.label || 'Unnamed Wallet'}</p>
+                    <span className="px-3 py-1 text-xs rounded-lg bg-slate-700/50 text-slate-300 border border-slate-600/50 font-medium">
                       {wallet.blockchain}
                     </span>
                   </div>
-                  <p className="mt-1 text-sm text-gray-500 font-mono">{wallet.address}</p>
-                  <div className="mt-2 flex items-center space-x-4 text-sm">
-                    <span className="text-gray-500">
-                      Transactions: {wallet._count?.transactions || 0}
+                  <p className="mt-2 text-sm text-slate-400 font-mono bg-slate-900/50 px-3 py-1 rounded-lg inline-block">{wallet.address}</p>
+                  <div className="mt-3 flex items-center space-x-4 text-sm">
+                    <span className="text-slate-400">
+                      Transactions: <span className="text-white font-medium">{wallet._count?.transactions || 0}</span>
                     </span>
-                    <span className="text-gray-500">
-                      Alerts: {wallet._count?.alerts || 0}
+                    <span className="text-slate-400">
+                      Alerts: <span className="text-white font-medium">{wallet._count?.alerts || 0}</span>
                     </span>
-                    <span className={`px-2 py-1 rounded ${
-                      wallet.riskLevel === 'LOW' ? 'bg-green-100 text-green-800' :
-                      wallet.riskLevel === 'MEDIUM' ? 'bg-yellow-100 text-yellow-800' :
-                      wallet.riskLevel === 'HIGH' ? 'bg-red-100 text-red-800' :
-                      'bg-red-900 text-white'
+                    <span className={`px-3 py-1 rounded-lg font-medium ${
+                      wallet.riskLevel === 'LOW' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                      wallet.riskLevel === 'MEDIUM' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
+                      wallet.riskLevel === 'HIGH' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
+                      'bg-red-600/30 text-red-300 border border-red-600/50'
                     }`}>
                       Risk: {wallet.riskLevel}
                     </span>
@@ -95,7 +95,7 @@ const Wallets = () => {
                 </div>
                 <button
                   onClick={() => handleDelete(wallet.id)}
-                  className="ml-4 text-red-600 hover:text-red-800"
+                  className="ml-4 p-2 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-500/20 transition-all duration-200"
                 >
                   <Trash2 className="w-5 h-5" />
                 </button>
@@ -106,26 +106,27 @@ const Wallets = () => {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h2 className="text-xl font-bold mb-4">Add New Wallet</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="backdrop-blur-xl bg-slate-800/90 border border-slate-700/50 rounded-2xl p-8 max-w-md w-full shadow-2xl">
+            <h2 className="text-2xl font-bold mb-6 text-white">Add New Wallet</h2>
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Wallet Address</label>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Wallet Address</label>
                 <input
                   type="text"
                   required
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+                  placeholder="Enter wallet address"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Blockchain</label>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Blockchain</label>
                 <select
                   value={formData.blockchain}
                   onChange={(e) => setFormData({ ...formData, blockchain: e.target.value })}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
                 >
                   <option value="BITCOIN">Bitcoin</option>
                   <option value="ETHEREUM">Ethereum</option>
@@ -135,25 +136,26 @@ const Wallets = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Label (Optional)</label>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Label (Optional)</label>
                 <input
                   type="text"
                   value={formData.label}
                   onChange={(e) => setFormData({ ...formData, label: e.target.value })}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+                  placeholder="My Wallet"
                 />
               </div>
-              <div className="flex space-x-3">
+              <div className="flex space-x-3 pt-2">
                 <button
                   type="submit"
-                  className="flex-1 bg-primary text-white py-2 px-4 rounded-md hover:bg-green-600"
+                  className="flex-1 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white py-3 px-4 rounded-xl hover:from-emerald-600 hover:to-emerald-700 font-medium shadow-lg shadow-emerald-500/30 transition-all duration-200 transform hover:scale-105"
                 >
                   Add Wallet
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300"
+                  className="flex-1 bg-slate-700/50 text-slate-300 py-3 px-4 rounded-xl hover:bg-slate-700 font-medium transition-all duration-200"
                 >
                   Cancel
                 </button>

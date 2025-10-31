@@ -6,6 +6,7 @@ import { AuthRequest } from '../middleware/auth';
 
 export const register = async (req: Request, res: Response) => {
   try {
+    console.log('Register request body:', req.body);
     const { email, password, name, company } = req.body;
 
     const existingUser = await prisma.user.findUnique({ where: { email } });
