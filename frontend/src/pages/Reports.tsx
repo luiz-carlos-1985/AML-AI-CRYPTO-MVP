@@ -101,11 +101,12 @@ const Reports = () => {
                     <button
                       onClick={async () => {
                         try {
-                          const response = await api.get(report.fileUrl, { responseType: 'blob' });
+                          const filename = report.fileUrl.split('/').pop();
+                          const response = await api.get(`/reports/download/${filename}`, { responseType: 'blob' });
                           const url = window.URL.createObjectURL(new Blob([response.data]));
                           const link = document.createElement('a');
                           link.href = url;
-                          link.setAttribute('download', `report-${report.id}.${report.format.toLowerCase()}`);
+                          link.setAttribute('download', filename);
                           document.body.appendChild(link);
                           link.click();
                           link.remove();

@@ -1,0 +1,64 @@
+{
+  "name": "CryptoAML - Anti-Money Laundering Platform",
+  "short_name": "CryptoAML",
+  "description": "Advanced cryptocurrency anti-money laundering monitoring platform with real-time risk analysis",
+  "start_url": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "any",
+  "theme_color": "#10b981",
+  "background_color": "#111827",
+  "scope": "/",
+  "categories": ["finance", "business", "productivity"],
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "View your AML dashboard",
+      "url": "/",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Alerts",
+      "short_name": "Alerts",
+      "description": "Check security alerts",
+      "url": "/alerts",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+    }
+  ],
+  "prefer_related_applications": false
+}

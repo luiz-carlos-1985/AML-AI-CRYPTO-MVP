@@ -9,6 +9,8 @@ import Transactions from './pages/Transactions';
 import Alerts from './pages/Alerts';
 import Reports from './pages/Reports';
 import Layout from './components/Layout';
+import InstallPWA from './components/InstallPWA';
+import OfflineIndicator from './components/OfflineIndicator';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
@@ -19,7 +21,15 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Toaster position="top-right" />
+        <Toaster 
+          position="top-right" 
+          toastOptions={{
+            className: 'backdrop-blur-xl bg-slate-900/90 text-white border border-slate-700',
+            duration: 3000,
+          }}
+        />
+        <OfflineIndicator />
+        <InstallPWA />
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
