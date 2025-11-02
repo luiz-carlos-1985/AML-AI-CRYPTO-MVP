@@ -1,10 +1,12 @@
 import { usePWA } from '../hooks/usePWA';
 import { Download, X } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const InstallPWA = () => {
   const { canInstall, promptInstall } = usePWA();
   const [dismissed, setDismissed] = useState(false);
+  const { t } = useTranslation();
 
   if (!canInstall || dismissed) return null;
 
@@ -33,17 +35,17 @@ const InstallPWA = () => {
           
           <div className="flex-1 min-w-0">
             <h3 className="text-white font-semibold text-sm mb-1">
-              Install CryptoAML
+              {t('pwa.installTitle')}
             </h3>
             <p className="text-white/90 text-xs mb-3">
-              Install our app for a better experience on all your devices
+              {t('pwa.installDescription')}
             </p>
             
             <button
               onClick={handleInstall}
               className="w-full py-2 px-4 bg-white text-emerald-600 font-semibold rounded-lg hover:bg-white/90 transition-all duration-200 text-sm"
             >
-              Install Now
+              {t('pwa.installNow')}
             </button>
           </div>
         </div>

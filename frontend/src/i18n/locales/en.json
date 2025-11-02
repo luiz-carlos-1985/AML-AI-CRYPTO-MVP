@@ -75,5 +75,10 @@
     "company": "Company",
     "creatingAccount": "Creating account...",
     "alreadyHaveAccount": "Already have an account?"
+  },
+  "pwa": {
+    "installTitle": "Install CryptoAML",
+    "installDescription": "Install our app for a better experience on all your devices",
+    "installNow": "Install Now"
   }
 }

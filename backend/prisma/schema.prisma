@@ -14,7 +14,10 @@ model User {
   name          String
   company       String?
   plan          Plan     @default(STARTER)
+  role          UserRole @default(USER)
   isActive      Boolean  @default(true)
+  twoFactorEnabled Boolean @default(false)
+  twoFactorSecret String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   
@@ -22,6 +25,7 @@ model User {
   alerts        Alert[]
   reports       Report[]
   apiKeys       ApiKey[]
+  paymentSettings PaymentSettings?
 }
 
 model Wallet {
@@ -99,6 +103,15 @@ model ApiKey {
   isActive      Boolean  @default(true)
   lastUsed      DateTime?
   createdAt     DateTime @default(now())
+}
+
+model PaymentSettings {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  config        String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 enum Plan {
@@ -440,4 +453,9 @@ enum ReportStatus {
   PROCESSING
   COMPLETED
   FAILED
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }

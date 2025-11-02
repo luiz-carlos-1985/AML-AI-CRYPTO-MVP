@@ -1,18 +1,26 @@
 import { useEffect, useState } from 'react';
-import { Plus, Trash2, Search } from 'lucide-react';
+import { Plus, Trash2, Search, Lock } from 'lucide-react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
 import { BLOCKCHAINS, getBlockchainInfo } from '../utils/blockchains';
+import { canAddWallet, getPlanLimits } from '../utils/planLimits';
+import UpgradePrompt from '../components/UpgradePrompt';
+import { useAuth } from '../hooks/useAuth';
 
 const Wallets = () => {
+  const { user } = useAuth();
   const [wallets, setWallets] = useState<any[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData] = useState({
     address: '',
     blockchain: 'BITCOIN',
     label: ''
   });
+  
+  const planLimits = getPlanLimits(user?.plan || 'STARTER');
+  const canAdd = canAddWallet(wallets.length, user?.plan || 'STARTER');
 
   useEffect(() => {
     loadWallets();
@@ -52,15 +60,52 @@ const Wallets = () => {
     }
   };
 
+  const handleAddWalletClick = () => {
+    if (!canAdd) {
+      setShowUpgradePrompt(true);
+      return;
+    }
+    setShowModal(true);
+  };
+
   return (
     <div className="space-y-6">
+      {/* Plan Limit Banner */}
+      <div className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 rounded-2xl p-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm text-slate-400">Wallet Usage</p>
+            <p className="text-lg font-bold text-white">
+              {wallets.length} / {planLimits.maxWallets === -1 ? '∞' : planLimits.maxWallets} wallets
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-sm text-slate-400">Current Plan</p>
+            <p className="text-lg font-bold text-emerald-400">{user?.plan}</p>
+          </div>
+        </div>
+        {!canAdd && (
+          <div className="mt-3 p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl">
+            <p className="text-amber-400 text-sm flex items-center">
+              <Lock className="w-4 h-4 mr-2" />
+              You've reached your wallet limit. Upgrade to add more wallets.
+            </p>
+          </div>
+        )}
+      </div>
+
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-white">Wallets</h1>
         <button
-          onClick={() => setShowModal(true)}
-          className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-xl text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 shadow-lg shadow-emerald-500/30 transition-all duration-200 transform hover:scale-105"
+          onClick={handleAddWalletClick}
+          disabled={!canAdd}
+          className={`inline-flex items-center px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 ${
+            canAdd
+              ? 'text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 shadow-lg shadow-emerald-500/30 transform hover:scale-105'
+              : 'text-slate-400 bg-slate-700/50 cursor-not-allowed opacity-50'
+          }`}
         >
-          <Plus className="w-4 h-4 mr-2" />
+          {canAdd ? <Plus className="w-4 h-4 mr-2" /> : <Lock className="w-4 h-4 mr-2" />}
           Add Wallet
         </button>
       </div>
@@ -185,6 +230,14 @@ const Wallets = () => {
             </form>
           </div>
         </div>
+      )}
+
+      {showUpgradePrompt && (
+        <UpgradePrompt
+          feature="Additional Wallets"
+          requiredPlan="GROWTH"
+          onClose={() => setShowUpgradePrompt(false)}
+        />
       )}
     </div>
   );

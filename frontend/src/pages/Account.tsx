@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { User, CreditCard, Shield, Bell, Key, LogOut, Crown, Zap, Check, X, Bitcoin, Smartphone, Wallet as WalletIcon, Globe } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { User, CreditCard, Shield, Bell, Key, LogOut, Crown, Zap, Check, X, Bitcoin, Smartphone, Wallet as WalletIcon, Globe, Camera, Upload, Activity, TrendingUp, Award, Clock, Download, Edit2, Save, Mail, Building, MapPin, Phone, Copy } from 'lucide-react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
+import { QRCodeSVG } from 'qrcode.react';
 
 const Account = () => {
   const navigate = useNavigate();
@@ -13,6 +15,25 @@ const Account = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<string>('');
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [profileImage, setProfileImage] = useState<string>('');
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [profileData, setProfileData] = useState({
+    name: '',
+    email: '',
+    company: '',
+    phone: '',
+    country: '',
+    city: ''
+  });
+  const [stats, setStats] = useState({
+    totalWallets: 0,
+    totalTransactions: 0,
+    totalAlerts: 0,
+    accountAge: 0
+  });
+  const [activities, setActivities] = useState<any[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [paymentData, setPaymentData] = useState<any>(null);
 
   useEffect(() => {
     loadUser();
@@ -22,8 +43,69 @@ const Account = () => {
     try {
       const { data } = await api.get('/auth/me');
       setUser(data);
+      setProfileData({
+        name: data.name || '',
+        email: data.email || '',
+        company: data.company || '',
+        phone: data.phone || '',
+        country: data.country || '',
+        city: data.city || ''
+      });
+      setProfileImage(data.avatar || '');
+      loadStats();
+      loadActivities();
     } catch (error) {
       console.error('Failed to load user');
+    }
+  };
+
+  const loadStats = async () => {
+    try {
+      const { data } = await api.get('/dashboard/stats');
+      setStats({
+        totalWallets: data.totalWallets || 0,
+        totalTransactions: data.totalTransactions || 0,
+        totalAlerts: data.totalAlerts || 0,
+        accountAge: data.accountAge || 0
+      });
+    } catch (error) {
+      console.error('Failed to load stats');
+    }
+  };
+
+  const loadActivities = async () => {
+    try {
+      const { data } = await api.get('/alerts?limit=5');
+      setActivities(data || []);
+    } catch (error) {
+      console.error('Failed to load activities');
+    }
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('Image size must be less than 5MB');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result as string);
+        toast.success('Profile image updated');
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSaveProfile = async () => {
+    try {
+      await api.put('/auth/profile', { ...profileData, avatar: profileImage });
+      toast.success('Profile updated successfully');
+      setIsEditingProfile(false);
+      loadUser();
+    } catch (error) {
+      toast.error('Failed to update profile');
     }
   };
 
@@ -109,13 +191,46 @@ const Account = () => {
     setShowUpgradeModal(true);
   };
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     if (!paymentMethod) {
       toast.error('Please select a payment method');
       return;
     }
+
+    const plan = plans.find(p => p.id === selectedPlan);
+    
+    // Generate payment data based on method
+    let data: any = {
+      amount: plan?.price,
+      currency: plan?.currency,
+      plan: selectedPlan,
+      method: paymentMethod
+    };
+
+    if (paymentMethod === 'pix') {
+      // Generate PIX payment data
+      data.pixKey = 'cryptoaml@payment.com';
+      data.pixCode = `00020126580014br.gov.bcb.pix0136cryptoaml@payment.com520400005303986540${plan?.price}.005802BR5913CryptoAML Inc6009Sao Paulo62070503***6304`;
+    } else if (paymentMethod === 'bitcoin') {
+      data.address = 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh';
+      data.amount_btc = (plan?.price! / 45000).toFixed(8); // Approximate BTC conversion
+    } else if (paymentMethod === 'ethereum') {
+      data.address = '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb';
+      data.amount_eth = (plan?.price! / 2500).toFixed(6); // Approximate ETH conversion
+    } else if (paymentMethod === 'usdt') {
+      data.address = '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb';
+      data.amount_usdt = plan?.price;
+      data.network = 'ERC20';
+    }
+
+    setPaymentData(data);
     setShowUpgradeModal(false);
     setShowPaymentModal(true);
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast.success('Copied to clipboard!');
   };
 
   const processPayment = async () => {
@@ -152,20 +267,103 @@ const Account = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-white">Account Settings</h1>
-          <p className="text-slate-400 mt-1">Manage your account and subscription</p>
+      {/* Profile Header Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="backdrop-blur-xl bg-gradient-to-r from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl p-6 md:p-8"
+      >
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+          {/* Profile Image */}
+          <div className="relative group">
+            <div className="w-32 h-32 rounded-2xl overflow-hidden border-4 border-emerald-500/30 shadow-lg shadow-emerald-500/20">
+              {profileImage ? (
+                <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center">
+                  <User className="w-16 h-16 text-white" />
+                </div>
+              )}
+            </div>
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="absolute bottom-2 right-2 p-2 bg-emerald-500 rounded-lg shadow-lg hover:bg-emerald-600 transition-all duration-200 group-hover:scale-110"
+            >
+              <Camera className="w-4 h-4 text-white" />
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="hidden"
+            />
+          </div>
+
+          {/* Profile Info */}
+          <div className="flex-1 text-center md:text-left">
+            <div className="flex flex-col md:flex-row md:items-center gap-3 mb-2">
+              <h1 className="text-2xl md:text-3xl font-bold text-white">{user?.name}</h1>
+              <div className="flex items-center justify-center md:justify-start gap-2">
+                <span className={`px-3 py-1 rounded-lg text-xs font-bold ${
+                  user?.plan === 'ENTERPRISE' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' :
+                  user?.plan === 'GROWTH' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                  'bg-slate-500/20 text-slate-400 border border-slate-500/30'
+                }`}>
+                  {user?.plan}
+                </span>
+                {user?.plan !== 'STARTER' && (
+                  <Award className="w-5 h-5 text-emerald-400" />
+                )}
+              </div>
+            </div>
+            <p className="text-slate-400 mb-4">{user?.email}</p>
+            
+            {/* Quick Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+              <div className="bg-slate-900/50 rounded-xl p-3 border border-slate-700/50">
+                <div className="flex items-center space-x-2 mb-1">
+                  <WalletIcon className="w-4 h-4 text-emerald-400" />
+                  <span className="text-xs text-slate-400">Wallets</span>
+                </div>
+                <p className="text-xl font-bold text-white">{stats.totalWallets}</p>
+              </div>
+              <div className="bg-slate-900/50 rounded-xl p-3 border border-slate-700/50">
+                <div className="flex items-center space-x-2 mb-1">
+                  <Activity className="w-4 h-4 text-blue-400" />
+                  <span className="text-xs text-slate-400">Transactions</span>
+                </div>
+                <p className="text-xl font-bold text-white">{stats.totalTransactions}</p>
+              </div>
+              <div className="bg-slate-900/50 rounded-xl p-3 border border-slate-700/50">
+                <div className="flex items-center space-x-2 mb-1">
+                  <Bell className="w-4 h-4 text-amber-400" />
+                  <span className="text-xs text-slate-400">Alerts</span>
+                </div>
+                <p className="text-xl font-bold text-white">{stats.totalAlerts}</p>
+              </div>
+              <div className="bg-slate-900/50 rounded-xl p-3 border border-slate-700/50">
+                <div className="flex items-center space-x-2 mb-1">
+                  <Clock className="w-4 h-4 text-purple-400" />
+                  <span className="text-xs text-slate-400">Member</span>
+                </div>
+                <p className="text-xl font-bold text-white">{stats.accountAge}d</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="flex flex-col gap-2">
+            <button
+              onClick={handleLogout}
+              className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-xl text-red-400 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 transition-all duration-200"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Logout
+            </button>
+          </div>
         </div>
-        <button
-          onClick={handleLogout}
-          className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-xl text-red-400 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 transition-all duration-200"
-        >
-          <LogOut className="w-4 h-4 mr-2" />
-          Logout
-        </button>
-      </div>
+      </motion.div>
 
       {/* Current Plan Banner */}
       <motion.div
@@ -218,45 +416,167 @@ const Account = () => {
         <div className="p-6">
           {activeTab === 'profile' && (
             <div className="space-y-6">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-bold text-white">Personal Information</h3>
+                {!isEditingProfile ? (
+                  <button
+                    onClick={() => setIsEditingProfile(true)}
+                    className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-xl text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 transition-all duration-200"
+                  >
+                    <Edit2 className="w-4 h-4 mr-2" />
+                    Edit Profile
+                  </button>
+                ) : (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={handleSaveProfile}
+                      className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-xl text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200"
+                    >
+                      <Save className="w-4 h-4 mr-2" />
+                      Save
+                    </button>
+                    <button
+                      onClick={() => setIsEditingProfile(false)}
+                      className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-xl text-slate-400 bg-slate-700/50 hover:bg-slate-700 transition-all duration-200"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Full Name</label>
+                  <label className="flex items-center text-sm font-medium text-slate-300 mb-2">
+                    <User className="w-4 h-4 mr-2" />
+                    Full Name
+                  </label>
                   <input
                     type="text"
-                    defaultValue={user?.name}
-                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    value={profileData.name}
+                    onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+                    disabled={!isEditingProfile}
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Email</label>
+                  <label className="flex items-center text-sm font-medium text-slate-300 mb-2">
+                    <Mail className="w-4 h-4 mr-2" />
+                    Email
+                  </label>
                   <input
                     type="email"
-                    defaultValue={user?.email}
-                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    value={profileData.email}
+                    onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
+                    disabled={!isEditingProfile}
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Company</label>
+                  <label className="flex items-center text-sm font-medium text-slate-300 mb-2">
+                    <Building className="w-4 h-4 mr-2" />
+                    Company
+                  </label>
                   <input
                     type="text"
-                    defaultValue={user?.company}
-                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    value={profileData.company}
+                    onChange={(e) => setProfileData({ ...profileData, company: e.target.value })}
+                    disabled={!isEditingProfile}
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Country</label>
-                  <select className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
-                    <option>United States</option>
-                    <option>Brazil</option>
-                    <option>United Kingdom</option>
-                    <option>Germany</option>
-                    <option>Japan</option>
+                  <label className="flex items-center text-sm font-medium text-slate-300 mb-2">
+                    <Phone className="w-4 h-4 mr-2" />
+                    Phone
+                  </label>
+                  <input
+                    type="tel"
+                    value={profileData.phone}
+                    onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })}
+                    disabled={!isEditingProfile}
+                    placeholder="+1 (555) 000-0000"
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  />
+                </div>
+                <div>
+                  <label className="flex items-center text-sm font-medium text-slate-300 mb-2">
+                    <Globe className="w-4 h-4 mr-2" />
+                    Country
+                  </label>
+                  <select
+                    value={profileData.country}
+                    onChange={(e) => setProfileData({ ...profileData, country: e.target.value })}
+                    disabled={!isEditingProfile}
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <option value="">Select Country</option>
+                    <option value="US">United States</option>
+                    <option value="BR">Brazil</option>
+                    <option value="GB">United Kingdom</option>
+                    <option value="DE">Germany</option>
+                    <option value="JP">Japan</option>
+                    <option value="CN">China</option>
+                    <option value="IN">India</option>
+                    <option value="CA">Canada</option>
+                    <option value="AU">Australia</option>
+                    <option value="FR">France</option>
                   </select>
                 </div>
+                <div>
+                  <label className="flex items-center text-sm font-medium text-slate-300 mb-2">
+                    <MapPin className="w-4 h-4 mr-2" />
+                    City
+                  </label>
+                  <input
+                    type="text"
+                    value={profileData.city}
+                    onChange={(e) => setProfileData({ ...profileData, city: e.target.value })}
+                    disabled={!isEditingProfile}
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  />
+                </div>
               </div>
-              <button className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200">
-                Save Changes
-              </button>
+
+              {/* Recent Activity */}
+              <div className="pt-6 border-t border-slate-700/50">
+                <h3 className="text-lg font-bold text-white mb-4 flex items-center">
+                  <Activity className="w-5 h-5 mr-2 text-emerald-400" />
+                  Recent Activity
+                </h3>
+                <div className="space-y-3">
+                  {activities.length > 0 ? (
+                    activities.map((activity, idx) => (
+                      <div key={idx} className="flex items-center justify-between p-4 bg-slate-900/50 rounded-xl border border-slate-700/50 hover:border-slate-600/50 transition-all">
+                        <div className="flex items-center space-x-3">
+                          <div className={`p-2 rounded-lg ${
+                            activity.severity === 'CRITICAL' ? 'bg-red-500/20' :
+                            activity.severity === 'HIGH' ? 'bg-orange-500/20' :
+                            activity.severity === 'MEDIUM' ? 'bg-amber-500/20' :
+                            'bg-emerald-500/20'
+                          }`}>
+                            <Bell className={`w-4 h-4 ${
+                              activity.severity === 'CRITICAL' ? 'text-red-400' :
+                              activity.severity === 'HIGH' ? 'text-orange-400' :
+                              activity.severity === 'MEDIUM' ? 'text-amber-400' :
+                              'text-emerald-400'
+                            }`} />
+                          </div>
+                          <div>
+                            <p className="text-white font-medium text-sm">{activity.title}</p>
+                            <p className="text-slate-400 text-xs">{activity.description}</p>
+                          </div>
+                        </div>
+                        <span className="text-xs text-slate-500">
+                          {format(new Date(activity.createdAt), 'MMM dd, HH:mm')}
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-slate-400 text-center py-8">No recent activity</p>
+                  )}
+                </div>
+              </div>
             </div>
           )}
 
@@ -464,51 +784,185 @@ const Account = () => {
       )}
 
       {/* Payment Processing Modal */}
-      {showPaymentModal && (
+      {showPaymentModal && paymentData && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="backdrop-blur-xl bg-slate-800/90 border border-slate-700/50 rounded-2xl p-8 max-w-md w-full"
+            className="backdrop-blur-xl bg-slate-800/90 border border-slate-700/50 rounded-2xl p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto"
           >
             <div className="text-center">
               <div className="inline-flex p-4 bg-emerald-500/20 rounded-full mb-4">
                 {paymentMethod === 'pix' && <Smartphone className="w-12 h-12 text-emerald-400" />}
                 {paymentMethod === 'bitcoin' && <Bitcoin className="w-12 h-12 text-emerald-400" />}
-                {paymentMethod === 'ethereum' && <WalletIcon className="w-12 h-12 text-emerald-400" />}
-                {!['pix', 'bitcoin', 'ethereum'].includes(paymentMethod) && <CreditCard className="w-12 h-12 text-emerald-400" />}
+                {(paymentMethod === 'ethereum' || paymentMethod === 'usdt') && <WalletIcon className="w-12 h-12 text-emerald-400" />}
+                {!['pix', 'bitcoin', 'ethereum', 'usdt'].includes(paymentMethod) && <CreditCard className="w-12 h-12 text-emerald-400" />}
               </div>
               
               <h3 className="text-2xl font-bold text-white mb-2">Complete Payment</h3>
-              <p className="text-slate-400 mb-6">
-                {paymentMethod === 'pix' && 'Scan the QR code with your banking app'}
-                {paymentMethod === 'bitcoin' && 'Send BTC to the address below'}
-                {paymentMethod === 'ethereum' && 'Send ETH to the address below'}
-                {!['pix', 'bitcoin', 'ethereum'].includes(paymentMethod) && 'Enter your payment details'}
-              </p>
+              <div className="inline-flex items-center space-x-2 mb-4">
+                <span className="text-3xl font-bold text-emerald-400">${paymentData.amount}</span>
+                <span className="text-slate-400">USD</span>
+              </div>
 
-              {['pix', 'bitcoin', 'ethereum'].includes(paymentMethod) && (
-                <div className="p-6 bg-white rounded-xl mb-6">
-                  <div className="w-48 h-48 mx-auto bg-slate-200 rounded-lg flex items-center justify-center">
-                    <span className="text-slate-400">QR Code</span>
+              {/* PIX Payment */}
+              {paymentMethod === 'pix' && (
+                <div className="space-y-4">
+                  <p className="text-slate-400 mb-4">Scan the QR code with your banking app</p>
+                  <div className="p-6 bg-white rounded-xl">
+                    <QRCodeSVG
+                      value={paymentData.pixCode}
+                      size={256}
+                      level="H"
+                      includeMargin={true}
+                      className="mx-auto"
+                    />
                   </div>
-                  <p className="mt-4 text-xs text-slate-600 font-mono break-all">
-                    {paymentMethod === 'pix' && '00020126580014br.gov.bcb.pix...'}
-                    {paymentMethod === 'bitcoin' && 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh'}
-                    {paymentMethod === 'ethereum' && '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'}
-                  </p>
+                  <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
+                    <p className="text-xs text-slate-400 mb-2">PIX Key</p>
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm text-white font-mono">{paymentData.pixKey}</p>
+                      <button
+                        onClick={() => copyToClipboard(paymentData.pixKey)}
+                        className="p-2 hover:bg-slate-700 rounded-lg transition-all"
+                      >
+                        <Copy className="w-4 h-4 text-emerald-400" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
+                    <p className="text-xs text-slate-400 mb-2">PIX Code (Copy & Paste)</p>
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs text-white font-mono break-all text-left">{paymentData.pixCode.substring(0, 50)}...</p>
+                      <button
+                        onClick={() => copyToClipboard(paymentData.pixCode)}
+                        className="p-2 hover:bg-slate-700 rounded-lg transition-all flex-shrink-0 ml-2"
+                      >
+                        <Copy className="w-4 h-4 text-emerald-400" />
+                      </button>
+                    </div>
+                  </div>
                 </div>
               )}
 
-              <div className="space-y-3">
+              {/* Bitcoin Payment */}
+              {paymentMethod === 'bitcoin' && (
+                <div className="space-y-4">
+                  <p className="text-slate-400 mb-4">Send exactly {paymentData.amount_btc} BTC to the address below</p>
+                  <div className="p-6 bg-white rounded-xl">
+                    <QRCodeSVG
+                      value={`bitcoin:${paymentData.address}?amount=${paymentData.amount_btc}`}
+                      size={256}
+                      level="H"
+                      includeMargin={true}
+                      className="mx-auto"
+                    />
+                  </div>
+                  <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
+                    <p className="text-xs text-slate-400 mb-2">Bitcoin Address</p>
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm text-white font-mono break-all text-left">{paymentData.address}</p>
+                      <button
+                        onClick={() => copyToClipboard(paymentData.address)}
+                        className="p-2 hover:bg-slate-700 rounded-lg transition-all flex-shrink-0 ml-2"
+                      >
+                        <Copy className="w-4 h-4 text-emerald-400" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4">
+                    <p className="text-amber-400 text-xs">
+                      <strong>Important:</strong> Send exactly {paymentData.amount_btc} BTC. Network: Bitcoin (BTC)
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Ethereum Payment */}
+              {paymentMethod === 'ethereum' && (
+                <div className="space-y-4">
+                  <p className="text-slate-400 mb-4">Send exactly {paymentData.amount_eth} ETH to the address below</p>
+                  <div className="p-6 bg-white rounded-xl">
+                    <QRCodeSVG
+                      value={`ethereum:${paymentData.address}?value=${paymentData.amount_eth}`}
+                      size={256}
+                      level="H"
+                      includeMargin={true}
+                      className="mx-auto"
+                    />
+                  </div>
+                  <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
+                    <p className="text-xs text-slate-400 mb-2">Ethereum Address</p>
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm text-white font-mono break-all text-left">{paymentData.address}</p>
+                      <button
+                        onClick={() => copyToClipboard(paymentData.address)}
+                        className="p-2 hover:bg-slate-700 rounded-lg transition-all flex-shrink-0 ml-2"
+                      >
+                        <Copy className="w-4 h-4 text-emerald-400" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4">
+                    <p className="text-amber-400 text-xs">
+                      <strong>Important:</strong> Send exactly {paymentData.amount_eth} ETH. Network: Ethereum (ERC20)
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* USDT Payment */}
+              {paymentMethod === 'usdt' && (
+                <div className="space-y-4">
+                  <p className="text-slate-400 mb-4">Send exactly {paymentData.amount_usdt} USDT to the address below</p>
+                  <div className="p-6 bg-white rounded-xl">
+                    <QRCodeSVG
+                      value={paymentData.address}
+                      size={256}
+                      level="H"
+                      includeMargin={true}
+                      className="mx-auto"
+                    />
+                  </div>
+                  <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
+                    <p className="text-xs text-slate-400 mb-2">USDT Address (ERC20)</p>
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm text-white font-mono break-all text-left">{paymentData.address}</p>
+                      <button
+                        onClick={() => copyToClipboard(paymentData.address)}
+                        className="p-2 hover:bg-slate-700 rounded-lg transition-all flex-shrink-0 ml-2"
+                      >
+                        <Copy className="w-4 h-4 text-emerald-400" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4">
+                    <p className="text-amber-400 text-xs">
+                      <strong>Important:</strong> Send exactly {paymentData.amount_usdt} USDT. Network: {paymentData.network}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Credit Card / Other Methods */}
+              {!['pix', 'bitcoin', 'ethereum', 'usdt'].includes(paymentMethod) && (
+                <div className="space-y-4">
+                  <p className="text-slate-400 mb-4">Redirecting to payment processor...</p>
+                  <div className="animate-pulse bg-slate-900/50 rounded-xl p-8">
+                    <CreditCard className="w-16 h-16 text-slate-600 mx-auto" />
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-3 mt-6">
                 <button
                   onClick={processPayment}
-                  className="w-full py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-bold hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200"
+                  className="w-full py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-bold hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 shadow-lg shadow-emerald-500/30"
                 >
-                  Confirm Payment
+                  I've Made the Payment
                 </button>
                 <button
-                  onClick={() => setShowPaymentModal(false)}
+                  onClick={() => { setShowPaymentModal(false); setPaymentData(null); }}
                   className="w-full py-3 bg-slate-700/50 text-slate-300 rounded-xl font-medium hover:bg-slate-700 transition-all duration-200"
                 >
                   Cancel

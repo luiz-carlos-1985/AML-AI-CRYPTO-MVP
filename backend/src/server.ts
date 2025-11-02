@@ -11,6 +11,8 @@ import alertRoutes from './routes/alert.routes';
 import reportRoutes from './routes/report.routes';
 import dashboardRoutes from './routes/dashboard.routes';
 import paymentRoutes from './routes/payment.routes';
+import adminRoutes from './routes/admin.routes';
+import twoFactorRoutes from './routes/twoFactor.routes';
 import { errorHandler } from './middleware/errorHandler';
 
 dotenv.config();
@@ -40,6 +42,8 @@ app.use('/api/alerts', alertRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/2fa', twoFactorRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

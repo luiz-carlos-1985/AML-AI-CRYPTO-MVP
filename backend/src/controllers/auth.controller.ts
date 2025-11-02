@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import speakeasy from 'speakeasy';
 import prisma from '../utils/prisma';
 import { AuthRequest } from '../middleware/auth';
 
@@ -46,7 +47,7 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, twoFactorToken } = req.body;
 
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
@@ -56,6 +57,23 @@ export const login = async (req: Request, res: Response) => {
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
       return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    if (user.twoFactorEnabled && user.twoFactorSecret) {
+      if (!twoFactorToken) {
+        return res.status(200).json({ requiresTwoFactor: true });
+      }
+
+      const verified = speakeasy.totp.verify({
+        secret: user.twoFactorSecret,
+        encoding: 'base32',
+        token: twoFactorToken,
+        window: 2
+      });
+
+      if (!verified) {
+        return res.status(401).json({ error: 'Invalid 2FA token' });
+      }
     }
 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
@@ -69,7 +87,8 @@ export const login = async (req: Request, res: Response) => {
         email: user.email,
         name: user.name,
         company: user.company,
-        plan: user.plan
+        plan: user.plan,
+        role: user.role
       }
     });
   } catch (error) {
@@ -87,6 +106,8 @@ export const getProfile = async (req: AuthRequest, res: Response) => {
         name: true,
         company: true,
         plan: true,
+        role: true,
+        twoFactorEnabled: true,
         createdAt: true
       }
     });
