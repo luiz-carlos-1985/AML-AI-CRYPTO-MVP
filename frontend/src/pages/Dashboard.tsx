@@ -3,10 +3,12 @@ import { Wallet, ArrowLeftRight, Bell, TrendingUp } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { motion } from 'framer-motion';
 import CountUp from 'react-countup';
+import { useTranslation } from 'react-i18next';
 import api from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -37,10 +39,10 @@ const Dashboard = () => {
   ];
 
   const statCards = [
-    { icon: Wallet, label: 'Total Wallets', value: stats?.totalWallets || 0, gradient: 'from-emerald-500/10 to-emerald-600/5', border: 'border-emerald-500/20', iconGradient: 'from-emerald-500 to-emerald-600', shadow: 'shadow-emerald-500/50' },
-    { icon: ArrowLeftRight, label: 'Transactions', value: stats?.totalTransactions || 0, gradient: 'from-blue-500/10 to-blue-600/5', border: 'border-blue-500/20', iconGradient: 'from-blue-500 to-blue-600', shadow: 'shadow-blue-500/50' },
-    { icon: Bell, label: 'Unread Alerts', value: stats?.unreadAlerts || 0, gradient: 'from-amber-500/10 to-amber-600/5', border: 'border-amber-500/20', iconGradient: 'from-amber-500 to-amber-600', shadow: 'shadow-amber-500/50' },
-    { icon: TrendingUp, label: 'High Risk', value: stats?.highRiskTransactions || 0, gradient: 'from-red-500/10 to-red-600/5', border: 'border-red-500/20', iconGradient: 'from-red-500 to-red-600', shadow: 'shadow-red-500/50' }
+    { icon: Wallet, label: t('dashboard.totalWallets'), value: stats?.totalWallets || 0, gradient: 'from-emerald-500/10 to-emerald-600/5', border: 'border-emerald-500/20', iconGradient: 'from-emerald-500 to-emerald-600', shadow: 'shadow-emerald-500/50' },
+    { icon: ArrowLeftRight, label: t('dashboard.transactions'), value: stats?.totalTransactions || 0, gradient: 'from-blue-500/10 to-blue-600/5', border: 'border-blue-500/20', iconGradient: 'from-blue-500 to-blue-600', shadow: 'shadow-blue-500/50' },
+    { icon: Bell, label: t('dashboard.unreadAlerts'), value: stats?.unreadAlerts || 0, gradient: 'from-amber-500/10 to-amber-600/5', border: 'border-amber-500/20', iconGradient: 'from-amber-500 to-amber-600', shadow: 'shadow-amber-500/50' },
+    { icon: TrendingUp, label: t('dashboard.highRisk'), value: stats?.highRiskTransactions || 0, gradient: 'from-red-500/10 to-red-600/5', border: 'border-red-500/20', iconGradient: 'from-red-500 to-red-600', shadow: 'shadow-red-500/50' }
   ];
 
   return (
@@ -50,7 +52,7 @@ const Dashboard = () => {
         animate={{ opacity: 1, x: 0 }}
         className="text-3xl font-bold text-white"
       >
-        Dashboard
+        {t('dashboard.title')}
       </motion.h1>
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -100,7 +102,7 @@ const Dashboard = () => {
           transition={{ delay: 0.5 }}
           className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 p-6 rounded-2xl shadow-2xl hover:shadow-emerald-500/10 transition-all duration-300"
         >
-          <h2 className="text-lg font-semibold mb-4 text-white">Risk Distribution</h2>
+          <h2 className="text-lg font-semibold mb-4 text-white">{t('dashboard.riskDistribution')}</h2>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
@@ -128,7 +130,7 @@ const Dashboard = () => {
           transition={{ delay: 0.6 }}
           className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 p-6 rounded-2xl shadow-2xl hover:shadow-blue-500/10 transition-all duration-300"
         >
-          <h2 className="text-lg font-semibold mb-4 text-white">Recent Transactions</h2>
+          <h2 className="text-lg font-semibold mb-4 text-white">{t('dashboard.recentTransactions')}</h2>
           <div className="space-y-3">
             {stats?.recentTransactions?.slice(0, 5).map((tx: any, index: number) => (
               <motion.div 
@@ -138,6 +140,7 @@ const Dashboard = () => {
                 transition={{ delay: 0.7 + index * 0.1 }}
                 whileHover={{ x: 5 }}
                 className="flex items-center justify-between border-b border-slate-700/50 pb-3 hover:bg-slate-700/30 p-2 rounded-lg transition-all cursor-pointer"
+              >
                 <div className="flex-1">
                   <p className="text-sm font-medium text-slate-200 truncate font-mono">{tx.hash.substring(0, 20)}...</p>
                   <p className="text-xs text-slate-400">{tx.wallet.blockchain}</p>
