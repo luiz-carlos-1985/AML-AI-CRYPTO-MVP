@@ -7,6 +7,7 @@ import { BLOCKCHAINS, getBlockchainInfo } from '../utils/blockchains';
 const Wallets = () => {
   const [wallets, setWallets] = useState<any[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData] = useState({
     address: '',
     blockchain: 'BITCOIN',
@@ -124,16 +125,33 @@ const Wallets = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">Blockchain</label>
+                <div className="relative mb-2">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Search blockchain..."
+                    className="w-full pl-10 pr-4 py-2 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all text-sm"
+                  />
+                </div>
                 <select
                   value={formData.blockchain}
                   onChange={(e) => setFormData({ ...formData, blockchain: e.target.value })}
-                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all max-h-48 overflow-y-auto"
+                  size={8}
                 >
-                  {BLOCKCHAINS.map(blockchain => (
-                    <option key={blockchain.id} value={blockchain.id}>
-                      {blockchain.icon} {blockchain.name} ({blockchain.symbol})
-                    </option>
-                  ))}
+                  {BLOCKCHAINS
+                    .filter(blockchain => 
+                      blockchain.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                      blockchain.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                      blockchain.description.toLowerCase().includes(searchTerm.toLowerCase())
+                    )
+                    .map(blockchain => (
+                      <option key={blockchain.id} value={blockchain.id}>
+                        {blockchain.icon} {blockchain.name} ({blockchain.symbol})
+                      </option>
+                    ))}
                 </select>
                 <p className="text-xs text-slate-400 mt-2">
                   {getBlockchainInfo(formData.blockchain)?.description}
