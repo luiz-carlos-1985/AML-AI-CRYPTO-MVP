@@ -82,7 +82,7 @@ const Account = () => {
     }
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
@@ -90,9 +90,18 @@ const Account = () => {
         return;
       }
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImage(reader.result as string);
-        toast.success('Profile image updated');
+      reader.onloadend = async () => {
+        const imageData = reader.result as string;
+        setProfileImage(imageData);
+        
+        // Save immediately
+        try {
+          await api.put('/auth/profile', { ...profileData, avatar: imageData });
+          toast.success('Profile image saved!');
+          loadUser();
+        } catch (error) {
+          toast.error('Failed to save image');
+        }
       };
       reader.readAsDataURL(file);
     }
