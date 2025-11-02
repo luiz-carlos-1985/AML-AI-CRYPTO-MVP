@@ -39,10 +39,10 @@ const RiskExplanation = ({ riskScore, riskLevel, factors }: RiskExplanationProps
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-2xl"
+      className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 rounded-2xl p-4 md:p-6 shadow-2xl"
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
         <div className="flex items-center space-x-3">
           <Shield className="w-6 h-6 text-emerald-400" />
           <h3 className="text-xl font-bold text-white">Risk Analysis Explanation</h3>
@@ -54,7 +54,7 @@ const RiskExplanation = ({ riskScore, riskLevel, factors }: RiskExplanationProps
       </div>
 
       {/* Risk Level Badge */}
-      <div className="mb-6">
+      <div className="mb-4 md:mb-6">
         <div className={`inline-flex items-center px-4 py-2 rounded-xl font-semibold ${
           riskLevel === 'LOW' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
           riskLevel === 'MEDIUM' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
@@ -80,17 +80,17 @@ const RiskExplanation = ({ riskScore, riskLevel, factors }: RiskExplanationProps
       </div>
 
       {/* Risk Factors */}
-      <div className="space-y-4">
-        <h4 className="text-sm font-semibold text-slate-300 uppercase tracking-wider">Risk Factors Breakdown</h4>
+      <div className="space-y-3 md:space-y-4">
+        <h4 className="text-xs md:text-sm font-semibold text-slate-300 uppercase tracking-wider">Risk Factors Breakdown</h4>
         {factors.map((factor, index) => (
           <motion.div
             key={factor.name}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="p-4 bg-slate-900/50 rounded-xl border border-slate-700/30 hover:border-slate-600/50 transition-all"
+            className="p-3 md:p-4 bg-slate-900/50 rounded-xl border border-slate-700/30 hover:border-slate-600/50 transition-all"
           >
-            <div className="flex items-start justify-between mb-2">
+            <div className="flex flex-col sm:flex-row items-start justify-between mb-2 gap-2">
               <div className="flex items-center space-x-3">
                 {getStatusIcon(factor.status)}
                 <div>

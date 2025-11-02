@@ -41,99 +41,152 @@ const Reports = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-white">Reports</h1>
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <h1 className="text-2xl md:text-3xl font-bold text-white">Reports</h1>
         <button
           onClick={() => setShowModal(true)}
-          className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-xl text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 shadow-lg shadow-emerald-500/30 transition-all duration-200 transform hover:scale-105"
+          className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-xl text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 shadow-lg shadow-emerald-500/30 transition-all duration-200 transform hover:scale-105"
         >
           <FileText className="w-4 h-4 mr-2" />
           Generate Report
         </button>
       </div>
 
-      <div className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 shadow-2xl overflow-hidden rounded-2xl">
-        <table className="min-w-full divide-y divide-slate-700/50">
-          <thead className="bg-slate-900/50">
-            <tr>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">
-                Type
-              </th>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">
-                Format
-              </th>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">
-                Period
-              </th>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-700/50">
-            {reports.map((report) => (
-              <tr key={report.id} className="hover:bg-slate-700/30 transition-all duration-200">
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-white font-medium">
-                  {report.type}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
-                  {report.format}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-400">
-                  {format(new Date(report.startDate), 'MMM dd')} - {format(new Date(report.endDate), 'MMM dd, yyyy')}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-3 py-1 text-xs rounded-lg font-medium ${
-                    report.status === 'COMPLETED' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
-                    report.status === 'PROCESSING' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
-                    report.status === 'FAILED' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
-                    'bg-slate-700/50 text-slate-300 border border-slate-600/50'
-                  }`}>
-                    {report.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  {report.status === 'COMPLETED' && report.fileUrl && (
-                    <button
-                      onClick={async () => {
-                        try {
-                          const filename = report.fileUrl.split('/').pop();
-                          const response = await api.get(`/reports/download/${filename}`, { responseType: 'blob' });
-                          const url = window.URL.createObjectURL(new Blob([response.data]));
-                          const link = document.createElement('a');
-                          link.href = url;
-                          link.setAttribute('download', filename);
-                          document.body.appendChild(link);
-                          link.click();
-                          link.remove();
-                          window.URL.revokeObjectURL(url);
-                          toast.success('Download started');
-                        } catch (error) {
-                          toast.error('Download failed');
-                        }
-                      }}
-                      className="text-emerald-400 hover:text-emerald-300 inline-flex items-center font-medium transition-all duration-200 cursor-pointer"
-                    >
-                      <Download className="w-4 h-4 mr-1" />
-                      Download
-                    </button>
-                  )}
-                </td>
+      {/* Mobile Card View */}
+      <div className="block md:hidden space-y-3">
+        {reports.map((report) => (
+          <div key={report.id} className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 rounded-xl p-4 shadow-xl">
+            <div className="flex items-start justify-between mb-3">
+              <div>
+                <p className="text-sm font-bold text-white">{report.type}</p>
+                <p className="text-xs text-slate-400 mt-1">{report.format}</p>
+              </div>
+              <span className={`px-2 py-1 text-xs rounded-lg font-medium whitespace-nowrap ${
+                report.status === 'COMPLETED' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                report.status === 'PROCESSING' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
+                report.status === 'FAILED' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
+                'bg-slate-700/50 text-slate-300 border border-slate-600/50'
+              }`}>
+                {report.status}
+              </span>
+            </div>
+            <p className="text-xs text-slate-400 mb-3">
+              {format(new Date(report.startDate), 'MMM dd')} - {format(new Date(report.endDate), 'MMM dd, yyyy')}
+            </p>
+            {report.status === 'COMPLETED' && report.fileUrl && (
+              <button
+                onClick={async () => {
+                  try {
+                    const filename = report.fileUrl.split('/').pop();
+                    const response = await api.get(`/reports/download/${filename}`, { responseType: 'blob' });
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', filename);
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(url);
+                    toast.success('Download started');
+                  } catch (error) {
+                    toast.error('Download failed');
+                  }
+                }}
+                className="w-full flex items-center justify-center px-4 py-2 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-lg font-medium text-sm transition-all duration-200 hover:bg-emerald-500/30"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Download
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop Table View */}
+      <div className="hidden md:block backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 shadow-2xl overflow-hidden rounded-2xl">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-slate-700/50">
+            <thead className="bg-slate-900/50">
+              <tr>
+                <th className="px-4 lg:px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                  Type
+                </th>
+                <th className="px-4 lg:px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                  Format
+                </th>
+                <th className="px-4 lg:px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                  Period
+                </th>
+                <th className="px-4 lg:px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-4 lg:px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-slate-700/50">
+              {reports.map((report) => (
+                <tr key={report.id} className="hover:bg-slate-700/30 transition-all duration-200">
+                  <td className="px-4 lg:px-6 py-4 whitespace-nowrap text-sm text-white font-medium">
+                    {report.type}
+                  </td>
+                  <td className="px-4 lg:px-6 py-4 whitespace-nowrap text-sm text-slate-300">
+                    {report.format}
+                  </td>
+                  <td className="px-4 lg:px-6 py-4 whitespace-nowrap text-sm text-slate-400">
+                    {format(new Date(report.startDate), 'MMM dd')} - {format(new Date(report.endDate), 'MMM dd, yyyy')}
+                  </td>
+                  <td className="px-4 lg:px-6 py-4 whitespace-nowrap">
+                    <span className={`px-3 py-1 text-xs rounded-lg font-medium ${
+                      report.status === 'COMPLETED' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                      report.status === 'PROCESSING' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
+                      report.status === 'FAILED' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
+                      'bg-slate-700/50 text-slate-300 border border-slate-600/50'
+                    }`}>
+                      {report.status}
+                    </span>
+                  </td>
+                  <td className="px-4 lg:px-6 py-4 whitespace-nowrap text-sm">
+                    {report.status === 'COMPLETED' && report.fileUrl && (
+                      <button
+                        onClick={async () => {
+                          try {
+                            const filename = report.fileUrl.split('/').pop();
+                            const response = await api.get(`/reports/download/${filename}`, { responseType: 'blob' });
+                            const url = window.URL.createObjectURL(new Blob([response.data]));
+                            const link = document.createElement('a');
+                            link.href = url;
+                            link.setAttribute('download', filename);
+                            document.body.appendChild(link);
+                            link.click();
+                            link.remove();
+                            window.URL.revokeObjectURL(url);
+                            toast.success('Download started');
+                          } catch (error) {
+                            toast.error('Download failed');
+                          }
+                        }}
+                        className="text-emerald-400 hover:text-emerald-300 inline-flex items-center font-medium transition-all duration-200 cursor-pointer"
+                      >
+                        <Download className="w-4 h-4 mr-1" />
+                        Download
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="backdrop-blur-xl bg-slate-800/90 border border-slate-700/50 rounded-2xl p-8 max-w-md w-full shadow-2xl">
-            <h2 className="text-2xl font-bold mb-6 text-white">Generate Report</h2>
-            <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="backdrop-blur-xl bg-slate-800/90 border border-slate-700/50 rounded-2xl p-4 md:p-8 max-w-md w-full shadow-2xl max-h-[90vh] overflow-y-auto">
+            <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-white">Generate Report</h2>
+            <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">Report Type</label>
                 <select

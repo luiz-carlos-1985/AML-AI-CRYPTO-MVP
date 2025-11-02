@@ -183,6 +183,8 @@ npm run dev:ml        # Terminal 3
 | [EXECUTIVE_SUMMARY.md](./EXECUTIVE_SUMMARY.md) | Resumo executivo |
 | [FEATURES.md](./FEATURES.md) | Funcionalidades detalhadas |
 | [PROJECT_SUMMARY.md](./PROJECT_SUMMARY.md) | Resumo do projeto |
+| [TRANSPARENCY.md](./TRANSPARENCY.md) | Centro de transparência e confiança |
+| [CHANGELOG.md](./CHANGELOG.md) | Histórico de atualizações |
 
 ---
 

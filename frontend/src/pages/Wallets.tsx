@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Search } from 'lucide-react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
+import { BLOCKCHAINS, getBlockchainInfo } from '../utils/blockchains';
 
 const Wallets = () => {
   const [wallets, setWallets] = useState<any[]>([]);
@@ -128,12 +129,15 @@ const Wallets = () => {
                   onChange={(e) => setFormData({ ...formData, blockchain: e.target.value })}
                   className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
                 >
-                  <option value="BITCOIN">Bitcoin</option>
-                  <option value="ETHEREUM">Ethereum</option>
-                  <option value="POLYGON">Polygon</option>
-                  <option value="SOLANA">Solana</option>
-                  <option value="BNB_CHAIN">BNB Chain</option>
+                  {BLOCKCHAINS.map(blockchain => (
+                    <option key={blockchain.id} value={blockchain.id}>
+                      {blockchain.icon} {blockchain.name} ({blockchain.symbol})
+                    </option>
+                  ))}
                 </select>
+                <p className="text-xs text-slate-400 mt-2">
+                  {getBlockchainInfo(formData.blockchain)?.description}
+                </p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">Label (Optional)</label>

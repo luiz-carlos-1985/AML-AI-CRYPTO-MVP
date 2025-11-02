@@ -13,7 +13,7 @@ const TransparencyBadge = () => {
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="backdrop-blur-xl bg-gradient-to-br from-emerald-500/10 to-blue-600/10 border border-emerald-500/20 rounded-2xl p-6 shadow-xl"
+      className="backdrop-blur-xl bg-gradient-to-br from-emerald-500/10 to-blue-600/10 border border-emerald-500/20 rounded-2xl p-4 md:p-6 shadow-xl"
     >
       <div className="flex items-center space-x-3 mb-4">
         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-blue-600 flex items-center justify-center">
@@ -25,7 +25,7 @@ const TransparencyBadge = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3">
         {features.map((feature, index) => {
           const Icon = feature.icon;
           return (
