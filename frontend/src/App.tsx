@@ -8,6 +8,7 @@ import Wallets from './pages/Wallets';
 import Transactions from './pages/Transactions';
 import Alerts from './pages/Alerts';
 import Reports from './pages/Reports';
+import Account from './pages/Account';
 import Layout from './components/Layout';
 import InstallPWA from './components/InstallPWA';
 import OfflineIndicator from './components/OfflineIndicator';
@@ -45,6 +46,7 @@ function App() {
             <Route path="transactions" element={<Transactions />} />
             <Route path="alerts" element={<Alerts />} />
             <Route path="reports" element={<Reports />} />
+            <Route path="account" element={<Account />} />
           </Route>
         </Routes>
       </BrowserRouter>

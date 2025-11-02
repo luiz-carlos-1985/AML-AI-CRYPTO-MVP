@@ -10,6 +10,7 @@ import transactionRoutes from './routes/transaction.routes';
 import alertRoutes from './routes/alert.routes';
 import reportRoutes from './routes/report.routes';
 import dashboardRoutes from './routes/dashboard.routes';
+import paymentRoutes from './routes/payment.routes';
 import { errorHandler } from './middleware/errorHandler';
 
 dotenv.config();
@@ -38,6 +39,7 @@ app.use('/api/transactions', transactionRoutes);
 app.use('/api/alerts', alertRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/payments', paymentRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
