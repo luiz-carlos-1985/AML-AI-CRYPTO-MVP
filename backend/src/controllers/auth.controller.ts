@@ -105,6 +105,10 @@ export const getProfile = async (req: AuthRequest, res: Response) => {
         email: true,
         name: true,
         company: true,
+        phone: true,
+        country: true,
+        city: true,
+        avatar: true,
         plan: true,
         role: true,
         twoFactorEnabled: true,
@@ -115,5 +119,39 @@ export const getProfile = async (req: AuthRequest, res: Response) => {
     res.json(user);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch profile' });
+  }
+};
+
+export const updateProfile = async (req: AuthRequest, res: Response) => {
+  try {
+    const { name, company, phone, country, city, avatar } = req.body;
+
+    const user = await prisma.user.update({
+      where: { id: req.userId },
+      data: {
+        name,
+        company,
+        phone,
+        country,
+        city,
+        avatar
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        company: true,
+        phone: true,
+        country: true,
+        city: true,
+        avatar: true,
+        plan: true,
+        role: true
+      }
+    });
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update profile' });
   }
 };

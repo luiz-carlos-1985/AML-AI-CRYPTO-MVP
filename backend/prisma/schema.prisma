@@ -13,6 +13,10 @@ model User {
   password      String
   name          String
   company       String?
+  phone         String?
+  country       String?
+  city          String?
+  avatar        String?
   plan          Plan     @default(STARTER)
   role          UserRole @default(USER)
   isActive      Boolean  @default(true)
