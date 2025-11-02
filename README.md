@@ -78,9 +78,13 @@ npm run dev:ml        # Terminal 3
 - 💸 **Monitoramento de transações** - Análise automática de risco
 - 🚨 **Sistema de alertas** - Notificações inteligentes
 - 📊 **Dashboard analytics** - Gráficos e estatísticas
-- 📄 **Relatórios** - PDF/CSV personalizados
+- 📄 **Relatórios** - PDF/CSV personalizados com design profissional
 - 🤖 **Machine Learning** - Análise de risco explicável
 - 🔌 **API REST completa** - Documentação Swagger
+- 🌍 **Internacionalização** - 11 idiomas (EN, ES, FR, DE, IT, PT, RU, JA, ZH, KO, AR)
+- ✨ **Animações avançadas** - Interface super interativa e moderna
+- 📱 **PWA** - Funciona offline e instalável
+- 🎨 **Design Dark** - Interface moderna com glassmorphism
 
 ### ⏳ Roadmap
 
@@ -138,9 +142,12 @@ npm run dev:ml        # Terminal 3
 - **Library:** React 18
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS
+- **Animations:** Framer Motion
 - **Charts:** Recharts
 - **HTTP:** Axios
 - **Routing:** React Router
+- **i18n:** i18next (11 idiomas)
+- **PWA:** Vite PWA
 
 ### ML Service
 - **Language:** Python 3.11+
