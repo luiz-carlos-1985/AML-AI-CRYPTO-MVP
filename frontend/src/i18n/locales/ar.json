@@ -1,0 +1,79 @@
+{
+  "nav": {
+    "dashboard": "لوحة التحكم",
+    "wallets": "المحافظ",
+    "transactions": "المعاملات",
+    "alerts": "التنبيهات",
+    "reports": "التقارير",
+    "logout": "تسجيل الخروج"
+  },
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "totalWallets": "إجمالي المحافظ",
+    "transactions": "المعاملات",
+    "unreadAlerts": "التنبيهات غير المقروءة",
+    "highRisk": "مخاطر عالية",
+    "riskDistribution": "توزيع المخاطر",
+    "recentTransactions": "المعاملات الأخيرة"
+  },
+  "wallets": {
+    "title": "المحافظ",
+    "addWallet": "إضافة محفظة",
+    "addNew": "إضافة محفظة جديدة",
+    "address": "عنوان المحفظة",
+    "blockchain": "البلوكشين",
+    "label": "التسمية",
+    "optional": "اختياري",
+    "cancel": "إلغاء",
+    "unnamed": "محفظة بدون اسم",
+    "risk": "المخاطر"
+  },
+  "transactions": {
+    "title": "المعاملات",
+    "allRiskLevels": "جميع مستويات المخاطر",
+    "lowRisk": "مخاطر منخفضة",
+    "mediumRisk": "مخاطر متوسطة",
+    "highRisk": "مخاطر عالية",
+    "criticalRisk": "مخاطر حرجة",
+    "hash": "هاش المعاملة",
+    "amount": "المبلغ",
+    "riskLevel": "مستوى المخاطر",
+    "date": "التاريخ"
+  },
+  "alerts": {
+    "title": "التنبيهات",
+    "all": "جميع التنبيهات",
+    "unread": "غير مقروءة",
+    "unresolved": "غير محلولة",
+    "new": "جديد"
+  },
+  "reports": {
+    "title": "التقارير",
+    "generate": "إنشاء تقرير",
+    "type": "نوع التقرير",
+    "format": "التنسيق",
+    "startDate": "تاريخ البدء",
+    "endDate": "تاريخ الانتهاء",
+    "daily": "يومي",
+    "weekly": "أسبوعي",
+    "monthly": "شهري",
+    "custom": "مخصص",
+    "download": "تحميل",
+    "status": "الحالة"
+  },
+  "auth": {
+    "welcomeBack": "مرحباً بعودتك",
+    "email": "عنوان البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "signIn": "تسجيل الدخول",
+    "signingIn": "جاري تسجيل الدخول...",
+    "dontHaveAccount": "ليس لديك حساب؟",
+    "register": "التسجيل",
+    "createAccount": "إنشاء حساب",
+    "joinToday": "انضم إلى CryptoAML اليوم",
+    "fullName": "الاسم الكامل",
+    "company": "الشركة",
+    "creatingAccount": "جاري إنشاء الحساب...",
+    "alreadyHaveAccount": "هل لديك حساب بالفعل؟"
+  }
+}

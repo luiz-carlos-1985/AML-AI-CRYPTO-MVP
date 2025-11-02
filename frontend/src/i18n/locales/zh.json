@@ -1,0 +1,79 @@
+{
+  "nav": {
+    "dashboard": "仪表板",
+    "wallets": "钱包",
+    "transactions": "交易",
+    "alerts": "警报",
+    "reports": "报告",
+    "logout": "登出"
+  },
+  "dashboard": {
+    "title": "仪表板",
+    "totalWallets": "总钱包数",
+    "transactions": "交易",
+    "unreadAlerts": "未读警报",
+    "highRisk": "高风险",
+    "riskDistribution": "风险分布",
+    "recentTransactions": "最近交易"
+  },
+  "wallets": {
+    "title": "钱包",
+    "addWallet": "添加钱包",
+    "addNew": "添加新钱包",
+    "address": "钱包地址",
+    "blockchain": "区块链",
+    "label": "标签",
+    "optional": "可选",
+    "cancel": "取消",
+    "unnamed": "未命名钱包",
+    "risk": "风险"
+  },
+  "transactions": {
+    "title": "交易",
+    "allRiskLevels": "所有风险级别",
+    "lowRisk": "低风险",
+    "mediumRisk": "中风险",
+    "highRisk": "高风险",
+    "criticalRisk": "严重风险",
+    "hash": "交易哈希",
+    "amount": "金额",
+    "riskLevel": "风险级别",
+    "date": "日期"
+  },
+  "alerts": {
+    "title": "警报",
+    "all": "所有警报",
+    "unread": "未读",
+    "unresolved": "未解决",
+    "new": "新"
+  },
+  "reports": {
+    "title": "报告",
+    "generate": "生成报告",
+    "type": "报告类型",
+    "format": "格式",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "daily": "每日",
+    "weekly": "每周",
+    "monthly": "每月",
+    "custom": "自定义",
+    "download": "下载",
+    "status": "状态"
+  },
+  "auth": {
+    "welcomeBack": "欢迎回来",
+    "email": "电子邮件地址",
+    "password": "密码",
+    "signIn": "登录",
+    "signingIn": "登录中...",
+    "dontHaveAccount": "还没有账户？",
+    "register": "注册",
+    "createAccount": "创建账户",
+    "joinToday": "立即加入CryptoAML",
+    "fullName": "全名",
+    "company": "公司",
+    "creatingAccount": "创建账户中...",
+    "alreadyHaveAccount": "已有账户？"
+  }
+}

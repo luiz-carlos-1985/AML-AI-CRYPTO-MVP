@@ -1,0 +1,79 @@
+{
+  "nav": {
+    "dashboard": "Панель",
+    "wallets": "Кошельки",
+    "transactions": "Транзакции",
+    "alerts": "Оповещения",
+    "reports": "Отчеты",
+    "logout": "Выйти"
+  },
+  "dashboard": {
+    "title": "Панель",
+    "totalWallets": "Всего Кошельков",
+    "transactions": "Транзакции",
+    "unreadAlerts": "Непрочитанные Оповещения",
+    "highRisk": "Высокий Риск",
+    "riskDistribution": "Распределение Рисков",
+    "recentTransactions": "Последние Транзакции"
+  },
+  "wallets": {
+    "title": "Кошельки",
+    "addWallet": "Добавить Кошелек",
+    "addNew": "Добавить Новый Кошелек",
+    "address": "Адрес Кошелька",
+    "blockchain": "Блокчейн",
+    "label": "Метка",
+    "optional": "Необязательно",
+    "cancel": "Отмена",
+    "unnamed": "Безымянный Кошелек",
+    "risk": "Риск"
+  },
+  "transactions": {
+    "title": "Транзакции",
+    "allRiskLevels": "Все Уровни Риска",
+    "lowRisk": "Низкий Риск",
+    "mediumRisk": "Средний Риск",
+    "highRisk": "Высокий Риск",
+    "criticalRisk": "Критический Риск",
+    "hash": "Хеш Транзакции",
+    "amount": "Сумма",
+    "riskLevel": "Уровень Риска",
+    "date": "Дата"
+  },
+  "alerts": {
+    "title": "Оповещения",
+    "all": "Все Оповещения",
+    "unread": "Непрочитанные",
+    "unresolved": "Нерешенные",
+    "new": "НОВОЕ"
+  },
+  "reports": {
+    "title": "Отчеты",
+    "generate": "Создать Отчет",
+    "type": "Тип Отчета",
+    "format": "Формат",
+    "startDate": "Дата Начала",
+    "endDate": "Дата Окончания",
+    "daily": "Ежедневный",
+    "weekly": "Еженедельный",
+    "monthly": "Ежемесячный",
+    "custom": "Пользовательский",
+    "download": "Скачать",
+    "status": "Статус"
+  },
+  "auth": {
+    "welcomeBack": "С возвращением",
+    "email": "Адрес Электронной Почты",
+    "password": "Пароль",
+    "signIn": "Войти",
+    "signingIn": "Вход...",
+    "dontHaveAccount": "Нет аккаунта?",
+    "register": "Регистрация",
+    "createAccount": "Создать Аккаунт",
+    "joinToday": "Присоединяйтесь к CryptoAML сегодня",
+    "fullName": "Полное Имя",
+    "company": "Компания",
+    "creatingAccount": "Создание аккаунта...",
+    "alreadyHaveAccount": "Уже есть аккаунт?"
+  }
+}

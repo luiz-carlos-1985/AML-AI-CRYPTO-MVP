@@ -1,0 +1,79 @@
+{
+  "nav": {
+    "dashboard": "대시보드",
+    "wallets": "지갑",
+    "transactions": "거래",
+    "alerts": "알림",
+    "reports": "보고서",
+    "logout": "로그아웃"
+  },
+  "dashboard": {
+    "title": "대시보드",
+    "totalWallets": "총 지갑 수",
+    "transactions": "거래",
+    "unreadAlerts": "읽지 않은 알림",
+    "highRisk": "고위험",
+    "riskDistribution": "위험 분포",
+    "recentTransactions": "최근 거래"
+  },
+  "wallets": {
+    "title": "지갑",
+    "addWallet": "지갑 추가",
+    "addNew": "새 지갑 추가",
+    "address": "지갑 주소",
+    "blockchain": "블록체인",
+    "label": "라벨",
+    "optional": "선택사항",
+    "cancel": "취소",
+    "unnamed": "이름 없는 지갑",
+    "risk": "위험"
+  },
+  "transactions": {
+    "title": "거래",
+    "allRiskLevels": "모든 위험 수준",
+    "lowRisk": "낮은 위험",
+    "mediumRisk": "중간 위험",
+    "highRisk": "높은 위험",
+    "criticalRisk": "심각한 위험",
+    "hash": "거래 해시",
+    "amount": "금액",
+    "riskLevel": "위험 수준",
+    "date": "날짜"
+  },
+  "alerts": {
+    "title": "알림",
+    "all": "모든 알림",
+    "unread": "읽지 않음",
+    "unresolved": "미해결",
+    "new": "새로운"
+  },
+  "reports": {
+    "title": "보고서",
+    "generate": "보고서 생성",
+    "type": "보고서 유형",
+    "format": "형식",
+    "startDate": "시작 날짜",
+    "endDate": "종료 날짜",
+    "daily": "일일",
+    "weekly": "주간",
+    "monthly": "월간",
+    "custom": "사용자 정의",
+    "download": "다운로드",
+    "status": "상태"
+  },
+  "auth": {
+    "welcomeBack": "환영합니다",
+    "email": "이메일 주소",
+    "password": "비밀번호",
+    "signIn": "로그인",
+    "signingIn": "로그인 중...",
+    "dontHaveAccount": "계정이 없으신가요?",
+    "register": "등록",
+    "createAccount": "계정 만들기",
+    "joinToday": "오늘 CryptoAML에 가입하세요",
+    "fullName": "전체 이름",
+    "company": "회사",
+    "creatingAccount": "계정 생성 중...",
+    "alreadyHaveAccount": "이미 계정이 있으신가요?"
+  }
+}

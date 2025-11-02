@@ -1,0 +1,79 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "wallets": "Wallets",
+    "transactions": "Transactions",
+    "alerts": "Alerts",
+    "reports": "Reports",
+    "logout": "Logout"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "totalWallets": "Total Wallets",
+    "transactions": "Transactions",
+    "unreadAlerts": "Unread Alerts",
+    "highRisk": "High Risk",
+    "riskDistribution": "Risk Distribution",
+    "recentTransactions": "Recent Transactions"
+  },
+  "wallets": {
+    "title": "Wallets",
+    "addWallet": "Add Wallet",
+    "addNew": "Add New Wallet",
+    "address": "Wallet Address",
+    "blockchain": "Blockchain",
+    "label": "Label",
+    "optional": "Optional",
+    "cancel": "Cancel",
+    "unnamed": "Unnamed Wallet",
+    "risk": "Risk"
+  },
+  "transactions": {
+    "title": "Transactions",
+    "allRiskLevels": "All Risk Levels",
+    "lowRisk": "Low Risk",
+    "mediumRisk": "Medium Risk",
+    "highRisk": "High Risk",
+    "criticalRisk": "Critical Risk",
+    "hash": "Transaction Hash",
+    "amount": "Amount",
+    "riskLevel": "Risk Level",
+    "date": "Date"
+  },
+  "alerts": {
+    "title": "Alerts",
+    "all": "All Alerts",
+    "unread": "Unread",
+    "unresolved": "Unresolved",
+    "new": "NEW"
+  },
+  "reports": {
+    "title": "Reports",
+    "generate": "Generate Report",
+    "type": "Report Type",
+    "format": "Format",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "custom": "Custom",
+    "download": "Download",
+    "status": "Status"
+  },
+  "auth": {
+    "welcomeBack": "Welcome back",
+    "email": "Email Address",
+    "password": "Password",
+    "signIn": "Sign In",
+    "signingIn": "Signing in...",
+    "dontHaveAccount": "Don't have an account?",
+    "register": "Register",
+    "createAccount": "Create Account",
+    "joinToday": "Join CryptoAML today",
+    "fullName": "Full Name",
+    "company": "Company",
+    "creatingAccount": "Creating account...",
+    "alreadyHaveAccount": "Already have an account?"
+  }
+}

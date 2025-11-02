@@ -1,0 +1,79 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "wallets": "Wallets",
+    "transactions": "Transaktionen",
+    "alerts": "Warnungen",
+    "reports": "Berichte",
+    "logout": "Abmelden"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "totalWallets": "Gesamt Wallets",
+    "transactions": "Transaktionen",
+    "unreadAlerts": "Ungelesene Warnungen",
+    "highRisk": "Hohes Risiko",
+    "riskDistribution": "Risikoverteilung",
+    "recentTransactions": "Letzte Transaktionen"
+  },
+  "wallets": {
+    "title": "Wallets",
+    "addWallet": "Wallet Hinzufügen",
+    "addNew": "Neues Wallet Hinzufügen",
+    "address": "Wallet-Adresse",
+    "blockchain": "Blockchain",
+    "label": "Bezeichnung",
+    "optional": "Optional",
+    "cancel": "Abbrechen",
+    "unnamed": "Unbenanntes Wallet",
+    "risk": "Risiko"
+  },
+  "transactions": {
+    "title": "Transaktionen",
+    "allRiskLevels": "Alle Risikostufen",
+    "lowRisk": "Niedriges Risiko",
+    "mediumRisk": "Mittleres Risiko",
+    "highRisk": "Hohes Risiko",
+    "criticalRisk": "Kritisches Risiko",
+    "hash": "Transaktions-Hash",
+    "amount": "Betrag",
+    "riskLevel": "Risikostufe",
+    "date": "Datum"
+  },
+  "alerts": {
+    "title": "Warnungen",
+    "all": "Alle Warnungen",
+    "unread": "Ungelesen",
+    "unresolved": "Ungelöst",
+    "new": "NEU"
+  },
+  "reports": {
+    "title": "Berichte",
+    "generate": "Bericht Erstellen",
+    "type": "Berichtstyp",
+    "format": "Format",
+    "startDate": "Startdatum",
+    "endDate": "Enddatum",
+    "daily": "Täglich",
+    "weekly": "Wöchentlich",
+    "monthly": "Monatlich",
+    "custom": "Benutzerdefiniert",
+    "download": "Herunterladen",
+    "status": "Status"
+  },
+  "auth": {
+    "welcomeBack": "Willkommen zurück",
+    "email": "E-Mail-Adresse",
+    "password": "Passwort",
+    "signIn": "Anmelden",
+    "signingIn": "Anmeldung...",
+    "dontHaveAccount": "Noch kein Konto?",
+    "register": "Registrieren",
+    "createAccount": "Konto Erstellen",
+    "joinToday": "Treten Sie CryptoAML heute bei",
+    "fullName": "Vollständiger Name",
+    "company": "Unternehmen",
+    "creatingAccount": "Konto wird erstellt...",
+    "alreadyHaveAccount": "Bereits ein Konto?"
+  }
+}

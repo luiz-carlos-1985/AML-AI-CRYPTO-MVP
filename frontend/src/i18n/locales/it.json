@@ -1,0 +1,79 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "wallets": "Portafogli",
+    "transactions": "Transazioni",
+    "alerts": "Avvisi",
+    "reports": "Rapporti",
+    "logout": "Esci"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "totalWallets": "Totale Portafogli",
+    "transactions": "Transazioni",
+    "unreadAlerts": "Avvisi Non Letti",
+    "highRisk": "Alto Rischio",
+    "riskDistribution": "Distribuzione del Rischio",
+    "recentTransactions": "Transazioni Recenti"
+  },
+  "wallets": {
+    "title": "Portafogli",
+    "addWallet": "Aggiungi Portafoglio",
+    "addNew": "Aggiungi Nuovo Portafoglio",
+    "address": "Indirizzo Portafoglio",
+    "blockchain": "Blockchain",
+    "label": "Etichetta",
+    "optional": "Opzionale",
+    "cancel": "Annulla",
+    "unnamed": "Portafoglio Senza Nome",
+    "risk": "Rischio"
+  },
+  "transactions": {
+    "title": "Transazioni",
+    "allRiskLevels": "Tutti i Livelli di Rischio",
+    "lowRisk": "Rischio Basso",
+    "mediumRisk": "Rischio Medio",
+    "highRisk": "Rischio Alto",
+    "criticalRisk": "Rischio Critico",
+    "hash": "Hash Transazione",
+    "amount": "Importo",
+    "riskLevel": "Livello di Rischio",
+    "date": "Data"
+  },
+  "alerts": {
+    "title": "Avvisi",
+    "all": "Tutti gli Avvisi",
+    "unread": "Non Letti",
+    "unresolved": "Non Risolti",
+    "new": "NUOVO"
+  },
+  "reports": {
+    "title": "Rapporti",
+    "generate": "Genera Rapporto",
+    "type": "Tipo di Rapporto",
+    "format": "Formato",
+    "startDate": "Data Inizio",
+    "endDate": "Data Fine",
+    "daily": "Giornaliero",
+    "weekly": "Settimanale",
+    "monthly": "Mensile",
+    "custom": "Personalizzato",
+    "download": "Scarica",
+    "status": "Stato"
+  },
+  "auth": {
+    "welcomeBack": "Bentornato",
+    "email": "Indirizzo Email",
+    "password": "Password",
+    "signIn": "Accedi",
+    "signingIn": "Accesso in corso...",
+    "dontHaveAccount": "Non hai un account?",
+    "register": "Registrati",
+    "createAccount": "Crea Account",
+    "joinToday": "Unisciti a CryptoAML oggi",
+    "fullName": "Nome Completo",
+    "company": "Azienda",
+    "creatingAccount": "Creazione account...",
+    "alreadyHaveAccount": "Hai già un account?"
+  }
+}

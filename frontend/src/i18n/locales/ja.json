@@ -1,0 +1,79 @@
+{
+  "nav": {
+    "dashboard": "ダッシュボード",
+    "wallets": "ウォレット",
+    "transactions": "取引",
+    "alerts": "アラート",
+    "reports": "レポート",
+    "logout": "ログアウト"
+  },
+  "dashboard": {
+    "title": "ダッシュボード",
+    "totalWallets": "総ウォレット数",
+    "transactions": "取引",
+    "unreadAlerts": "未読アラート",
+    "highRisk": "高リスク",
+    "riskDistribution": "リスク分布",
+    "recentTransactions": "最近の取引"
+  },
+  "wallets": {
+    "title": "ウォレット",
+    "addWallet": "ウォレット追加",
+    "addNew": "新しいウォレットを追加",
+    "address": "ウォレットアドレス",
+    "blockchain": "ブロックチェーン",
+    "label": "ラベル",
+    "optional": "オプション",
+    "cancel": "キャンセル",
+    "unnamed": "名前なしウォレット",
+    "risk": "リスク"
+  },
+  "transactions": {
+    "title": "取引",
+    "allRiskLevels": "すべてのリスクレベル",
+    "lowRisk": "低リスク",
+    "mediumRisk": "中リスク",
+    "highRisk": "高リスク",
+    "criticalRisk": "重大リスク",
+    "hash": "取引ハッシュ",
+    "amount": "金額",
+    "riskLevel": "リスクレベル",
+    "date": "日付"
+  },
+  "alerts": {
+    "title": "アラート",
+    "all": "すべてのアラート",
+    "unread": "未読",
+    "unresolved": "未解決",
+    "new": "新規"
+  },
+  "reports": {
+    "title": "レポート",
+    "generate": "レポート生成",
+    "type": "レポートタイプ",
+    "format": "フォーマット",
+    "startDate": "開始日",
+    "endDate": "終了日",
+    "daily": "日次",
+    "weekly": "週次",
+    "monthly": "月次",
+    "custom": "カスタム",
+    "download": "ダウンロード",
+    "status": "ステータス"
+  },
+  "auth": {
+    "welcomeBack": "おかえりなさい",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "signIn": "ログイン",
+    "signingIn": "ログイン中...",
+    "dontHaveAccount": "アカウントをお持ちでないですか？",
+    "register": "登録",
+    "createAccount": "アカウント作成",
+    "joinToday": "今すぐCryptoAMLに参加",
+    "fullName": "氏名",
+    "company": "会社",
+    "creatingAccount": "アカウント作成中...",
+    "alreadyHaveAccount": "既にアカウントをお持ちですか？"
+  }
+}

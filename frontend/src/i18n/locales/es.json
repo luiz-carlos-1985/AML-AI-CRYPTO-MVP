@@ -1,0 +1,79 @@
+{
+  "nav": {
+    "dashboard": "Panel",
+    "wallets": "Billeteras",
+    "transactions": "Transacciones",
+    "alerts": "Alertas",
+    "reports": "Informes",
+    "logout": "Cerrar Sesión"
+  },
+  "dashboard": {
+    "title": "Panel",
+    "totalWallets": "Total de Billeteras",
+    "transactions": "Transacciones",
+    "unreadAlerts": "Alertas No Leídas",
+    "highRisk": "Alto Riesgo",
+    "riskDistribution": "Distribución de Riesgo",
+    "recentTransactions": "Transacciones Recientes"
+  },
+  "wallets": {
+    "title": "Billeteras",
+    "addWallet": "Agregar Billetera",
+    "addNew": "Agregar Nueva Billetera",
+    "address": "Dirección de Billetera",
+    "blockchain": "Blockchain",
+    "label": "Etiqueta",
+    "optional": "Opcional",
+    "cancel": "Cancelar",
+    "unnamed": "Billetera Sin Nombre",
+    "risk": "Riesgo"
+  },
+  "transactions": {
+    "title": "Transacciones",
+    "allRiskLevels": "Todos los Niveles de Riesgo",
+    "lowRisk": "Riesgo Bajo",
+    "mediumRisk": "Riesgo Medio",
+    "highRisk": "Riesgo Alto",
+    "criticalRisk": "Riesgo Crítico",
+    "hash": "Hash de Transacción",
+    "amount": "Cantidad",
+    "riskLevel": "Nivel de Riesgo",
+    "date": "Fecha"
+  },
+  "alerts": {
+    "title": "Alertas",
+    "all": "Todas las Alertas",
+    "unread": "No Leídas",
+    "unresolved": "Sin Resolver",
+    "new": "NUEVO"
+  },
+  "reports": {
+    "title": "Informes",
+    "generate": "Generar Informe",
+    "type": "Tipo de Informe",
+    "format": "Formato",
+    "startDate": "Fecha de Inicio",
+    "endDate": "Fecha de Fin",
+    "daily": "Diario",
+    "weekly": "Semanal",
+    "monthly": "Mensual",
+    "custom": "Personalizado",
+    "download": "Descargar",
+    "status": "Estado"
+  },
+  "auth": {
+    "welcomeBack": "Bienvenido de nuevo",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "signIn": "Iniciar Sesión",
+    "signingIn": "Iniciando sesión...",
+    "dontHaveAccount": "¿No tienes una cuenta?",
+    "register": "Registrarse",
+    "createAccount": "Crear Cuenta",
+    "joinToday": "Únete a CryptoAML hoy",
+    "fullName": "Nombre Completo",
+    "company": "Empresa",
+    "creatingAccount": "Creando cuenta...",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?"
+  }
+}

@@ -2,18 +2,22 @@ import { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Wallet, ArrowLeftRight, Bell, FileText, LogOut, Menu, X } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const Layout = () => {
   const { user, logout } = useAuth();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const { t } = useTranslation();
+
   const navigation = [
-    { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-    { name: 'Wallets', href: '/wallets', icon: Wallet },
-    { name: 'Transactions', href: '/transactions', icon: ArrowLeftRight },
-    { name: 'Alerts', href: '/alerts', icon: Bell },
-    { name: 'Reports', href: '/reports', icon: FileText },
+    { name: t('nav.dashboard'), href: '/', icon: LayoutDashboard },
+    { name: t('nav.wallets'), href: '/wallets', icon: Wallet },
+    { name: t('nav.transactions'), href: '/transactions', icon: ArrowLeftRight },
+    { name: t('nav.alerts'), href: '/alerts', icon: Bell },
+    { name: t('nav.reports'), href: '/reports', icon: FileText },
   ];
 
   return (
@@ -59,6 +63,7 @@ const Layout = () => {
             
             {/* User Info & Logout */}
             <div className="hidden md:flex items-center space-x-3 xl:space-x-4 tv:space-x-8">
+              <LanguageSwitcher />
               <div className="text-sm xl:text-base tv:text-2xl text-right">
                 <p className="font-medium text-slate-200">{user?.name}</p>
                 <p className="text-emerald-400 text-xs xl:text-sm tv:text-xl">{user?.plan}</p>
@@ -68,7 +73,7 @@ const Layout = () => {
                 className="inline-flex items-center px-3 xl:px-4 tv:px-8 py-2 tv:py-4 text-sm xl:text-base tv:text-2xl font-medium rounded-lg text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-lg shadow-red-500/30 transition-all duration-200 transform hover:scale-105"
               >
                 <LogOut className="w-4 h-4 tv:w-7 tv:h-7 mr-2" />
-                <span className="hidden xl:inline">Logout</span>
+                <span className="hidden xl:inline">{t('nav.logout')}</span>
               </button>
             </div>
 
@@ -113,12 +118,15 @@ const Layout = () => {
                   <p className="font-medium text-slate-200">{user?.name}</p>
                   <p className="text-emerald-400 text-sm">{user?.plan}</p>
                 </div>
+                <div className="px-4 py-2">
+                  <LanguageSwitcher />
+                </div>
                 <button
                   onClick={() => { logout(); setMobileMenuOpen(false); }}
                   className="w-full flex items-center px-4 py-3 mt-2 rounded-lg text-base font-medium text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-lg shadow-red-500/30"
                 >
                   <LogOut className="w-5 h-5 mr-3" />
-                  Logout
+                  {t('nav.logout')}
                 </button>
               </div>
             </div>
