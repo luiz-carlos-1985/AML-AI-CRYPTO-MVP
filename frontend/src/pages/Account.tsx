@@ -818,13 +818,12 @@ const Account = () => {
               {paymentMethod === 'pix' && (
                 <div className="space-y-4">
                   <p className="text-slate-400 mb-4">Scan the QR code with your banking app</p>
-                  <div className="p-6 bg-white rounded-xl">
+                  <div className="flex justify-center p-6 bg-white rounded-xl">
                     <QRCodeSVG
                       value={paymentData.pixCode}
-                      size={256}
+                      size={Math.min(256, window.innerWidth - 120)}
                       level="H"
                       includeMargin={true}
-                      className="mx-auto"
                     />
                   </div>
                   <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
@@ -858,13 +857,12 @@ const Account = () => {
               {paymentMethod === 'bitcoin' && (
                 <div className="space-y-4">
                   <p className="text-slate-400 mb-4">Send exactly {paymentData.amount_btc} BTC to the address below</p>
-                  <div className="p-6 bg-white rounded-xl">
+                  <div className="flex justify-center p-6 bg-white rounded-xl">
                     <QRCodeSVG
                       value={`bitcoin:${paymentData.address}?amount=${paymentData.amount_btc}`}
-                      size={256}
+                      size={Math.min(256, window.innerWidth - 120)}
                       level="H"
                       includeMargin={true}
-                      className="mx-auto"
                     />
                   </div>
                   <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
@@ -891,13 +889,12 @@ const Account = () => {
               {paymentMethod === 'ethereum' && (
                 <div className="space-y-4">
                   <p className="text-slate-400 mb-4">Send exactly {paymentData.amount_eth} ETH to the address below</p>
-                  <div className="p-6 bg-white rounded-xl">
+                  <div className="flex justify-center p-6 bg-white rounded-xl">
                     <QRCodeSVG
                       value={`ethereum:${paymentData.address}?value=${paymentData.amount_eth}`}
-                      size={256}
+                      size={Math.min(256, window.innerWidth - 120)}
                       level="H"
                       includeMargin={true}
-                      className="mx-auto"
                     />
                   </div>
                   <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
@@ -924,13 +921,12 @@ const Account = () => {
               {paymentMethod === 'usdt' && (
                 <div className="space-y-4">
                   <p className="text-slate-400 mb-4">Send exactly {paymentData.amount_usdt} USDT to the address below</p>
-                  <div className="p-6 bg-white rounded-xl">
+                  <div className="flex justify-center p-6 bg-white rounded-xl">
                     <QRCodeSVG
                       value={paymentData.address}
-                      size={256}
+                      size={Math.min(256, window.innerWidth - 120)}
                       level="H"
                       includeMargin={true}
-                      className="mx-auto"
                     />
                   </div>
                   <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
