@@ -1,0 +1,21 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="#111827"/>
+  
+  <!-- Shield -->
+  <path d="M512 128L256 256V448C256 640 384 800 512 896C640 800 768 640 768 448V256L512 128Z" fill="url(#gradient1)" stroke="#10b981" stroke-width="16"/>
+  
+  <!-- Checkmark -->
+  <path d="M384 512L464 592L640 416" stroke="#10b981" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- AML Text -->
+  <text x="512" y="680" font-family="Arial, sans-serif" font-size="120" font-weight="bold" fill="#10b981" text-anchor="middle">AML</text>
+  
+  <!-- Gradient -->
+  <defs>
+    <linearGradient id="gradient1" x1="256" y1="128" x2="768" y2="896" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@capacitor/android": "^7.4.4",
+    "@capacitor/app": "^7.1.0",
+    "@capacitor/cli": "^7.4.4",
+    "@capacitor/core": "^7.4.4",
+    "@capacitor/ios": "^7.4.4",
+    "@capacitor/splash-screen": "^7.0.3",
+    "@capacitor/status-bar": "^7.0.3",
     "@headlessui/react": "^2.2.9",
     "axios": "^1.6.5",
     "date-fns": "^3.0.6",
@@ -35,6 +42,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:ios": "npm run build && npx cap sync ios && npx cap open ios",
+    "build:android": "npm run build && npx cap sync android && npx cap open android",
+    "sync:ios": "npx cap sync ios",
+    "sync:android": "npx cap sync android",
+    "open:ios": "npx cap open ios",
+    "open:android": "npx cap open android"
   }
 }
