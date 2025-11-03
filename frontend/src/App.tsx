@@ -5,11 +5,13 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Wallets from './pages/Wallets';
+import WalletMonitoring from './pages/WalletMonitoring';
 import Transactions from './pages/Transactions';
 import Alerts from './pages/Alerts';
 import Reports from './pages/Reports';
 import Account from './pages/Account';
 import PaymentSettings from './pages/PaymentSettings';
+import ApiSettings from './pages/ApiSettings';
 import Layout from './components/Layout';
 import InstallPWA from './components/InstallPWA';
 import OfflineIndicator from './components/OfflineIndicator';
@@ -44,11 +46,13 @@ function App() {
           <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
             <Route index element={<Dashboard />} />
             <Route path="wallets" element={<Wallets />} />
+            <Route path="monitoring" element={<WalletMonitoring />} />
             <Route path="transactions" element={<Transactions />} />
             <Route path="alerts" element={<Alerts />} />
             <Route path="reports" element={<Reports />} />
             <Route path="account" element={<Account />} />
             <Route path="payment-settings" element={<PaymentSettings />} />
+            <Route path="api-settings" element={<ApiSettings />} />
           </Route>
         </Routes>
       </BrowserRouter>

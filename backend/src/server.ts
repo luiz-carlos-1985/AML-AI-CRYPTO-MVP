@@ -14,7 +14,10 @@ import dashboardRoutes from './routes/dashboard.routes';
 import paymentRoutes from './routes/payment.routes';
 import adminRoutes from './routes/admin.routes';
 import twoFactorRoutes from './routes/twoFactor.routes';
+import monitoringRoutes from './routes/monitoring.routes';
+import apiConfigRoutes from './routes/apiConfig.routes';
 import { errorHandler } from './middleware/errorHandler';
+import { blockchainMonitor } from './services/blockchain.service';
 
 dotenv.config();
 
@@ -57,6 +60,8 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/2fa', twoFactorRoutes);
+app.use('/api/monitoring', monitoringRoutes);
+app.use('/api/config', apiConfigRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
@@ -78,4 +83,8 @@ app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV}`);
+  
+  // Start blockchain monitoring
+  blockchainMonitor.startContinuousMonitoring();
+  console.log('🔍 Blockchain monitoring started');
 });
