@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Wallet, ArrowLeftRight, Bell, TrendingUp } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { motion } from 'framer-motion';
 import CountUp from 'react-countup';
 import { useTranslation } from 'react-i18next';

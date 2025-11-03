@@ -1,12 +1,10 @@
 import { motion } from 'framer-motion';
-import { useTranslation } from 'react-i18next';
 import AIExplainer from '../components/AIExplainer';
 import ComplianceInfo from '../components/ComplianceInfo';
 import RiskEducation from '../components/RiskEducation';
 import TransparencyBadge from '../components/TransparencyBadge';
 
 const Transparency = () => {
-  const { t } = useTranslation();
 
   return (
     <div className="space-y-6 md:space-y-8">

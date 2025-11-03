@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { User, CreditCard, Shield, Bell, Key, LogOut, Crown, Zap, Check, X, Bitcoin, Smartphone, Wallet as WalletIcon, Globe, Camera, Upload, Activity, TrendingUp, Award, Clock, Download, Edit2, Save, Mail, Building, MapPin, Phone, Copy } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { User, CreditCard, Shield, Bell, Key, LogOut, Crown, Zap, Check, X, Bitcoin, Smartphone, Wallet as WalletIcon, Globe, Camera, Activity, Award, Clock, Edit2, Save, Mail, Building, MapPin, Phone, Copy } from 'lucide-react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';

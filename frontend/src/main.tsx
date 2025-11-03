@@ -3,19 +3,11 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
 import './i18n/config';
-import { registerSW } from 'virtual:pwa-register';
 
 // Register service worker
 if ('serviceWorker' in navigator) {
-  registerSW({
-    onNeedRefresh() {
-      if (confirm('New version available! Reload to update?')) {
-        window.location.reload();
-      }
-    },
-    onOfflineReady() {
-      console.log('App ready to work offline');
-    },
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
   });
 }
 
