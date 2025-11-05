@@ -15,6 +15,7 @@ import ApiSettings from './pages/ApiSettings';
 import Integrations from './pages/Integrations';
 import Analytics from './pages/Analytics';
 import Team from './pages/Team';
+import Tools from './pages/Tools';
 import Layout from './components/Layout';
 import InstallPWA from './components/InstallPWA';
 import OfflineIndicator from './components/OfflineIndicator';
@@ -59,6 +60,7 @@ function App() {
             <Route path="integrations" element={<Integrations />} />
             <Route path="analytics" element={<Analytics />} />
             <Route path="team" element={<Team />} />
+            <Route path="tools" element={<Tools />} />
           </Route>
         </Routes>
       </BrowserRouter>

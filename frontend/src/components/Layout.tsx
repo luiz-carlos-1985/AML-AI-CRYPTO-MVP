@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Wallet, ArrowLeftRight, Bell, FileText, User, Settings, LogOut, Menu, X, BarChart3, Users } from 'lucide-react';
+import { LayoutDashboard, Wallet, ArrowLeftRight, Bell, FileText, User, Settings, LogOut, Menu, X, BarChart3, Users, Wrench } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
@@ -20,6 +20,7 @@ const Layout = () => {
     { name: t('nav.transactions'), href: '/transactions', icon: ArrowLeftRight },
     { name: t('nav.alerts'), href: '/alerts', icon: Bell },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
+    { name: 'Tools', href: '/tools', icon: Wrench },
     { name: t('nav.reports'), href: '/reports', icon: FileText },
     { name: 'Team', href: '/team', icon: Users },
     { name: 'Integrations', href: '/integrations', icon: Settings },
