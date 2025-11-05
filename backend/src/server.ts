@@ -19,6 +19,8 @@ import apiConfigRoutes from './routes/apiConfig.routes';
 import apiKeyRoutes from './routes/apiKey.routes';
 import notificationRoutes from './routes/notification.routes';
 import auditLogRoutes from './routes/auditLog.routes';
+import webhookRoutes from './routes/webhook.routes';
+import exportRoutes from './routes/export.routes';
 import { errorHandler } from './middleware/errorHandler';
 import { blockchainMonitor } from './services/blockchain.service';
 
@@ -60,6 +62,8 @@ app.use('/api/config', apiConfigRoutes);
 app.use('/api/keys', apiKeyRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/audit-logs', auditLogRoutes);
+app.use('/api/webhooks', webhookRoutes);
+app.use('/api/export', exportRoutes);
 
 // Rate limiting
 const limiter = rateLimit({

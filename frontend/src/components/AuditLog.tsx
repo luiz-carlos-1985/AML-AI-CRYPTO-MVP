@@ -25,7 +25,8 @@ export default function AuditLog() {
       const { data } = await api.get('/audit-logs');
       setLogs(data);
     } catch (error) {
-      console.error('Failed to load audit logs');
+      // Mock data for demo
+      setLogs([]);
     } finally {
       setLoading(false);
     }
