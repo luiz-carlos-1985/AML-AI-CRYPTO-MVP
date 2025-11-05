@@ -14,6 +14,12 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - cryptoaml-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cryptoaml"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
 
   redis:
     image: redis:7-alpine
@@ -22,6 +28,12 @@ services:
       - "6379:6379"
     networks:
       - cryptoaml-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
 
   backend:
     build: ./backend
@@ -29,16 +41,31 @@ services:
     environment:
       DATABASE_URL: postgresql://cryptoaml:cryptoaml123@postgres:5432/cryptoaml
       REDIS_HOST: redis
+      REDIS_PORT: 6379
       ML_SERVICE_URL: http://ml-service:8000
       NODE_ENV: production
+      JWT_SECRET: ${JWT_SECRET:-CHANGE_THIS_SECRET_IN_PRODUCTION}
+      JWT_EXPIRES_IN: 7d
+      RATE_LIMIT_WINDOW_MS: 900000
+      RATE_LIMIT_MAX_REQUESTS: 100
     ports:
       - "3001:3001"
     depends_on:
-      - postgres
-      - redis
-      - ml-service
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      ml-service:
+        condition: service_started
     networks:
       - cryptoaml-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
 
   ml-service:
     build: ./ml-service
@@ -47,6 +74,13 @@ services:
       - "8000:8000"
     networks:
       - cryptoaml-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
 
   frontend:
     build: ./frontend
@@ -54,9 +88,16 @@ services:
     ports:
       - "3000:80"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     networks:
       - cryptoaml-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
 
 volumes:
   postgres_data:

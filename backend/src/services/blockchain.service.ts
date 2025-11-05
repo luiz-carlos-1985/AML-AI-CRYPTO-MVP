@@ -40,7 +40,7 @@ export class BlockchainMonitor {
       case 'ethereum':
         return this.fetchEthereumTransactions(address);
       default:
-        throw new Error(`Blockchain ${blockchain} not supported`);
+        return [];
     }
   }
 

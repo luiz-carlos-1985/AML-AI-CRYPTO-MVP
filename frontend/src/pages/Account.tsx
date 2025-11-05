@@ -9,6 +9,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import TwoFactorAuth from '../components/TwoFactorAuth';
 import { useResponsive } from '../hooks/useResponsive';
 import { countries } from '../utils/countries';
+import ApiKeys from '../components/ApiKeys';
 
 const Account = () => {
   const navigate = useNavigate();
@@ -735,19 +736,7 @@ const Account = () => {
           )}
 
           {activeTab === 'api' && (
-            <div className="space-y-6">
-              <div className="flex justify-between items-center">
-                <h3 className="text-lg font-bold text-white">API Keys</h3>
-                <button className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200">
-                  Generate New Key
-                </button>
-              </div>
-              <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl">
-                <p className="text-amber-400 text-sm">
-                  <strong>Note:</strong> API access is available for Growth and Enterprise plans only.
-                </p>
-              </div>
-            </div>
+            <ApiKeys />
           )}
         </div>
       </div>

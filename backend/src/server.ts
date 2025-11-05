@@ -16,6 +16,7 @@ import adminRoutes from './routes/admin.routes';
 import twoFactorRoutes from './routes/twoFactor.routes';
 import monitoringRoutes from './routes/monitoring.routes';
 import apiConfigRoutes from './routes/apiConfig.routes';
+import apiKeyRoutes from './routes/apiKey.routes';
 import { errorHandler } from './middleware/errorHandler';
 import { blockchainMonitor } from './services/blockchain.service';
 
@@ -54,6 +55,7 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/monitoring', monitoringRoutes);
 app.use('/api/config', apiConfigRoutes);
+app.use('/api/keys', apiKeyRoutes);
 
 // Rate limiting
 const limiter = rateLimit({

@@ -8,7 +8,12 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev"
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:migrate:deploy": "prisma migrate deploy",
+    "validate:production": "tsx scripts/validateProduction.ts",
+    "health:check": "tsx scripts/healthCheck.ts",
+    "test:integration": "tsx scripts/integrationTest.ts",
+    "admin:set": "tsx scripts/setAdmin.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.18.0",

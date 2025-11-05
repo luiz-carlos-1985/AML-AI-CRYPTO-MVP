@@ -75,7 +75,27 @@ async def analyze_transaction(request: TransactionAnalysisRequest):
 
 @app.get("/health")
 def health_check():
-    return {"status": "healthy", "timestamp": datetime.now().isoformat()}
+    try:
+        # Test analyzer is working
+        test_result = analyzer.analyze_transaction(
+            tx_hash="test",
+            from_address="0x0000000000000000000000000000000000000000",
+            to_address="0x0000000000000000000000000000000000000001",
+            amount=1.0,
+            blockchain="ETHEREUM"
+        )
+        return {
+            "status": "healthy",
+            "timestamp": datetime.now().isoformat(),
+            "analyzer": "operational",
+            "version": "1.0.0"
+        }
+    except Exception as e:
+        return {
+            "status": "unhealthy",
+            "timestamp": datetime.now().isoformat(),
+            "error": str(e)
+        }
 
 if __name__ == "__main__":
     import uvicorn
