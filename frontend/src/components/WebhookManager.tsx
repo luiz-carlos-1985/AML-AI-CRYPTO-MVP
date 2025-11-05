@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { Webhook, Plus, Trash2, TestTube, Copy, Eye, EyeOff } from 'lucide-react';
 import api from '../services/api';
@@ -155,12 +156,12 @@ export default function WebhookManager() {
         ))}
       </div>
 
-      {showModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
+      {showModal && createPortal(
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-[99999]">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-slate-800 border border-slate-700 rounded-2xl p-6 max-w-md w-full relative z-[101]"
+            className="bg-slate-800 border border-slate-700 rounded-2xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto"
           >
             <h3 className="text-xl font-bold text-white mb-4">Add Webhook</h3>
             
@@ -215,7 +216,8 @@ export default function WebhookManager() {
               </div>
             </div>
           </motion.div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
