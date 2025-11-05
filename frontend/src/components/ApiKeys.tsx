@@ -9,6 +9,7 @@ const ApiKeys = () => {
   const [showNewKeyModal, setShowNewKeyModal] = useState(false);
   const [newKeyName, setNewKeyName] = useState('');
   const [visibleKeys, setVisibleKeys] = useState<Set<string>>(new Set());
+  const [selectedLang, setSelectedLang] = useState<{[key: string]: string}>({});
 
   useEffect(() => {
     loadApiKeys();
@@ -67,17 +68,31 @@ const ApiKeys = () => {
     toast.success('API key copied to clipboard!');
   };
 
+  const testApiKey = async (key: string) => {
+    try {
+      toast.loading('Testing API key...');
+      const response = await api.get('/wallets', {
+        headers: { Authorization: `Bearer ${key}` }
+      });
+      toast.dismiss();
+      toast.success('API key is working! ✅');
+    } catch (error) {
+      toast.dismiss();
+      toast.error('API key test failed');
+    }
+  };
+
   const maskKey = (key: string) => {
     return `${key.substring(0, 10)}${'*'.repeat(20)}${key.substring(key.length - 10)}`;
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-bold text-white">API Keys</h3>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+        <h3 className="text-base sm:text-lg font-bold text-white">API Keys</h3>
         <button
           onClick={() => setShowNewKeyModal(true)}
-          className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200"
+          className="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 text-sm sm:text-base touch-target"
         >
           <Plus className="w-4 h-4 mr-2" />
           Generate New Key
@@ -85,26 +100,26 @@ const ApiKeys = () => {
       </div>
 
       {apiKeys.length === 0 ? (
-        <div className="text-center py-12 bg-slate-900/50 rounded-xl border border-slate-700/50">
-          <Key className="w-12 h-12 text-slate-600 mx-auto mb-4" />
-          <p className="text-slate-400 mb-4">No API keys yet</p>
+        <div className="text-center py-8 sm:py-12 bg-slate-900/50 rounded-xl border border-slate-700/50">
+          <Key className="w-10 h-10 sm:w-12 sm:h-12 text-slate-600 mx-auto mb-3 sm:mb-4" />
+          <p className="text-sm sm:text-base text-slate-400 mb-3 sm:mb-4 px-4">No API keys yet</p>
           <button
             onClick={() => setShowNewKeyModal(true)}
-            className="px-6 py-2 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-all"
+            className="px-4 sm:px-6 py-2 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-all text-sm sm:text-base touch-target"
           >
             Generate Your First Key
           </button>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {apiKeys.map((apiKey) => (
             <div
               key={apiKey.id}
-              className="p-4 bg-slate-900/50 rounded-xl border border-slate-700/50 hover:border-slate-600/50 transition-all"
+              className="p-3 sm:p-4 bg-slate-900/50 rounded-xl border border-slate-700/50 hover:border-slate-600/50 transition-all"
             >
-              <div className="flex items-start justify-between mb-3">
-                <div>
-                  <h4 className="text-white font-medium">{apiKey.name}</h4>
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-0 mb-3">
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-sm sm:text-base text-white font-medium truncate">{apiKey.name}</h4>
                   <p className="text-xs text-slate-500 mt-1">
                     Created {format(new Date(apiKey.createdAt), 'MMM dd, yyyy')}
                   </p>
@@ -116,7 +131,7 @@ const ApiKeys = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <span
-                    className={`px-2 py-1 rounded text-xs font-medium ${
+                    className={`px-2 py-1 rounded text-xs font-medium whitespace-nowrap ${
                       apiKey.isActive
                         ? 'bg-emerald-500/20 text-emerald-400'
                         : 'bg-slate-500/20 text-slate-400'
@@ -127,39 +142,89 @@ const ApiKeys = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 mb-3">
-                <div className="flex-1 px-3 py-2 bg-slate-800/50 rounded-lg border border-slate-700/50 font-mono text-sm text-white overflow-hidden">
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-3">
+                <div className="flex-1 px-2 sm:px-3 py-1.5 sm:py-2 bg-slate-800/50 rounded-lg border border-slate-700/50 font-mono text-xs sm:text-sm text-white overflow-hidden">
                   {visibleKeys.has(apiKey.id) ? apiKey.key : maskKey(apiKey.key)}
                 </div>
                 <button
                   onClick={() => toggleKeyVisibility(apiKey.id)}
-                  className="p-2 hover:bg-slate-700 rounded-lg transition-all"
+                  className="p-1.5 sm:p-2 hover:bg-slate-700 rounded-lg transition-all touch-target flex-shrink-0"
                   title={visibleKeys.has(apiKey.id) ? 'Hide' : 'Show'}
                 >
                   {visibleKeys.has(apiKey.id) ? (
-                    <EyeOff className="w-4 h-4 text-slate-400" />
+                    <EyeOff className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400" />
                   ) : (
-                    <Eye className="w-4 h-4 text-slate-400" />
+                    <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400" />
                   )}
                 </button>
                 <button
                   onClick={() => copyKey(apiKey.key)}
-                  className="p-2 hover:bg-slate-700 rounded-lg transition-all"
+                  className="p-1.5 sm:p-2 hover:bg-slate-700 rounded-lg transition-all touch-target flex-shrink-0"
                   title="Copy"
                 >
-                  <Copy className="w-4 h-4 text-emerald-400" />
+                  <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />
+                </button>
+                <button
+                  onClick={() => testApiKey(apiKey.key)}
+                  className="p-1.5 sm:p-2 hover:bg-blue-500/20 rounded-lg transition-all touch-target flex-shrink-0"
+                  title="Test"
+                >
+                  <Key className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400" />
                 </button>
                 <button
                   onClick={() => deleteKey(apiKey.id)}
-                  className="p-2 hover:bg-red-500/20 rounded-lg transition-all"
+                  className="p-1.5 sm:p-2 hover:bg-red-500/20 rounded-lg transition-all touch-target flex-shrink-0"
                   title="Delete"
                 >
-                  <Trash2 className="w-4 h-4 text-red-400" />
+                  <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-400" />
                 </button>
               </div>
 
-              <div className="text-xs text-slate-500">
-                Use this key in your API requests with the header: <code className="text-emerald-400">Authorization: Bearer {'{'}your-key{'}'}</code>
+              <div className="mt-3 p-2.5 sm:p-3 bg-slate-800/50 rounded-lg border border-slate-700/50">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                  <p className="text-xs text-slate-400 font-medium">Quick Start:</p>
+                  <div className="flex gap-1 overflow-x-auto pb-1">
+                    {['curl', 'js', 'python', 'php', 'go'].map((lang) => (
+                      <button
+                        key={lang}
+                        onClick={() => setSelectedLang({...selectedLang, [apiKey.id]: lang})}
+                        className={`px-2 py-1 text-xs rounded transition-all whitespace-nowrap touch-target ${
+                          (selectedLang[apiKey.id] || 'curl') === lang
+                            ? 'bg-emerald-500 text-white'
+                            : 'bg-slate-700/50 text-slate-400 hover:bg-slate-700'
+                        }`}
+                      >
+                        {lang === 'js' ? 'JS' : lang.toUpperCase()}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex items-start gap-1.5 sm:gap-2">
+                  <code className="flex-1 text-xs text-emerald-400 bg-slate-900/50 px-2 py-1.5 rounded overflow-x-auto break-all">
+                    {(selectedLang[apiKey.id] || 'curl') === 'curl' && `curl -H "Authorization: Bearer ${apiKey.key}" https://api.cryptoaml.com/wallets`}
+                    {(selectedLang[apiKey.id] || 'curl') === 'js' && `fetch('https://api.cryptoaml.com/wallets', { headers: { 'Authorization': 'Bearer ${apiKey.key}' } })`}
+                    {(selectedLang[apiKey.id] || 'curl') === 'python' && `requests.get('https://api.cryptoaml.com/wallets', headers={'Authorization': 'Bearer ${apiKey.key}'})`}
+                    {(selectedLang[apiKey.id] || 'curl') === 'php' && `$ch = curl_init('https://api.cryptoaml.com/wallets'); curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ${apiKey.key}']);`}
+                    {(selectedLang[apiKey.id] || 'curl') === 'go' && `req.Header.Set("Authorization", "Bearer ${apiKey.key}")`}
+                  </code>
+                  <button
+                    onClick={() => {
+                      const lang = selectedLang[apiKey.id] || 'curl';
+                      const examples = {
+                        curl: `curl -H "Authorization: Bearer ${apiKey.key}" https://api.cryptoaml.com/wallets`,
+                        js: `fetch('https://api.cryptoaml.com/wallets', { headers: { 'Authorization': 'Bearer ${apiKey.key}' } })`,
+                        python: `requests.get('https://api.cryptoaml.com/wallets', headers={'Authorization': 'Bearer ${apiKey.key}'})`,
+                        php: `$ch = curl_init('https://api.cryptoaml.com/wallets');\ncurl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ${apiKey.key}']);`,
+                        go: `req, _ := http.NewRequest("GET", "https://api.cryptoaml.com/wallets", nil)\nreq.Header.Set("Authorization", "Bearer ${apiKey.key}")`
+                      };
+                      copyKey(examples[lang as keyof typeof examples]);
+                    }}
+                    className="p-1.5 hover:bg-emerald-500/20 rounded transition-all flex-shrink-0 touch-target"
+                    title="Copy code"
+                  >
+                    <Copy className="w-3.5 h-3.5 text-emerald-400" />
+                  </button>
+                </div>
               </div>
             </div>
           ))}
@@ -168,11 +233,11 @@ const ApiKeys = () => {
 
       {showNewKeyModal && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="backdrop-blur-xl bg-slate-800/90 border border-slate-700/50 rounded-2xl p-6 max-w-md w-full">
-            <h3 className="text-xl font-bold text-white mb-4">Generate New API Key</h3>
-            <div className="space-y-4">
+          <div className="backdrop-blur-xl bg-slate-800/90 border border-slate-700/50 rounded-2xl p-4 sm:p-6 max-w-md w-full">
+            <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Generate New API Key</h3>
+            <div className="space-y-3 sm:space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-slate-300 mb-2">
                   Key Name
                 </label>
                 <input
@@ -180,14 +245,20 @@ const ApiKeys = () => {
                   value={newKeyName}
                   onChange={(e) => setNewKeyName(e.target.value)}
                   placeholder="e.g., Production API Key"
-                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   autoFocus
+                  onKeyPress={(e) => e.key === 'Enter' && generateKey()}
                 />
               </div>
-              <div className="flex gap-3">
+              <div className="p-2.5 sm:p-3 bg-blue-500/10 border border-blue-500/30 rounded-xl">
+                <p className="text-xs text-blue-400">
+                  💡 <strong>Tip:</strong> After generating, copy the example code for your language to get started instantly!
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                 <button
                   onClick={generateKey}
-                  className="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-emerald-700 transition-all"
+                  className="flex-1 py-2.5 sm:py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-emerald-700 transition-all text-sm sm:text-base touch-target"
                 >
                   Generate Key
                 </button>
@@ -196,7 +267,7 @@ const ApiKeys = () => {
                     setShowNewKeyModal(false);
                     setNewKeyName('');
                   }}
-                  className="flex-1 py-3 bg-slate-700/50 text-slate-300 rounded-xl font-medium hover:bg-slate-700 transition-all"
+                  className="flex-1 py-2.5 sm:py-3 bg-slate-700/50 text-slate-300 rounded-xl font-medium hover:bg-slate-700 transition-all text-sm sm:text-base touch-target"
                 >
                   Cancel
                 </button>
