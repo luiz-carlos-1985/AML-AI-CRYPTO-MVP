@@ -42,16 +42,9 @@ app.use(express.static('public', {
   }
 }));
 
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000'),
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100'),
-  message: 'Too many requests from this IP, please try again later.'
-});
-app.use('/api/', limiter);
-
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/2fa', twoFactorRoutes);
 app.use('/api/wallets', walletRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/alerts', alertRoutes);
@@ -59,9 +52,16 @@ app.use('/api/reports', reportRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/2fa', twoFactorRoutes);
 app.use('/api/monitoring', monitoringRoutes);
 app.use('/api/config', apiConfigRoutes);
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000'),
+  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100'),
+  message: 'Too many requests from this IP, please try again later.'
+});
+app.use('/api/', limiter);
 
 // Health check
 app.get('/health', (req, res) => {

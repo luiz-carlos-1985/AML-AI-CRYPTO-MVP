@@ -6,9 +6,12 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { QRCodeSVG } from 'qrcode.react';
+import TwoFactorAuth from '../components/TwoFactorAuth';
+import { useResponsive } from '../hooks/useResponsive';
 
 const Account = () => {
   const navigate = useNavigate();
+  const { isMobile, isTablet } = useResponsive();
   const [activeTab, setActiveTab] = useState('profile');
   const [user, setUser] = useState<any>(null);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
@@ -41,7 +44,7 @@ const Account = () => {
 
   const loadUser = async () => {
     try {
-      const { data } = await api.get('/auth/me');
+      const { data } = await api.get('/auth/profile');
       setUser(data);
       setProfileData({
         name: data.name || '',
@@ -54,8 +57,10 @@ const Account = () => {
       setProfileImage(data.avatar || '');
       loadStats();
       loadActivities();
-    } catch (error) {
-      console.error('Failed to load user');
+    } catch (error: any) {
+      if (error.response?.status === 401 || error.response?.status === 404) {
+        navigate('/login');
+      }
     }
   };
 
@@ -405,7 +410,28 @@ const Account = () => {
 
       {/* Tabs */}
       <div className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 rounded-2xl overflow-hidden">
-        <div className="flex overflow-x-auto">
+        {/* Mobile: Horizontal scroll tabs */}
+        <div className="md:hidden">
+          <div className="flex overflow-x-auto scrollbar-hide tabs-container px-2">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`mobile-tab-button touch-target transition-all duration-200 ${
+                  activeTab === tab.id
+                    ? 'text-emerald-400 border-b-2 border-emerald-500 bg-emerald-500/10'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-700/30'
+                }`}
+              >
+                <tab.icon className="mobile-tab-icon flex-shrink-0" />
+                <span className="mobile-tab-text truncate">{tab.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+        
+        {/* Desktop: Standard horizontal tabs */}
+        <div className="hidden md:flex overflow-x-auto scrollbar-hide">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -422,7 +448,7 @@ const Account = () => {
           ))}
         </div>
 
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           {activeTab === 'profile' && (
             <div className="space-y-6">
               <div className="flex justify-between items-center mb-4">
@@ -592,7 +618,7 @@ const Account = () => {
           {activeTab === 'billing' && (
             <div className="space-y-6">
               <h3 className="text-xl font-bold text-white mb-4">Available Plans</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {plans.map((plan) => (
                   <motion.div
                     key={plan.id}
@@ -659,19 +685,19 @@ const Account = () => {
                   <input
                     type="password"
                     placeholder="Current Password"
-                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full px-3 py-2 sm:px-4 sm:py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm sm:text-base"
                   />
                   <input
                     type="password"
                     placeholder="New Password"
-                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full px-3 py-2 sm:px-4 sm:py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm sm:text-base"
                   />
                   <input
                     type="password"
                     placeholder="Confirm New Password"
-                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full px-3 py-2 sm:px-4 sm:py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm sm:text-base"
                   />
-                  <button className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200">
+                  <button className="w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 text-sm sm:text-base">
                     Update Password
                   </button>
                 </div>
@@ -679,15 +705,7 @@ const Account = () => {
               
               <div className="pt-6 border-t border-slate-700/50">
                 <h3 className="text-lg font-bold text-white mb-4">Two-Factor Authentication</h3>
-                <div className="flex items-center justify-between p-4 bg-slate-900/50 rounded-xl">
-                  <div>
-                    <p className="text-white font-medium">2FA Status</p>
-                    <p className="text-sm text-slate-400">Add an extra layer of security</p>
-                  </div>
-                  <button className="px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-lg hover:bg-emerald-500/30 transition-all">
-                    Enable
-                  </button>
-                </div>
+                <TwoFactorAuth />
               </div>
             </div>
           )}
@@ -738,7 +756,7 @@ const Account = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="backdrop-blur-xl bg-slate-800/90 border border-slate-700/50 rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            className="backdrop-blur-xl bg-slate-800/90 border border-slate-700/50 rounded-2xl p-4 sm:p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4"
           >
             <div className="flex justify-between items-start mb-6">
               <h2 className="text-2xl font-bold text-white">Select Payment Method</h2>
@@ -760,7 +778,7 @@ const Account = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-6">
               {paymentMethods.map((method) => (
                 <button
                   key={method.id}
@@ -784,7 +802,7 @@ const Account = () => {
             <button
               onClick={handlePayment}
               disabled={!paymentMethod}
-              className="w-full py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-bold hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-emerald-500/30"
+              className="w-full py-3 sm:py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-bold hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-emerald-500/30 text-sm sm:text-base touch-target"
             >
               Continue to Payment
             </button>
@@ -798,7 +816,7 @@ const Account = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="backdrop-blur-xl bg-slate-800/90 border border-slate-700/50 rounded-2xl p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto"
+            className="backdrop-blur-xl bg-slate-800/90 border border-slate-700/50 rounded-2xl p-4 sm:p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto mx-4"
           >
             <div className="text-center">
               <div className="inline-flex p-4 bg-emerald-500/20 rounded-full mb-4">
@@ -818,10 +836,10 @@ const Account = () => {
               {paymentMethod === 'pix' && (
                 <div className="space-y-4">
                   <p className="text-slate-400 mb-4">Scan the QR code with your banking app</p>
-                  <div className="flex justify-center p-6 bg-white rounded-xl">
+                  <div className="flex justify-center p-4 sm:p-6 bg-white rounded-xl">
                     <QRCodeSVG
                       value={paymentData.pixCode}
-                      size={Math.min(256, window.innerWidth - 120)}
+                      size={isMobile ? 180 : 200}
                       level="H"
                       includeMargin={true}
                     />
@@ -857,10 +875,10 @@ const Account = () => {
               {paymentMethod === 'bitcoin' && (
                 <div className="space-y-4">
                   <p className="text-slate-400 mb-4">Send exactly {paymentData.amount_btc} BTC to the address below</p>
-                  <div className="flex justify-center p-6 bg-white rounded-xl">
+                  <div className="flex justify-center p-4 sm:p-6 bg-white rounded-xl">
                     <QRCodeSVG
                       value={`bitcoin:${paymentData.address}?amount=${paymentData.amount_btc}`}
-                      size={Math.min(256, window.innerWidth - 120)}
+                      size={isMobile ? 180 : 200}
                       level="H"
                       includeMargin={true}
                     />
@@ -889,10 +907,10 @@ const Account = () => {
               {paymentMethod === 'ethereum' && (
                 <div className="space-y-4">
                   <p className="text-slate-400 mb-4">Send exactly {paymentData.amount_eth} ETH to the address below</p>
-                  <div className="flex justify-center p-6 bg-white rounded-xl">
+                  <div className="flex justify-center p-4 sm:p-6 bg-white rounded-xl">
                     <QRCodeSVG
                       value={`ethereum:${paymentData.address}?value=${paymentData.amount_eth}`}
-                      size={Math.min(256, window.innerWidth - 120)}
+                      size={isMobile ? 180 : 200}
                       level="H"
                       includeMargin={true}
                     />
@@ -921,10 +939,10 @@ const Account = () => {
               {paymentMethod === 'usdt' && (
                 <div className="space-y-4">
                   <p className="text-slate-400 mb-4">Send exactly {paymentData.amount_usdt} USDT to the address below</p>
-                  <div className="flex justify-center p-6 bg-white rounded-xl">
+                  <div className="flex justify-center p-4 sm:p-6 bg-white rounded-xl">
                     <QRCodeSVG
                       value={paymentData.address}
-                      size={Math.min(256, window.innerWidth - 120)}
+                      size={isMobile ? 180 : 200}
                       level="H"
                       includeMargin={true}
                     />
@@ -962,13 +980,13 @@ const Account = () => {
               <div className="space-y-3 mt-6">
                 <button
                   onClick={processPayment}
-                  className="w-full py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-bold hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 shadow-lg shadow-emerald-500/30"
+                  className="w-full py-3 sm:py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-bold hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 shadow-lg shadow-emerald-500/30 text-sm sm:text-base touch-target"
                 >
                   I've Made the Payment
                 </button>
                 <button
                   onClick={() => { setShowPaymentModal(false); setPaymentData(null); }}
-                  className="w-full py-3 bg-slate-700/50 text-slate-300 rounded-xl font-medium hover:bg-slate-700 transition-all duration-200"
+                  className="w-full py-3 sm:py-4 bg-slate-700/50 text-slate-300 rounded-xl font-medium hover:bg-slate-700 transition-all duration-200 text-sm sm:text-base touch-target"
                 >
                   Cancel
                 </button>

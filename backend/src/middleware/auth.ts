@@ -13,7 +13,7 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
       return res.status(401).json({ error: 'Authentication required' });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: string };
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: string };
     req.userId = decoded.userId;
     next();
   } catch (error) {

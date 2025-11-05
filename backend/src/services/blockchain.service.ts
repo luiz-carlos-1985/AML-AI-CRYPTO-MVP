@@ -14,9 +14,9 @@ export class BlockchainMonitor {
   async monitorWallet(address: string, blockchain: string, userId: string) {
     try {
       const wallet = await prisma.wallet.upsert({
-        where: { address_blockchain: { address, blockchain } },
+        where: { address },
         create: { address, blockchain, userId },
-        update: { lastMonitored: new Date() }
+        update: { updatedAt: new Date() }
       });
 
       // Busca transações da carteira
@@ -204,7 +204,8 @@ export class BlockchainMonitor {
     setInterval(async () => {
       const walletsToMonitor = await prisma.wallet.findMany({
         where: {
-          lastMonitored: {
+          isMonitored: true,
+          updatedAt: {
             lt: new Date(Date.now() - 5 * 60 * 1000) // 5 minutos atrás
           }
         }

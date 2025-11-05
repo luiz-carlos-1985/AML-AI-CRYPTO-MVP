@@ -26,7 +26,7 @@ export const register = async (req: Request, res: Response) => {
       }
     });
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, {
       expiresIn: process.env.JWT_EXPIRES_IN || '7d'
     });
 
@@ -76,7 +76,7 @@ export const login = async (req: Request, res: Response) => {
       }
     }
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, {
       expiresIn: process.env.JWT_EXPIRES_IN || '7d'
     });
 
