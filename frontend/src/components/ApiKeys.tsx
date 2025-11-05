@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Key, Copy, Trash2, Eye, EyeOff, Plus } from 'lucide-react';
+import { Key, Copy, Trash2, Eye, EyeOff, Plus, Shield, Lock, AlertCircle, CheckCircle } from 'lucide-react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
+import InfoTooltip from './InfoTooltip';
 
 const ApiKeys = () => {
   const [apiKeys, setApiKeys] = useState<any[]>([]);
@@ -88,8 +89,28 @@ const ApiKeys = () => {
 
   return (
     <div className="space-y-4 sm:space-y-6">
+      {/* Security Notice */}
+      <div className="p-3 sm:p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
+        <div className="flex items-start gap-3">
+          <Shield className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+          <div className="flex-1 min-w-0">
+            <h4 className="text-sm font-bold text-emerald-400 mb-1">🔒 Your Security is Our Priority</h4>
+            <p className="text-xs text-emerald-300/80 leading-relaxed">
+              All API keys are encrypted using AES-256 encryption before storage. Keys are only decrypted when making authorized requests on your behalf. We never share or expose your keys to third parties.
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-        <h3 className="text-base sm:text-lg font-bold text-white">API Keys</h3>
+        <div className="flex items-center gap-2">
+          <h3 className="text-base sm:text-lg font-bold text-white">API Keys</h3>
+          <InfoTooltip
+            type="info"
+            title="What are API Keys?"
+            description="API keys allow you to programmatically access CryptoAML features. Each key is unique and can be used to authenticate your requests to our API endpoints. You can generate multiple keys for different applications or environments."
+          />
+        </div>
         <button
           onClick={() => setShowNewKeyModal(true)}
           className="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 text-sm sm:text-base touch-target"
@@ -102,7 +123,8 @@ const ApiKeys = () => {
       {apiKeys.length === 0 ? (
         <div className="text-center py-8 sm:py-12 bg-slate-900/50 rounded-xl border border-slate-700/50">
           <Key className="w-10 h-10 sm:w-12 sm:h-12 text-slate-600 mx-auto mb-3 sm:mb-4" />
-          <p className="text-sm sm:text-base text-slate-400 mb-3 sm:mb-4 px-4">No API keys yet</p>
+          <p className="text-sm sm:text-base text-slate-400 mb-2 px-4">No API keys yet</p>
+          <p className="text-xs text-slate-500 mb-3 sm:mb-4 px-4">Generate your first API key to start integrating CryptoAML into your applications</p>
           <button
             onClick={() => setShowNewKeyModal(true)}
             className="px-4 sm:px-6 py-2 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-all text-sm sm:text-base touch-target"
@@ -119,7 +141,14 @@ const ApiKeys = () => {
             >
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-0 mb-3">
                 <div className="min-w-0 flex-1">
-                  <h4 className="text-sm sm:text-base text-white font-medium truncate">{apiKey.name}</h4>
+                  <div className="flex items-center gap-2">
+                    <h4 className="text-sm sm:text-base text-white font-medium truncate">{apiKey.name}</h4>
+                    <InfoTooltip
+                      type="security"
+                      title="Key Security"
+                      description="This key is encrypted in our database. Only you can see the full key. If compromised, delete it immediately and generate a new one."
+                    />
+                  </div>
                   <p className="text-xs text-slate-500 mt-1">
                     Created {format(new Date(apiKey.createdAt), 'MMM dd, yyyy')}
                   </p>
@@ -182,7 +211,14 @@ const ApiKeys = () => {
 
               <div className="mt-3 p-2.5 sm:p-3 bg-slate-800/50 rounded-lg border border-slate-700/50">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                  <p className="text-xs text-slate-400 font-medium">Quick Start:</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-xs text-slate-400 font-medium">Quick Start:</p>
+                    <InfoTooltip
+                      type="info"
+                      title="How to Use"
+                      description="Copy the code example for your preferred language. Replace the API endpoint with your desired action. All requests must include the Authorization header with your API key."
+                    />
+                  </div>
                   <div className="flex gap-1 overflow-x-auto pb-1">
                     {['curl', 'js', 'python', 'php', 'go'].map((lang) => (
                       <button
@@ -236,6 +272,20 @@ const ApiKeys = () => {
           <div className="backdrop-blur-xl bg-slate-800/90 border border-slate-700/50 rounded-2xl p-4 sm:p-6 max-w-md w-full">
             <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Generate New API Key</h3>
             <div className="space-y-3 sm:space-y-4">
+              <div className="p-3 bg-blue-500/10 border border-blue-500/30 rounded-xl">
+                <div className="flex items-start gap-2">
+                  <Lock className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-xs font-bold text-blue-400 mb-1">Security Best Practices</p>
+                    <ul className="text-xs text-blue-300/80 space-y-1">
+                      <li>• Never share your API keys publicly</li>
+                      <li>• Use environment variables in production</li>
+                      <li>• Rotate keys regularly for security</li>
+                      <li>• Delete unused keys immediately</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
               <div>
                 <label className="block text-xs sm:text-sm font-medium text-slate-300 mb-2">
                   Key Name
@@ -250,10 +300,16 @@ const ApiKeys = () => {
                   onKeyPress={(e) => e.key === 'Enter' && generateKey()}
                 />
               </div>
-              <div className="p-2.5 sm:p-3 bg-blue-500/10 border border-blue-500/30 rounded-xl">
-                <p className="text-xs text-blue-400">
-                  💡 <strong>Tip:</strong> After generating, copy the example code for your language to get started instantly!
-                </p>
+              <div className="p-2.5 sm:p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl">
+                <div className="flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-xs font-bold text-amber-400 mb-1">Important</p>
+                    <p className="text-xs text-amber-300/80">
+                      Save your key immediately after generation. For security reasons, you won't be able to see the full key again. If lost, you'll need to generate a new one.
+                    </p>
+                  </div>
+                </div>
               </div>
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                 <button

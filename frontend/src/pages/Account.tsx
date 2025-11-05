@@ -575,46 +575,6 @@ const Account = () => {
                   </select>
                 </div>
               </div>
-
-              {/* Recent Activity */}
-              <div className="pt-6 border-t border-slate-700/50">
-                <h3 className="text-lg font-bold text-white mb-4 flex items-center">
-                  <Activity className="w-5 h-5 mr-2 text-emerald-400" />
-                  Recent Activity
-                </h3>
-                <div className="space-y-3">
-                  {activities.length > 0 ? (
-                    activities.map((activity, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-4 bg-slate-900/50 rounded-xl border border-slate-700/50 hover:border-slate-600/50 transition-all">
-                        <div className="flex items-center space-x-3">
-                          <div className={`p-2 rounded-lg ${
-                            activity.severity === 'CRITICAL' ? 'bg-red-500/20' :
-                            activity.severity === 'HIGH' ? 'bg-orange-500/20' :
-                            activity.severity === 'MEDIUM' ? 'bg-amber-500/20' :
-                            'bg-emerald-500/20'
-                          }`}>
-                            <Bell className={`w-4 h-4 ${
-                              activity.severity === 'CRITICAL' ? 'text-red-400' :
-                              activity.severity === 'HIGH' ? 'text-orange-400' :
-                              activity.severity === 'MEDIUM' ? 'text-amber-400' :
-                              'text-emerald-400'
-                            }`} />
-                          </div>
-                          <div>
-                            <p className="text-white font-medium text-sm">{activity.title}</p>
-                            <p className="text-slate-400 text-xs">{activity.description}</p>
-                          </div>
-                        </div>
-                        <span className="text-xs text-slate-500">
-                          {format(new Date(activity.createdAt), 'MMM dd, HH:mm')}
-                        </span>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-slate-400 text-center py-8">No recent activity</p>
-                  )}
-                </div>
-              </div>
             </div>
           )}
 

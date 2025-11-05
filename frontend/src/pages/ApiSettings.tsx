@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Key, Plus, Trash2, Eye, EyeOff, ExternalLink, CheckCircle, XCircle, Copy, AlertCircle } from 'lucide-react';
+import { Key, Plus, Trash2, Eye, EyeOff, ExternalLink, CheckCircle, XCircle, Copy, AlertCircle, Shield, Lock } from 'lucide-react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
 
@@ -105,10 +105,31 @@ export default function ApiSettings() {
 
   return (
     <div className="space-y-6">
+      {/* Security Notice */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="backdrop-blur-xl bg-purple-500/10 border border-purple-500/30 rounded-2xl p-4 sm:p-6"
+      >
+        <div className="flex items-start gap-3">
+          <Lock className="w-6 h-6 text-purple-400 flex-shrink-0" />
+          <div className="flex-1">
+            <h3 className="text-base sm:text-lg font-bold text-purple-400 mb-2">🔒 Your Privacy & Data Security</h3>
+            <div className="space-y-1.5 text-xs sm:text-sm text-purple-300/80">
+              <p>• <strong>Encryption:</strong> All API keys encrypted with AES-256 before storage</p>
+              <p>• <strong>Usage:</strong> Keys only used to fetch blockchain data on your behalf</p>
+              <p>• <strong>Privacy:</strong> Never shared with third parties or logged</p>
+              <p>• <strong>Control:</strong> Delete configurations anytime - data permanently removed</p>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
         className="backdrop-blur-xl bg-gradient-to-r from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl p-4 sm:p-6"
       >
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -256,6 +277,18 @@ export default function ApiSettings() {
           >
             <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Add API Configuration</h3>
             
+            <div className="p-2.5 sm:p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl mb-3 sm:mb-4">
+              <div className="flex gap-2">
+                <Shield className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-xs font-bold text-emerald-400 mb-1">Security Guarantee</p>
+                  <p className="text-xs text-emerald-300/80">
+                    Your API keys are encrypted with AES-256 before storage. We never share, sell, or expose your keys to third parties.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <div className="space-y-3 sm:space-y-4">
               <div>
                 <label className="block text-xs sm:text-sm font-medium text-slate-300 mb-2">Provider</label>

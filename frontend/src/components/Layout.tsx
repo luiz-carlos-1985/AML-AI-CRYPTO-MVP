@@ -96,7 +96,7 @@ const Layout = () => {
         {mobileMenuOpen && (
           <div className="lg:hidden border-t border-slate-800/50 backdrop-blur-xl bg-slate-900/95">
             <div className="px-4 pt-2 pb-3 space-y-1">
-              {navigation.map((item) => {
+              {navigation.filter(item => item.href !== '/').map((item) => {
                 const Icon = item.icon;
                 const isActive = location.pathname === item.href;
                 return (
