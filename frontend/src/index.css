@@ -31,6 +31,16 @@ body {
   min-height: 100dvh;
   overflow-x: hidden;
   padding: var(--safe-area-inset-top) var(--safe-area-inset-right) var(--safe-area-inset-bottom) var(--safe-area-inset-left);
+  transition: background 0.3s ease;
+}
+
+/* Light theme */
+html.light body {
+  background: linear-gradient(to bottom right, #f8fafc, #e2e8f0, #f1f5f9);
+}
+
+html.light {
+  color-scheme: light;
 }
 
 code {
@@ -175,4 +185,27 @@ button, a, input, select, textarea {
 
 .mobile-tab-text {
   text-align: center;
+}
+
+/* Touch target optimization */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Loading skeleton */
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Glass morphism effect */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }

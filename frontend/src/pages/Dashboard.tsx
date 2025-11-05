@@ -7,6 +7,9 @@ import { useTranslation } from 'react-i18next';
 import api from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import TransparencyBadge from '../components/TransparencyBadge';
+import RealTimeMetrics from '../components/RealTimeMetrics';
+import AuditLog from '../components/AuditLog';
+import AdvancedCharts from '../components/AdvancedCharts';
 
 const Dashboard = () => {
   const { t } = useTranslation();
@@ -55,6 +58,9 @@ const Dashboard = () => {
       >
         {t('dashboard.title')}
       </motion.h1>
+
+      {/* Real-Time Metrics */}
+      <RealTimeMetrics />
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {statCards.map((card, index) => {
@@ -171,7 +177,25 @@ const Dashboard = () => {
           </div>
         </motion.div>
         </div>
+
+        {/* Audit Log */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+        >
+          <AuditLog />
+        </motion.div>
       </div>
+
+      {/* Advanced Charts */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8 }}
+      >
+        <AdvancedCharts />
+      </motion.div>
     </div>
   );
 };

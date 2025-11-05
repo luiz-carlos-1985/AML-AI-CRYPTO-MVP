@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
+import { motion } from 'framer-motion';
 import api from '../services/api';
+import AdvancedFilters from '../components/AdvancedFilters';
+import ExportData from '../components/ExportData';
 
 const Transactions = () => {
   const [transactions, setTransactions] = useState<any[]>([]);
@@ -20,22 +23,39 @@ const Transactions = () => {
     }
   };
 
+  const handleApplyFilters = (filters: any) => {
+    console.log('Applying filters:', filters);
+    // Apply filters logic here
+  };
+
+  const handleResetFilters = () => {
+    setFilter('');
+  };
+
   return (
     <div className="space-y-4 md:space-y-6">
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col md:flex-row md:justify-between md:items-center gap-4"
+      >
         <h1 className="text-2xl md:text-3xl font-bold text-white">Transactions</h1>
-        <select
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="w-full md:w-auto px-4 py-2 bg-slate-800/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
-        >
-          <option value="">All Risk Levels</option>
-          <option value="LOW">Low Risk</option>
-          <option value="MEDIUM">Medium Risk</option>
-          <option value="HIGH">High Risk</option>
-          <option value="CRITICAL">Critical Risk</option>
-        </select>
-      </div>
+        <div className="flex flex-wrap gap-3">
+          <AdvancedFilters onApply={handleApplyFilters} onReset={handleResetFilters} />
+          <ExportData type="transactions" />
+          <select
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            className="px-4 py-2 bg-slate-800/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
+          >
+            <option value="">All Risk Levels</option>
+            <option value="LOW">Low Risk</option>
+            <option value="MEDIUM">Medium Risk</option>
+            <option value="HIGH">High Risk</option>
+            <option value="CRITICAL">Critical Risk</option>
+          </select>
+        </div>
+      </motion.div>
 
       {/* Mobile Card View */}
       <div className="md:hidden space-y-4">

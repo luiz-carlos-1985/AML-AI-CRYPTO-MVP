@@ -46,42 +46,50 @@ export class BlockchainMonitor {
 
   // Bitcoin via Blockstream API (gratuita)
   private async fetchBitcoinTransactions(address: string) {
-    const response = await axios.get(`${BLOCKCHAIN_APIS.bitcoin}/address/${address}/txs`);
-    return response.data.map((tx: any) => ({
-      hash: tx.txid,
-      fromAddress: tx.vin[0]?.prevout?.scriptpubkey_address || 'unknown',
-      toAddress: tx.vout[0]?.scriptpubkey_address || 'unknown',
-      amount: tx.vout[0]?.value || 0,
-      timestamp: new Date(tx.status.block_time * 1000),
-      blockchain: 'bitcoin',
-      blockNumber: tx.status.block_height
-    }));
+    try {
+      const response = await axios.get(`${BLOCKCHAIN_APIS.bitcoin}/address/${address}/txs`);
+      return response.data.map((tx: any) => ({
+        hash: tx.txid,
+        fromAddress: tx.vin[0]?.prevout?.scriptpubkey_address || 'unknown',
+        toAddress: tx.vout[0]?.scriptpubkey_address || 'unknown',
+        amount: tx.vout[0]?.value || 0,
+        timestamp: new Date(tx.status.block_time * 1000),
+        blockchain: 'bitcoin',
+        blockNumber: tx.status.block_height
+      }));
+    } catch (error) {
+      return [];
+    }
   }
 
   // Ethereum via Etherscan API (gratuita com rate limit)
   private async fetchEthereumTransactions(address: string) {
-    const apiKey = process.env.ETHERSCAN_API_KEY || 'YourApiKeyToken';
-    const response = await axios.get(`${BLOCKCHAIN_APIS.ethereum}`, {
-      params: {
-        module: 'account',
-        action: 'txlist',
-        address,
-        startblock: 0,
-        endblock: 99999999,
-        sort: 'desc',
-        apikey: apiKey
-      }
-    });
+    try {
+      const apiKey = process.env.ETHERSCAN_API_KEY || 'YourApiKeyToken';
+      const response = await axios.get(`${BLOCKCHAIN_APIS.ethereum}`, {
+        params: {
+          module: 'account',
+          action: 'txlist',
+          address,
+          startblock: 0,
+          endblock: 99999999,
+          sort: 'desc',
+          apikey: apiKey
+        }
+      });
 
-    return response.data.result.map((tx: any) => ({
-      hash: tx.hash,
-      fromAddress: tx.from,
-      toAddress: tx.to,
-      amount: parseFloat(tx.value) / 1e18, // Wei to ETH
-      timestamp: new Date(parseInt(tx.timeStamp) * 1000),
-      blockchain: 'ethereum',
-      blockNumber: parseInt(tx.blockNumber)
-    }));
+      return response.data.result.map((tx: any) => ({
+        hash: tx.hash,
+        fromAddress: tx.from,
+        toAddress: tx.to,
+        amount: parseFloat(tx.value) / 1e18, // Wei to ETH
+        timestamp: new Date(parseInt(tx.timeStamp) * 1000),
+        blockchain: 'ethereum',
+        blockNumber: parseInt(tx.blockNumber)
+      }));
+    } catch (error) {
+      return [];
+    }
   }
 
   // Processa e salva transação

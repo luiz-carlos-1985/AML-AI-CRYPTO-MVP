@@ -4,6 +4,8 @@ import { LayoutDashboard, Wallet, ArrowLeftRight, Bell, FileText, User, Settings
 import { useAuth } from '../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
+import NotificationCenter from './NotificationCenter';
+import ThemeToggle from './ThemeToggle';
 
 const Layout = () => {
   const { user, logout } = useAuth();
@@ -18,6 +20,7 @@ const Layout = () => {
     { name: t('nav.transactions'), href: '/transactions', icon: ArrowLeftRight },
     { name: t('nav.alerts'), href: '/alerts', icon: Bell },
     { name: t('nav.reports'), href: '/reports', icon: FileText },
+    { name: 'Integrations', href: '/integrations', icon: Settings },
     { name: 'Account', href: '/account', icon: User },
     { name: 'Payment Settings', href: '/payment-settings', icon: Settings },
   ];
@@ -65,6 +68,8 @@ const Layout = () => {
             
             {/* User Info & Logout */}
             <div className="hidden md:flex items-center space-x-3 xl:space-x-4 tv:space-x-8">
+              <ThemeToggle />
+              <NotificationCenter />
               <LanguageSwitcher />
               <div className="text-sm xl:text-base tv:text-2xl text-right">
                 <p className="font-medium text-slate-200">{user?.name}</p>

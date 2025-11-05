@@ -92,6 +92,7 @@ export const login = async (req: Request, res: Response) => {
       }
     });
   } catch (error) {
+    console.error('Login error:', error);
     res.status(500).json({ error: 'Login failed' });
   }
 };

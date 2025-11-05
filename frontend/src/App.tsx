@@ -12,6 +12,7 @@ import Reports from './pages/Reports';
 import Account from './pages/Account';
 import PaymentSettings from './pages/PaymentSettings';
 import ApiSettings from './pages/ApiSettings';
+import Integrations from './pages/Integrations';
 import Layout from './components/Layout';
 import InstallPWA from './components/InstallPWA';
 import OfflineIndicator from './components/OfflineIndicator';
@@ -53,6 +54,7 @@ function App() {
             <Route path="account" element={<Account />} />
             <Route path="payment-settings" element={<PaymentSettings />} />
             <Route path="api-settings" element={<ApiSettings />} />
+            <Route path="integrations" element={<Integrations />} />
           </Route>
         </Routes>
       </BrowserRouter>
