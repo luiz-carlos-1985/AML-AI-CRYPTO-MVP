@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 import { QRCodeSVG } from 'qrcode.react';
 import TwoFactorAuth from '../components/TwoFactorAuth';
 import { useResponsive } from '../hooks/useResponsive';
+import { countries } from '../utils/countries';
 
 const Account = () => {
   const navigate = useNavigate();
@@ -541,21 +542,16 @@ const Account = () => {
                   </label>
                   <select
                     value={profileData.country}
-                    onChange={(e) => setProfileData({ ...profileData, country: e.target.value })}
+                    onChange={(e) => setProfileData({ ...profileData, country: e.target.value, city: '' })}
                     disabled={!isEditingProfile}
                     className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <option value="">Select Country</option>
-                    <option value="US">United States</option>
-                    <option value="BR">Brazil</option>
-                    <option value="GB">United Kingdom</option>
-                    <option value="DE">Germany</option>
-                    <option value="JP">Japan</option>
-                    <option value="CN">China</option>
-                    <option value="IN">India</option>
-                    <option value="CA">Canada</option>
-                    <option value="AU">Australia</option>
-                    <option value="FR">France</option>
+                    {countries.map((country) => (
+                      <option key={country.code} value={country.code}>
+                        {country.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div>
@@ -563,13 +559,19 @@ const Account = () => {
                     <MapPin className="w-4 h-4 mr-2" />
                     City
                   </label>
-                  <input
-                    type="text"
+                  <select
                     value={profileData.city}
                     onChange={(e) => setProfileData({ ...profileData, city: e.target.value })}
-                    disabled={!isEditingProfile}
+                    disabled={!isEditingProfile || !profileData.country}
                     className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                  />
+                  >
+                    <option value="">Select City</option>
+                    {profileData.country && countries.find(c => c.code === profileData.country)?.cities.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 

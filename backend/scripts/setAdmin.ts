@@ -8,10 +8,13 @@ async function setAdmin() {
   try {
     const user = await prisma.user.update({
       where: { email },
-      data: { role: 'ADMIN' }
+      data: { 
+        role: 'ADMIN',
+        plan: 'ENTERPRISE'
+      }
     });
     
-    console.log(`✅ User ${user.email} is now an ADMIN`);
+    console.log(`✅ User ${user.email} is now an ADMIN with ENTERPRISE plan`);
   } catch (error) {
     console.error('❌ Error:', error);
   } finally {
