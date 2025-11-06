@@ -1,6 +1,6 @@
 {
   "name": "cryptoaml-mvp",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "SaaS de detecção de lavagem de dinheiro em criptomoedas",
   "scripts": {
     "install:all": "cd backend && npm install && cd ../frontend && npm install && cd ../ml-service && pip install -r requirements.txt",
@@ -12,7 +12,9 @@
     "docker:logs": "docker-compose logs -f",
     "db:migrate": "cd backend && npx prisma migrate dev",
     "db:studio": "cd backend && npx prisma studio",
-    "db:seed": "cd backend && npx prisma db seed"
+    "db:seed": "cd backend && npx prisma db seed",
+    "validate": "node validate-system.js",
+    "test:all": "npm run validate && cd backend && npm test && cd ../frontend && npm test"
   },
   "keywords": [
     "aml",
