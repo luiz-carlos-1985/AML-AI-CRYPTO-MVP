@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
+import http from 'http';
 import authRoutes from './routes/auth.routes';
 import walletRoutes from './routes/wallet.routes';
 import transactionRoutes from './routes/transaction.routes';
@@ -23,10 +24,12 @@ import webhookRoutes from './routes/webhook.routes';
 import exportRoutes from './routes/export.routes';
 import { errorHandler } from './middleware/errorHandler';
 import { blockchainMonitor } from './services/blockchain.service';
+import { initializeWebSocket } from './services/websocket.service';
 
 dotenv.config();
 
 const app = express();
+const server = http.createServer(app);
 const PORT = process.env.PORT || 3001;
 
 // Middleware
@@ -90,11 +93,13 @@ app.get('*', (req, res) => {
 // Error handler
 app.use(errorHandler);
 
-app.listen(PORT, () => {
+initializeWebSocket(server);
+
+server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV}`);
+  console.log('🔌 WebSocket initialized');
   
-  // Start blockchain monitoring
   blockchainMonitor.startContinuousMonitoring();
   console.log('🔍 Blockchain monitoring started');
 });

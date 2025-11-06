@@ -2,6 +2,7 @@ import { Response } from 'express';
 import prisma from '../utils/prisma';
 import { AuthRequest } from '../middleware/auth';
 import { analyzeWalletRisk } from '../services/riskAnalysis.service';
+import { blockchainMonitor } from '../services/blockchain.service';
 
 export const createWallet = async (req: AuthRequest, res: Response) => {
   try {
@@ -111,5 +112,29 @@ export const deleteWallet = async (req: AuthRequest, res: Response) => {
     res.json({ message: 'Wallet deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete wallet' });
+  }
+};
+
+export const syncWallet = async (req: AuthRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    console.log('Syncing wallet:', id, 'for user:', req.userId);
+
+    const wallet = await prisma.wallet.findFirst({
+      where: { id, userId: req.userId }
+    });
+
+    if (!wallet) {
+      console.log('Wallet not found:', id);
+      return res.status(404).json({ error: 'Wallet not found' });
+    }
+
+    console.log('Monitoring wallet:', wallet.address, wallet.blockchain);
+    await blockchainMonitor.monitorWallet(wallet.address, wallet.blockchain, wallet.userId);
+
+    res.json({ message: 'Wallet synchronized successfully' });
+  } catch (error) {
+    console.error('Sync error:', error);
+    res.status(500).json({ error: 'Failed to sync wallet' });
   }
 };

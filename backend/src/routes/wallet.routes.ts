@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createWallet, getWallets, getWallet, updateWallet, deleteWallet } from '../controllers/wallet.controller';
+import { createWallet, getWallets, getWallet, updateWallet, deleteWallet, syncWallet } from '../controllers/wallet.controller';
 import { authenticate } from '../middleware/auth';
 import { checkWalletLimit } from '../middleware/planLimits';
 
@@ -12,5 +12,6 @@ router.get('/', getWallets);
 router.get('/:id', getWallet);
 router.put('/:id', updateWallet);
 router.delete('/:id', deleteWallet);
+router.post('/:id/sync', syncWallet);
 
 export default router;

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import prisma from '../utils/prisma';
+import { notifyUser } from './websocket.service';
 
 // APIs gratuitas para dados blockchain
 const BLOCKCHAIN_APIS = {
@@ -114,7 +115,11 @@ export class BlockchainMonitor {
       }
     });
 
-    // Analisa risco da transação
+    const wallet = await prisma.wallet.findUnique({ where: { id: walletId } });
+    if (wallet) {
+      notifyUser(wallet.userId, 'transaction:new', transaction);
+    }
+
     await this.analyzeTransactionRisk(transaction.id);
   }
 
@@ -160,12 +165,16 @@ export class BlockchainMonitor {
 
     const riskLevel = this.calculateRiskLevel(riskScore);
 
-    await prisma.transaction.update({
+    const updatedTx = await prisma.transaction.update({
       where: { id: transactionId },
       data: { riskScore, riskLevel, flags, analyzed: true }
     });
 
-    // Cria alerta se necessário
+    const wallet = await prisma.wallet.findUnique({ where: { id: transaction.walletId } });
+    if (wallet) {
+      notifyUser(wallet.userId, 'transaction:analyzed', updatedTx);
+    }
+
     if (riskLevel === 'HIGH' || riskLevel === 'CRITICAL') {
       await this.createAlert(transaction, riskScore, flags);
     }
@@ -194,7 +203,7 @@ export class BlockchainMonitor {
 
     if (!wallet) return;
 
-    await prisma.alert.create({
+    const alert = await prisma.alert.create({
       data: {
         userId: wallet.userId,
         walletId: wallet.id,
@@ -205,6 +214,8 @@ export class BlockchainMonitor {
         description: `Transação ${transaction.hash} com score ${riskScore}. Flags: ${flags.join(', ')}`
       }
     });
+
+    notifyUser(wallet.userId, 'alert:new', alert);
   }
 
   // Monitoramento contínuo
