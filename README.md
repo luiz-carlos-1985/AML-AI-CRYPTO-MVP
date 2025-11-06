@@ -100,6 +100,7 @@ npm run dev:ml        # Terminal 3
 - 🔔 **Notification Center** - Alertas em tempo real
 - 📝 **Audit Log** - Registro completo de atividades
 - 📈 **Real-Time Metrics** - Métricas ao vivo
+- 🔄 **Wallet Sync** - Sincronização automática de transações
 
 #### UX/UI
 - 🌍 **Internacionalização** - 11 idiomas

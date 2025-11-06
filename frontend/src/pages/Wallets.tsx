@@ -24,6 +24,12 @@ const Wallets = () => {
 
   useEffect(() => {
     loadWallets();
+    
+    const interval = setInterval(() => {
+      loadWallets();
+    }, 10000);
+    
+    return () => clearInterval(interval);
   }, []);
 
   const loadWallets = async () => {
@@ -38,11 +44,15 @@ const Wallets = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await api.post('/wallets', formData);
+      const { data } = await api.post('/wallets', formData);
       toast.success('Wallet added successfully');
       setShowModal(false);
       setFormData({ address: '', blockchain: 'BITCOIN', label: '' });
-      loadWallets();
+      
+      setTimeout(async () => {
+        await handleSync(data.id);
+        loadWallets();
+      }, 2000);
     } catch (error: any) {
       toast.error(error.response?.data?.error || 'Failed to add wallet');
     }

@@ -22,8 +22,8 @@ export const createWallet = async (req: AuthRequest, res: Response) => {
       }
     });
 
-    // Trigger risk analysis
     analyzeWalletRisk(wallet.id).catch(console.error);
+    blockchainMonitor.monitorWallet(wallet.address, wallet.blockchain, wallet.userId).catch(console.error);
 
     res.status(201).json(wallet);
   } catch (error) {
@@ -45,6 +45,7 @@ export const getWallets = async (req: AuthRequest, res: Response) => {
 
     res.json(wallets);
   } catch (error) {
+    console.error('Get wallets error:', error);
     res.status(500).json({ error: 'Failed to fetch wallets' });
   }
 };

@@ -6,20 +6,23 @@ let io: Server;
 export const initializeWebSocket = (server: HttpServer) => {
   io = new Server(server, {
     cors: {
-      origin: '*',
-      methods: ['GET', 'POST']
-    }
+      origin: 'http://localhost:3000',
+      methods: ['GET', 'POST'],
+      credentials: true
+    },
+    transports: ['polling', 'websocket']
   });
 
   io.on('connection', (socket) => {
-    console.log('Client connected:', socket.id);
+    console.log('✅ Client connected:', socket.id);
 
     socket.on('authenticate', (userId: string) => {
       socket.join(`user:${userId}`);
+      console.log('🔐 User authenticated:', userId);
     });
 
     socket.on('disconnect', () => {
-      console.log('Client disconnected:', socket.id);
+      console.log('❌ Client disconnected:', socket.id);
     });
   });
 

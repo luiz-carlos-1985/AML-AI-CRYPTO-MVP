@@ -10,6 +10,7 @@ import TransparencyBadge from '../components/TransparencyBadge';
 import RealTimeMetrics from '../components/RealTimeMetrics';
 import AuditLog from '../components/AuditLog';
 import AdvancedCharts from '../components/AdvancedCharts';
+import WalletSync from '../components/WalletSync';
 
 const Dashboard = () => {
   const { t } = useTranslation();
@@ -61,6 +62,9 @@ const Dashboard = () => {
 
       {/* Real-Time Metrics */}
       <RealTimeMetrics />
+
+      {/* Wallet Sync */}
+      <WalletSync />
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {statCards.map((card, index) => {

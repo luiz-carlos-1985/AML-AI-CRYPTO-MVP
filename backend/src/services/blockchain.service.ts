@@ -14,14 +14,16 @@ export class BlockchainMonitor {
   // Monitora uma carteira específica
   async monitorWallet(address: string, blockchain: string, userId: string) {
     try {
+      console.log(`🔍 Monitoring wallet: ${address} (${blockchain})`);
+      
       const wallet = await prisma.wallet.upsert({
         where: { address },
         create: { address, blockchain, userId },
         update: { updatedAt: new Date() }
       });
 
-      // Busca transações da carteira
       const transactions = await this.fetchWalletTransactions(address, blockchain);
+      console.log(`📊 Found ${transactions.length} transactions for ${address}`);
       
       for (const tx of transactions) {
         await this.processTransaction(tx, wallet.id);
@@ -29,7 +31,7 @@ export class BlockchainMonitor {
 
       return wallet;
     } catch (error) {
-      console.error('Wallet monitoring failed:', error);
+      console.error('❌ Wallet monitoring failed:', error);
     }
   }
 
@@ -218,14 +220,13 @@ export class BlockchainMonitor {
     notifyUser(wallet.userId, 'alert:new', alert);
   }
 
-  // Monitoramento contínuo
   async startContinuousMonitoring() {
     setInterval(async () => {
       const walletsToMonitor = await prisma.wallet.findMany({
         where: {
           isMonitored: true,
           updatedAt: {
-            lt: new Date(Date.now() - 5 * 60 * 1000) // 5 minutos atrás
+            lt: new Date(Date.now() - 2 * 60 * 1000)
           }
         }
       });
@@ -233,7 +234,7 @@ export class BlockchainMonitor {
       for (const wallet of walletsToMonitor) {
         await this.monitorWallet(wallet.address, wallet.blockchain, wallet.userId);
       }
-    }, 60000); // Executa a cada minuto
+    }, 30000);
   }
 }
 
