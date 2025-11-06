@@ -10,6 +10,16 @@ export interface BlockchainInfo {
 }
 
 export const BLOCKCHAINS: BlockchainInfo[] = [
+  // Testnets (for testing)
+  { id: 'SEPOLIA', name: 'Ethereum Sepolia', symbol: 'SepoliaETH', icon: 'Ξ', color: '#627EEA', category: 'Layer1', explorer: 'sepolia.etherscan.io', description: 'Ethereum testnet' },
+  { id: 'GOERLI', name: 'Ethereum Goerli', symbol: 'GoerliETH', icon: 'Ξ', color: '#627EEA', category: 'Layer1', explorer: 'goerli.etherscan.io', description: 'Ethereum testnet' },
+  { id: 'MUMBAI', name: 'Polygon Mumbai', symbol: 'MATIC', icon: '⬡', color: '#8247E5', category: 'Layer2', explorer: 'mumbai.polygonscan.com', description: 'Polygon testnet' },
+  { id: 'BSC_TESTNET', name: 'BSC Testnet', symbol: 'tBNB', icon: '◆', color: '#F3BA2F', category: 'Sidechain', explorer: 'testnet.bscscan.com', description: 'BSC testnet' },
+  { id: 'FUJI', name: 'Avalanche Fuji', symbol: 'AVAX', icon: '▲', color: '#E84142', category: 'Layer1', explorer: 'testnet.snowtrace.io', description: 'Avalanche testnet' },
+  { id: 'ARBITRUM_GOERLI', name: 'Arbitrum Goerli', symbol: 'AGOR', icon: '🔷', color: '#28A0F0', category: 'Layer2', explorer: 'goerli.arbiscan.io', description: 'Arbitrum testnet' },
+  { id: 'OPTIMISM_GOERLI', name: 'Optimism Goerli', symbol: 'ETH', icon: '🔴', color: '#FF0420', category: 'Layer2', explorer: 'goerli-optimism.etherscan.io', description: 'Optimism testnet' },
+  { id: 'BASE_GOERLI', name: 'Base Goerli', symbol: 'ETH', icon: '🔵', color: '#0052FF', category: 'Layer2', explorer: 'goerli.basescan.org', description: 'Base testnet' },
+  
   // Top Layer 1 Chains
   { id: 'BITCOIN', name: 'Bitcoin', symbol: 'BTC', icon: '₿', color: '#F7931A', category: 'Layer1', explorer: 'blockchain.com', description: 'Original cryptocurrency' },
   { id: 'ETHEREUM', name: 'Ethereum', symbol: 'ETH', icon: 'Ξ', color: '#627EEA', category: 'Layer1', explorer: 'etherscan.io', description: 'Smart contract platform' },
