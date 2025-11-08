@@ -16,7 +16,7 @@ router.get('/', async (req: AuthRequest, res) => {
     });
     res.json(apiKeys);
   } catch (error) {
-    res.json([]);
+    res.status(500).json({ error: 'Failed to fetch API keys' });
   }
 });
 
@@ -36,18 +36,18 @@ router.post('/', async (req: AuthRequest, res) => {
     
     res.json(apiKey);
   } catch (error) {
-    res.json({ id: '1', name: name || 'API Key', key: `sk_${crypto.randomBytes(32).toString('hex')}`, isActive: true, createdAt: new Date() });
+    res.status(500).json({ error: 'Failed to create API key' });
   }
 });
 
 router.delete('/:id', async (req: AuthRequest, res) => {
   try {
-    await prisma.apiKey.delete({
+    await prisma.apiKey.deleteMany({
       where: { id: req.params.id, userId: req.userId! }
     });
     res.json({ message: 'API key deleted' });
   } catch (error) {
-    res.json({ message: 'API key deleted' });
+    res.status(500).json({ error: 'Failed to delete API key' });
   }
 });
 
@@ -68,7 +68,7 @@ router.patch('/:id/toggle', async (req: AuthRequest, res) => {
     
     res.json(updated);
   } catch (error) {
-    res.json({ id: req.params.id, isActive: true });
+    res.status(500).json({ error: 'Failed to toggle API key' });
   }
 });
 

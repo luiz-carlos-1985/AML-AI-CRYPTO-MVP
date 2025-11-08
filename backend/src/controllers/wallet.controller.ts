@@ -3,10 +3,29 @@ import prisma from '../utils/prisma';
 import { AuthRequest } from '../middleware/auth';
 import { analyzeWalletRisk } from '../services/riskAnalysis.service';
 import { blockchainMonitor } from '../services/blockchain.service';
+import { Blockchain } from '@prisma/client';
+
+function validateAddress(address: string, blockchain: Blockchain): boolean {
+  if (blockchain === Blockchain.BITCOIN) {
+    return /^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$|^bc1[a-z0-9]{39,59}$/.test(address);
+  }
+  if ([Blockchain.ETHEREUM, Blockchain.POLYGON, Blockchain.ARBITRUM, Blockchain.OPTIMISM, Blockchain.BASE].includes(blockchain)) {
+    return /^0x[a-fA-F0-9]{40}$/.test(address);
+  }
+  return true; // Allow other blockchains for now
+}
 
 export const createWallet = async (req: AuthRequest, res: Response) => {
   try {
     const { address, blockchain, label } = req.body;
+
+    if (!address || !blockchain) {
+      return res.status(400).json({ error: 'Address and blockchain are required' });
+    }
+
+    if (!validateAddress(address, blockchain)) {
+      return res.status(400).json({ error: 'Invalid address format for selected blockchain' });
+    }
 
     const existingWallet = await prisma.wallet.findUnique({ where: { address } });
     if (existingWallet) {

@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import prisma from '../utils/prisma';
 import { AuthRequest } from '../middleware/auth';
+import { RiskLevel } from '@prisma/client';
 
 export const getDashboardStats = async (req: AuthRequest, res: Response) => {
   try {
@@ -28,7 +29,7 @@ export const getDashboardStats = async (req: AuthRequest, res: Response) => {
       prisma.transaction.count({
         where: {
           wallet: { userId: req.userId },
-          riskLevel: { in: ['HIGH', 'CRITICAL'] }
+          riskLevel: { in: [RiskLevel.HIGH, RiskLevel.CRITICAL] }
         }
       }),
       

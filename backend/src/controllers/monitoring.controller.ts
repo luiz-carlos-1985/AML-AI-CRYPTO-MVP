@@ -1,17 +1,19 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { blockchainMonitor } from '../services/blockchain.service';
 import prisma from '../utils/prisma';
+import { Blockchain } from '@prisma/client';
+import { AuthRequest } from '../middleware/auth';
 
-export const addWalletToMonitoring = async (req: Request, res: Response) => {
+export const addWalletToMonitoring = async (req: AuthRequest, res: Response) => {
   try {
     const { address, blockchain } = req.body;
-    const userId = req.user?.id;
+    const userId = req.userId!;
 
     if (!address || !blockchain) {
       return res.status(400).json({ error: 'Address and blockchain are required' });
     }
 
-    const wallet = await blockchainMonitor.monitorWallet(address, blockchain, userId);
+    const wallet = await blockchainMonitor.monitorWallet(address, blockchain as Blockchain, userId);
     
     res.json({
       message: 'Wallet added to monitoring',
@@ -27,9 +29,9 @@ export const addWalletToMonitoring = async (req: Request, res: Response) => {
   }
 };
 
-export const getMonitoredWallets = async (req: Request, res: Response) => {
+export const getMonitoredWallets = async (req: AuthRequest, res: Response) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.userId!;
     
     const wallets = await prisma.wallet.findMany({
       where: { userId },
@@ -80,9 +82,9 @@ export const getWalletTransactions = async (req: Request, res: Response) => {
   }
 };
 
-export const getRiskAlerts = async (req: Request, res: Response) => {
+export const getRiskAlerts = async (req: AuthRequest, res: Response) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.userId!;
     
     const alerts = await prisma.alert.findMany({
       where: { userId },

@@ -3,6 +3,8 @@ import { ethers } from 'ethers';
 import prisma from '../utils/prisma';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { WalletService } from '../services/wallet.service';
+import { Blockchain } from '@prisma/client';
+import { blockchainMonitor } from '../services/blockchain.service';
 
 const router = Router();
 
@@ -17,7 +19,7 @@ router.post('/generate', async (req: AuthRequest, res) => {
     const wallet = await prisma.wallet.create({
       data: {
         address: walletData.address,
-        blockchain: blockchain || 'ETHEREUM',
+        blockchain: (blockchain as Blockchain) || Blockchain.ETHEREUM,
         label: label || 'Account 1',
         userId: req.userId!
       }
@@ -47,7 +49,7 @@ router.post('/import/mnemonic', async (req: AuthRequest, res) => {
     const wallet = await prisma.wallet.create({
       data: {
         address: walletData.address,
-        blockchain: blockchain || 'ETHEREUM',
+        blockchain: (blockchain as Blockchain) || Blockchain.ETHEREUM,
         label: label || `Account ${accountIndex || 1}`,
         userId: req.userId!
       }
@@ -73,7 +75,7 @@ router.post('/import/private-key', async (req: AuthRequest, res) => {
     const wallet = await prisma.wallet.create({
       data: {
         address: walletData.address,
-        blockchain: blockchain || 'ETHEREUM',
+        blockchain: (blockchain as Blockchain) || Blockchain.ETHEREUM,
         label: label || 'Imported Account',
         userId: req.userId!
       }
@@ -114,7 +116,7 @@ router.post('/', async (req: AuthRequest, res) => {
   res.json(wallet);
 });
 
-// Sync wallet transactions
+// Sync wallet transactions - REAL IMPLEMENTATION
 router.post('/:id/sync', async (req: AuthRequest, res) => {
   try {
     const wallet = await prisma.wallet.findFirst({
@@ -125,40 +127,44 @@ router.post('/:id/sync', async (req: AuthRequest, res) => {
       return res.status(404).json({ error: 'Wallet not found' });
     }
 
-    // Simulate blockchain sync
-    const provider = new ethers.JsonRpcProvider(getProviderUrl(wallet.blockchain));
+    // Get transaction count before sync
+    const txCountBefore = await prisma.transaction.count({
+      where: { walletId: wallet.id }
+    });
+
+    // Real blockchain sync using blockchain monitor
+    await blockchainMonitor.monitorWallet(wallet.address, wallet.blockchain, wallet.userId);
+
+    // Get transaction count after sync
+    const txCountAfter = await prisma.transaction.count({
+      where: { walletId: wallet.id }
+    });
+
+    const newTransactions = txCountAfter - txCountBefore;
+
+    // Try to get real balance for EVM chains
+    let balance = '0.0';
+    let txCount = 0;
     
-    try {
-      const balance = await provider.getBalance(wallet.address);
-      const txCount = await provider.getTransactionCount(wallet.address);
-      
-      await prisma.wallet.update({
-        where: { id: wallet.id },
-        data: { updatedAt: new Date() }
-      });
-      
-      const newTransactions = Math.floor(Math.random() * 5);
-      
-      res.json({
-        success: true,
-        transactionsFound: newTransactions,
-        balance: ethers.formatEther(balance),
-        transactionCount: txCount
-      });
-    } catch (error) {
-      await prisma.wallet.update({
-        where: { id: wallet.id },
-        data: { updatedAt: new Date() }
-      });
-      
-      res.json({
-        success: true,
-        transactionsFound: Math.floor(Math.random() * 3),
-        balance: '0.0',
-        transactionCount: 0
-      });
+    if ([Blockchain.ETHEREUM, Blockchain.POLYGON, Blockchain.ARBITRUM, Blockchain.OPTIMISM, Blockchain.BASE, Blockchain.BNB_CHAIN].includes(wallet.blockchain)) {
+      try {
+        const provider = new ethers.JsonRpcProvider(getProviderUrl(wallet.blockchain));
+        const balanceWei = await provider.getBalance(wallet.address);
+        balance = ethers.formatEther(balanceWei);
+        txCount = await provider.getTransactionCount(wallet.address);
+      } catch (error) {
+        console.warn('Failed to fetch balance from RPC:', error);
+      }
     }
+
+    res.json({
+      success: true,
+      transactionsFound: newTransactions,
+      balance,
+      transactionCount: txCount || txCountAfter
+    });
   } catch (error) {
+    console.error('Sync error:', error);
     res.status(500).json({ error: 'Sync failed' });
   }
 });
@@ -171,18 +177,14 @@ router.delete('/:id', async (req: AuthRequest, res) => {
   res.json({ success: true });
 });
 
-function getProviderUrl(blockchain: string): string {
+function getProviderUrl(blockchain: Blockchain): string {
   const providers: Record<string, string> = {
-    'Ethereum': 'https://eth.llamarpc.com',
-    'Sepolia': 'https://rpc.sepolia.org',
-    'Polygon': 'https://polygon-rpc.com',
-    'Mumbai': 'https://rpc-mumbai.maticvigil.com',
-    'BSC': 'https://bsc-dataseed.binance.org',
-    'BSC Testnet': 'https://data-seed-prebsc-1-s1.binance.org:8545',
-    'Arbitrum': 'https://arb1.arbitrum.io/rpc',
-    'Optimism': 'https://mainnet.optimism.io',
-    'Avalanche': 'https://api.avax.network/ext/bc/C/rpc',
-    'Fuji': 'https://api.avax-test.network/ext/bc/C/rpc'
+    [Blockchain.ETHEREUM]: 'https://eth.llamarpc.com',
+    [Blockchain.POLYGON]: 'https://polygon-rpc.com',
+    [Blockchain.ARBITRUM]: 'https://arb1.arbitrum.io/rpc',
+    [Blockchain.OPTIMISM]: 'https://mainnet.optimism.io',
+    [Blockchain.AVALANCHE]: 'https://api.avax.network/ext/bc/C/rpc',
+    [Blockchain.BNB_CHAIN]: 'https://bsc-dataseed.binance.org'
   };
   
   return providers[blockchain] || 'https://eth.llamarpc.com';

@@ -1,17 +1,17 @@
 import { Router } from 'express';
-import { authenticate } from '../middleware/auth';
-import { PrismaClient } from '@prisma/client';
+import { authenticate, AuthRequest } from '../middleware/auth';
+import { PrismaClient, Plan } from '@prisma/client';
 
 const router = Router();
 const prisma = new PrismaClient();
 
-router.post('/upgrade', authenticate, async (req, res) => {
+router.post('/upgrade', authenticate, async (req: AuthRequest, res) => {
   try {
     const { plan, paymentMethod, amount } = req.body;
-    const userId = req.user!.id;
+    const userId = req.userId!;
 
     // Validate plan
-    if (!['STARTER', 'GROWTH', 'ENTERPRISE'].includes(plan)) {
+    if (!Object.values(Plan).includes(plan)) {
       return res.status(400).json({ error: 'Invalid plan' });
     }
 

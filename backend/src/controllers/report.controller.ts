@@ -2,6 +2,7 @@ import { Response } from 'express';
 import prisma from '../utils/prisma';
 import { AuthRequest } from '../middleware/auth';
 import { generatePDFReport, generateCSVReport } from '../services/report.service';
+import { ReportStatus, ReportFormat } from '@prisma/client';
 
 export const generateReport = async (req: AuthRequest, res: Response) => {
   try {
@@ -14,7 +15,7 @@ export const generateReport = async (req: AuthRequest, res: Response) => {
         format,
         startDate: new Date(startDate),
         endDate: new Date(endDate),
-        status: 'PROCESSING'
+        status: ReportStatus.PROCESSING
       }
     });
 
@@ -23,20 +24,20 @@ export const generateReport = async (req: AuthRequest, res: Response) => {
       try {
         let fileUrl;
         
-        if (format === 'PDF') {
+        if (format === ReportFormat.PDF) {
           fileUrl = await generatePDFReport(req.userId!, startDate, endDate);
-        } else if (format === 'CSV') {
+        } else if (format === ReportFormat.CSV) {
           fileUrl = await generateCSVReport(req.userId!, startDate, endDate);
         }
 
         await prisma.report.update({
           where: { id: report.id },
-          data: { status: 'COMPLETED', fileUrl }
+          data: { status: ReportStatus.COMPLETED, fileUrl }
         });
       } catch (error) {
         await prisma.report.update({
           where: { id: report.id },
-          data: { status: 'FAILED' }
+          data: { status: ReportStatus.FAILED }
         });
       }
     })();

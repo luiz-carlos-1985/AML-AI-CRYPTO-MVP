@@ -3,6 +3,7 @@ import { createObjectCsvWriter } from 'csv-writer';
 import fs from 'fs';
 import path from 'path';
 import prisma from '../utils/prisma';
+import { RiskLevel } from '@prisma/client';
 
 export const generatePDFReport = async (userId: string, startDate: string, endDate: string): Promise<string> => {
   const transactions = await prisma.transaction.findMany({
@@ -19,10 +20,10 @@ export const generatePDFReport = async (userId: string, startDate: string, endDa
   const user = await prisma.user.findUnique({ where: { id: userId } });
   const totalTx = transactions.length || 1;
   const riskStats = {
-    LOW: transactions.filter(t => t.riskLevel === 'LOW').length,
-    MEDIUM: transactions.filter(t => t.riskLevel === 'MEDIUM').length,
-    HIGH: transactions.filter(t => t.riskLevel === 'HIGH').length,
-    CRITICAL: transactions.filter(t => t.riskLevel === 'CRITICAL').length
+    LOW: transactions.filter(t => t.riskLevel === RiskLevel.LOW).length,
+    MEDIUM: transactions.filter(t => t.riskLevel === RiskLevel.MEDIUM).length,
+    HIGH: transactions.filter(t => t.riskLevel === RiskLevel.HIGH).length,
+    CRITICAL: transactions.filter(t => t.riskLevel === RiskLevel.CRITICAL).length
   };
   const totalVolume = transactions.reduce((sum, t) => sum + parseFloat(t.amount), 0);
   const avgRiskScore = transactions.length > 0 ? transactions.reduce((sum, t) => sum + t.riskScore, 0) / transactions.length : 0;
@@ -84,7 +85,7 @@ export const generatePDFReport = async (userId: string, startDate: string, endDa
   const riskY = metricsY + 130;
   doc.fontSize(18).fillColor('#1f2937').font('Helvetica-Bold').text('Risk Distribution', 50, riskY);
   
-  const colors = { LOW: '#10b981', MEDIUM: '#f59e0b', HIGH: '#ef4444', CRITICAL: '#991b1b' };
+  const colors = { [RiskLevel.LOW]: '#10b981', [RiskLevel.MEDIUM]: '#f59e0b', [RiskLevel.HIGH]: '#ef4444', [RiskLevel.CRITICAL]: '#991b1b' };
   const barMaxWidth = 370;
   
   Object.entries(riskStats).forEach(([level, count], i) => {
@@ -94,7 +95,7 @@ export const generatePDFReport = async (userId: string, startDate: string, endDa
     
     doc.fontSize(11).fillColor('#000000').font('Helvetica-Bold').text(level, 50, y);
     doc.roundedRect(120, y - 5, barMaxWidth, 25, 5).fill('#f3f4f6');
-    if (barWidth > 0) doc.roundedRect(120, y - 5, barWidth, 25, 5).fill(colors[level as keyof typeof colors]);
+    if (barWidth > 0) doc.roundedRect(120, y - 5, barWidth, 25, 5).fill(colors[level as RiskLevel]);
     doc.fillColor('#000000').fontSize(10).font('Helvetica-Bold').text(`${count} (${percentage.toFixed(1)}%)`, 130, y + 2);
   });
 
@@ -128,7 +129,7 @@ export const generatePDFReport = async (userId: string, startDate: string, endDa
          .text(tx.wallet.blockchain, 200, tableY + 10, { width: 70 })
          .text(`$${tx.amount}`, 275, tableY + 10, { width: 80 });
       
-      const riskColor = colors[tx.riskLevel as keyof typeof colors];
+      const riskColor = colors[tx.riskLevel];
       doc.roundedRect(360, tableY + 8, 65, 18, 4).fill(riskColor);
       doc.fillColor('#ffffff').fontSize(8).font('Helvetica-Bold').text(tx.riskLevel, 365, tableY + 12, { width: 55, align: 'center' });
       
