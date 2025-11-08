@@ -6,6 +6,9 @@ import dotenv from 'dotenv';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
 import http from 'http';
+import { logger } from './utils/logger';
+import { requestLogger } from './middleware/requestLogger';
+import { cache } from './utils/cache';
 import authRoutes from './routes/auth.routes';
 import walletRoutes from './routes/wallet.routes';
 import transactionRoutes from './routes/transaction.routes';
@@ -40,6 +43,7 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(morgan('dev'));
+app.use(requestLogger);
 
 // Static files with proper MIME types
 app.use(express.static('public', {
@@ -96,10 +100,10 @@ app.use(errorHandler);
 initializeWebSocket(server);
 
 server.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📊 Environment: ${process.env.NODE_ENV}`);
-  console.log('🔌 WebSocket initialized');
+  logger.info(`Server running on port ${PORT}`);
+  logger.info(`Environment: ${process.env.NODE_ENV}`);
+  logger.info('WebSocket initialized');
   
   blockchainMonitor.startContinuousMonitoring();
-  console.log('🔍 Blockchain monitoring started');
+  logger.info('Blockchain monitoring started');
 });

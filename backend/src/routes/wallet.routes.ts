@@ -2,10 +2,88 @@ import { Router } from 'express';
 import { ethers } from 'ethers';
 import prisma from '../utils/prisma';
 import { authenticate, AuthRequest } from '../middleware/auth';
+import { WalletService } from '../services/wallet.service';
 
 const router = Router();
 
 router.use(authenticate);
+
+// Gerar nova wallet
+router.post('/generate', async (req: AuthRequest, res) => {
+  try {
+    const { label, blockchain } = req.body;
+    const walletData = WalletService.generateWallet();
+    
+    const wallet = await prisma.wallet.create({
+      data: {
+        address: walletData.address,
+        blockchain: blockchain || 'ETHEREUM',
+        label: label || 'Account 1',
+        userId: req.userId!
+      }
+    });
+
+    res.json({
+      wallet,
+      mnemonic: walletData.mnemonic,
+      privateKey: walletData.privateKey
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Importar wallet via seed phrase
+router.post('/import/mnemonic', async (req: AuthRequest, res) => {
+  try {
+    const { mnemonic, label, blockchain, accountIndex } = req.body;
+    
+    if (!mnemonic) {
+      return res.status(400).json({ error: 'Mnemonic required' });
+    }
+
+    const walletData = WalletService.importFromMnemonic(mnemonic, accountIndex || 0);
+    
+    const wallet = await prisma.wallet.create({
+      data: {
+        address: walletData.address,
+        blockchain: blockchain || 'ETHEREUM',
+        label: label || `Account ${accountIndex || 1}`,
+        userId: req.userId!
+      }
+    });
+
+    res.json({ wallet });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Importar wallet via chave privada
+router.post('/import/private-key', async (req: AuthRequest, res) => {
+  try {
+    const { privateKey, label, blockchain } = req.body;
+    
+    if (!privateKey) {
+      return res.status(400).json({ error: 'Private key required' });
+    }
+
+    const walletData = WalletService.importFromPrivateKey(privateKey);
+    
+    const wallet = await prisma.wallet.create({
+      data: {
+        address: walletData.address,
+        blockchain: blockchain || 'ETHEREUM',
+        label: label || 'Imported Account',
+        userId: req.userId!
+      }
+    });
+
+    res.json({ wallet });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Get all wallets
 router.get('/', async (req: AuthRequest, res) => {
