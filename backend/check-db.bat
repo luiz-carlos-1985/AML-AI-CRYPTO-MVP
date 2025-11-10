@@ -1,0 +1,3 @@
+@echo off
+echo Checking database...
+npx prisma studio

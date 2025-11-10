@@ -19,12 +19,14 @@ export default function ApiSettings() {
   const [showModal, setShowModal] = useState(false);
   const [visibleKeys, setVisibleKeys] = useState<Set<string>>(new Set());
   const [testingKey, setTestingKey] = useState<string | null>(null);
+  const [searchProvider, setSearchProvider] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   const providers = [
     { 
       value: 'etherscan', 
       label: 'Etherscan', 
-      blockchain: 'Ethereum, Polygon, BSC, Arbitrum, Optimism', 
+      blockchain: 'Ethereum, Polygon, BSC, Arbitrum, Optimism, Base', 
       url: 'https://etherscan.io/apis', 
       icon: '⟠', 
       color: 'from-blue-500 to-blue-600',
@@ -34,12 +36,32 @@ export default function ApiSettings() {
     { 
       value: 'alchemy', 
       label: 'Alchemy', 
-      blockchain: 'Ethereum Sepolia (Testnet)', 
+      blockchain: 'Ethereum, Polygon, Arbitrum, Optimism, Base', 
       url: 'https://www.alchemy.com/', 
       icon: '🔮', 
       color: 'from-purple-500 to-purple-600',
       description: 'Infraestrutura blockchain profissional',
       free: '300M compute units/mês'
+    },
+    { 
+      value: 'infura', 
+      label: 'Infura', 
+      blockchain: 'Ethereum, Polygon, Arbitrum, Optimism', 
+      url: 'https://infura.io/', 
+      icon: '🌐', 
+      color: 'from-red-500 to-red-600',
+      description: 'Infraestrutura Web3 confiável',
+      free: '100k req/dia'
+    },
+    { 
+      value: 'quicknode', 
+      label: 'QuickNode', 
+      blockchain: 'Multi-chain (20+ blockchains)', 
+      url: 'https://www.quicknode.com/', 
+      icon: '⚡', 
+      color: 'from-cyan-500 to-cyan-600',
+      description: 'Nós blockchain de alta performance',
+      free: '10M créditos/mês'
     },
     { 
       value: 'blockstream', 
@@ -50,6 +72,76 @@ export default function ApiSettings() {
       color: 'from-orange-500 to-orange-600',
       description: 'API pública Bitcoin (sem chave necessária)',
       free: 'Ilimitado'
+    },
+    { 
+      value: 'blockcypher', 
+      label: 'BlockCypher', 
+      blockchain: 'Bitcoin, Ethereum, Litecoin, Dogecoin', 
+      url: 'https://www.blockcypher.com/', 
+      icon: '🔗', 
+      color: 'from-green-500 to-green-600',
+      description: 'APIs blockchain simplificadas',
+      free: '200 req/hora'
+    },
+    { 
+      value: 'moralis', 
+      label: 'Moralis', 
+      blockchain: 'Ethereum, BSC, Polygon, Avalanche, Fantom', 
+      url: 'https://moralis.io/', 
+      icon: '🚀', 
+      color: 'from-teal-500 to-teal-600',
+      description: 'Web3 APIs e ferramentas de desenvolvimento',
+      free: '40k compute units/dia'
+    },
+    { 
+      value: 'ankr', 
+      label: 'Ankr', 
+      blockchain: 'Multi-chain (15+ blockchains)', 
+      url: 'https://www.ankr.com/', 
+      icon: '⚓', 
+      color: 'from-indigo-500 to-indigo-600',
+      description: 'RPC público e premium',
+      free: '500M req/mês'
+    },
+    { 
+      value: 'covalent', 
+      label: 'Covalent', 
+      blockchain: 'Multi-chain (100+ blockchains)', 
+      url: 'https://www.covalenthq.com/', 
+      icon: '💎', 
+      color: 'from-pink-500 to-pink-600',
+      description: 'API unificada para dados blockchain',
+      free: '100k créditos/mês'
+    },
+    { 
+      value: 'thegraph', 
+      label: 'The Graph', 
+      blockchain: 'Ethereum, Polygon, Arbitrum, Optimism', 
+      url: 'https://thegraph.com/', 
+      icon: '📊', 
+      color: 'from-violet-500 to-violet-600',
+      description: 'Protocolo de indexação descentralizado',
+      free: '100k queries/mês'
+    },
+    { 
+      value: 'chainstack', 
+      label: 'Chainstack', 
+      blockchain: 'Multi-chain (30+ blockchains)', 
+      url: 'https://chainstack.com/', 
+      icon: '🔧', 
+      color: 'from-amber-500 to-amber-600',
+      description: 'Plataforma de nós gerenciados',
+      free: '3M req/mês'
+    },
+    { 
+      value: 'getblock', 
+      label: 'GetBlock', 
+      blockchain: 'Multi-chain (50+ blockchains)', 
+      url: 'https://getblock.io/', 
+      icon: '🎯', 
+      color: 'from-lime-500 to-lime-600',
+      description: 'Acesso a nós blockchain',
+      free: '40k req/dia'
     }
   ];
 
@@ -395,26 +487,73 @@ export default function ApiSettings() {
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-slate-300 mb-3">
                   1️⃣ {t('apiKeys.chooseProvider')}
                 </label>
-                <select
-                  value={newConfig.provider}
-                  onChange={(e) => setNewConfig({...newConfig, provider: e.target.value})}
-                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                >
-                  {providers.map(provider => (
-                    <option key={provider.value} value={provider.value}>
-                      {provider.icon} {provider.label} - {provider.blockchain}
-                    </option>
+                
+                {/* Search and Filter */}
+                <div className="flex gap-2 mb-3">
+                  <input
+                    type="text"
+                    placeholder="Buscar provedor..."
+                    value={searchProvider}
+                    onChange={(e) => setSearchProvider(e.target.value)}
+                    className="flex-1 px-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="px-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  >
+                    <option value="all">Todos</option>
+                    <option value="evm">EVM</option>
+                    <option value="bitcoin">Bitcoin</option>
+                    <option value="multichain">Multi-chain</option>
+                  </select>
+                </div>
+
+                {/* Provider Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-96 overflow-y-auto p-1">
+                  {providers
+                    .filter(p => {
+                      const matchesSearch = p.label.toLowerCase().includes(searchProvider.toLowerCase()) || 
+                                          p.blockchain.toLowerCase().includes(searchProvider.toLowerCase());
+                      const matchesCategory = selectedCategory === 'all' || 
+                        (selectedCategory === 'evm' && ['etherscan', 'alchemy', 'infura', 'quicknode'].includes(p.value)) ||
+                        (selectedCategory === 'bitcoin' && ['blockstream', 'blockcypher'].includes(p.value)) ||
+                        (selectedCategory === 'multichain' && ['moralis', 'ankr', 'covalent', 'thegraph', 'chainstack', 'getblock'].includes(p.value));
+                      return matchesSearch && matchesCategory;
+                    })
+                    .map(provider => (
+                    <button
+                      key={provider.value}
+                      onClick={() => setNewConfig({...newConfig, provider: provider.value})}
+                      className={`p-3 rounded-xl border-2 transition-all text-left ${
+                        newConfig.provider === provider.value
+                          ? 'border-emerald-500 bg-emerald-500/10'
+                          : 'border-slate-700/50 bg-slate-900/50 hover:border-slate-600'
+                      }`}
+                    >
+                      <div className="flex items-start gap-2 mb-2">
+                        <div className={`w-8 h-8 rounded-lg bg-gradient-to-r ${provider.color} flex items-center justify-center text-lg flex-shrink-0`}>
+                          {provider.icon}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-sm font-bold text-white truncate">{provider.label}</h4>
+                          <p className="text-xs text-slate-400 truncate">{provider.blockchain}</p>
+                        </div>
+                        {newConfig.provider === provider.value && (
+                          <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                        )}
+                      </div>
+                      <p className="text-xs text-slate-500 mb-1">{provider.description}</p>
+                      <div className="flex items-center gap-1 text-xs text-emerald-400 font-medium">
+                        <Zap className="w-3 h-3" />
+                        {provider.free}
+                      </div>
+                    </button>
                   ))}
-                </select>
-                {selectedProvider && (
-                  <div className="mt-2 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-                    <p className="text-xs text-blue-400">{selectedProvider.description}</p>
-                    <p className="text-xs text-emerald-400 mt-1">✓ Plano gratuito: {selectedProvider.free}</p>
-                  </div>
-                )}
+                </div>
               </div>
 
               <div className="p-4 bg-gradient-to-r from-emerald-500/10 to-blue-500/10 border border-emerald-500/30 rounded-xl">

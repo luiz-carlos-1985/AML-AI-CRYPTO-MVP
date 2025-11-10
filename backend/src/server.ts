@@ -86,6 +86,10 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+app.get('/test-version', (req, res) => {
+  res.json({ version: 'MANUAL_COUNT_FIX', timestamp: new Date().toISOString() });
+});
+
 // Catch-all handler for non-API routes
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api/')) {
@@ -101,6 +105,7 @@ app.use(errorHandler);
 initializeWebSocket(server);
 
 server.listen(PORT, async () => {
+  console.log('\n🚀 BACKEND STARTED - VERSION WITH _COUNT FIX');
   logger.info(`Server running on port ${PORT}`);
   logger.info(`Environment: ${process.env.NODE_ENV}`);
   logger.info('WebSocket initialized');

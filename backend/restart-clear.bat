@@ -1,0 +1,6 @@
+@echo off
+echo Clearing ts-node-dev cache...
+if exist .ts-node rmdir /s /q .ts-node
+echo Cache cleared!
+echo Starting backend with --clear flag...
+npm run dev

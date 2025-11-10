@@ -35,7 +35,17 @@ const Wallets = () => {
   const loadWallets = async () => {
     try {
       const { data } = await api.get('/wallets');
-      console.log('Loaded wallets:', data);
+      console.log('=== WALLETS DATA ===');
+      console.log('Total wallets:', data.length);
+      data.forEach((w: any, i: number) => {
+        console.log(`Wallet ${i+1}:`, {
+          label: w.label,
+          address: w.address,
+          _count: w._count,
+          transactionCount: w._count?.transactions,
+          alertCount: w._count?.alerts
+        });
+      });
       setWallets(data);
     } catch (error: any) {
       console.error('Failed to load wallets:', error);
@@ -76,8 +86,11 @@ const Wallets = () => {
     try {
       toast.loading('Syncing wallet...', { id: 'sync' });
       await api.post(`/wallets/${id}/sync`);
+      
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      await loadWallets();
+      
       toast.success('Wallet synchronized', { id: 'sync' });
-      loadWallets();
     } catch (error) {
       toast.error('Failed to sync wallet', { id: 'sync' });
     }
@@ -153,10 +166,12 @@ const Wallets = () => {
                   </div>
                   <p className="mt-2 text-xs md:text-sm text-slate-400 font-mono bg-slate-900/50 px-2 md:px-3 py-1 rounded-lg inline-block break-all">{wallet.address}</p>
                   <div className="mt-3 flex flex-wrap items-center gap-2 md:gap-4 text-xs md:text-sm">
-                    <span className="text-slate-400">
+                    <span className="text-slate-400 flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-blue-400"></span>
                       Transactions: <span className="text-white font-medium">{wallet._count?.transactions || 0}</span>
                     </span>
-                    <span className="text-slate-400">
+                    <span className="text-slate-400 flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-amber-400"></span>
                       Alerts: <span className="text-white font-medium">{wallet._count?.alerts || 0}</span>
                     </span>
                     <span className={`px-2 md:px-3 py-1 rounded-lg font-medium text-xs ${
@@ -168,6 +183,14 @@ const Wallets = () => {
                       Risk: {wallet.riskLevel}
                     </span>
                   </div>
+                  {(wallet._count?.transactions || 0) === 0 && (
+                    <div className="mt-2 p-2 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                      <p className="text-xs text-blue-400 flex items-center gap-2">
+                        <RefreshCw className="w-3 h-3" />
+                        Clique em sincronizar para buscar transações
+                      </p>
+                    </div>
+                  )}
                 </div>
                 <div className="flex space-x-2 md:ml-4">
                   <button

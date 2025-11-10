@@ -51,22 +51,33 @@ export const createWallet = async (req: AuthRequest, res: Response) => {
 };
 
 export const getWallets = async (req: AuthRequest, res: Response) => {
+  console.log('\n🔍 getWallets called - MANUAL COUNT VERSION');
   try {
     const wallets = await prisma.wallet.findMany({
       where: { userId: req.userId },
-      include: {
-        _count: {
-          select: { 
-            transactions: true, 
-            alerts: true 
-          }
-        }
-      },
       orderBy: { createdAt: 'desc' }
     });
 
-    console.log(`Fetched ${wallets.length} wallets for user ${req.userId}`);
-    res.json(wallets);
+    const walletsWithCounts = await Promise.all(
+      wallets.map(async (wallet) => {
+        const [transactionCount, alertCount] = await Promise.all([
+          prisma.transaction.count({ where: { walletId: wallet.id } }),
+          prisma.alert.count({ where: { walletId: wallet.id } })
+        ]);
+        
+        console.log(`${wallet.label}: ${transactionCount} tx, ${alertCount} alerts`);
+        
+        return {
+          ...wallet,
+          _count: {
+            transactions: transactionCount,
+            alerts: alertCount
+          }
+        };
+      })
+    );
+    
+    res.json(walletsWithCounts);
   } catch (error) {
     console.error('Get wallets error:', error);
     res.status(500).json({ error: 'Failed to fetch wallets' });
