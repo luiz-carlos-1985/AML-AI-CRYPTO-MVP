@@ -9,7 +9,7 @@ function validateAddress(address: string, blockchain: Blockchain): boolean {
   if (blockchain === Blockchain.BITCOIN) {
     return /^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$|^bc1[a-z0-9]{39,59}$/.test(address);
   }
-  if ([Blockchain.ETHEREUM, Blockchain.POLYGON, Blockchain.ARBITRUM, Blockchain.OPTIMISM, Blockchain.BASE].includes(blockchain)) {
+  if ([Blockchain.ETHEREUM, Blockchain.SEPOLIA, Blockchain.POLYGON, Blockchain.ARBITRUM, Blockchain.OPTIMISM, Blockchain.BASE].includes(blockchain)) {
     return /^0x[a-fA-F0-9]{40}$/.test(address);
   }
   return true; // Allow other blockchains for now

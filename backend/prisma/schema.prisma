@@ -141,6 +141,7 @@ enum Plan {
 enum Blockchain {
   BITCOIN
   ETHEREUM
+  SEPOLIA
   SOLANA
   CARDANO
   POLKADOT

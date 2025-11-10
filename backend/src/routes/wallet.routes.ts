@@ -146,7 +146,7 @@ router.post('/:id/sync', async (req: AuthRequest, res) => {
     let balance = '0.0';
     let txCount = 0;
     
-    if ([Blockchain.ETHEREUM, Blockchain.POLYGON, Blockchain.ARBITRUM, Blockchain.OPTIMISM, Blockchain.BASE, Blockchain.BNB_CHAIN].includes(wallet.blockchain)) {
+    if ([Blockchain.ETHEREUM, Blockchain.SEPOLIA, Blockchain.POLYGON, Blockchain.ARBITRUM, Blockchain.OPTIMISM, Blockchain.BASE, Blockchain.BNB_CHAIN].includes(wallet.blockchain)) {
       try {
         const provider = new ethers.JsonRpcProvider(getProviderUrl(wallet.blockchain));
         const balanceWei = await provider.getBalance(wallet.address);
@@ -180,6 +180,7 @@ router.delete('/:id', async (req: AuthRequest, res) => {
 function getProviderUrl(blockchain: Blockchain): string {
   const providers: Record<string, string> = {
     [Blockchain.ETHEREUM]: 'https://eth.llamarpc.com',
+    [Blockchain.SEPOLIA]: 'https://rpc.sepolia.org',
     [Blockchain.POLYGON]: 'https://polygon-rpc.com',
     [Blockchain.ARBITRUM]: 'https://arb1.arbitrum.io/rpc',
     [Blockchain.OPTIMISM]: 'https://mainnet.optimism.io',

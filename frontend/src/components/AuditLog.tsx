@@ -48,7 +48,7 @@ export default function AuditLog() {
       <div className="space-y-3 max-h-96 overflow-y-auto">
         {logs.map((log, index) => (
           <motion.div
-            key={log.id}
+            key={`${log.id}-${index}`}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.05 }}

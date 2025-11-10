@@ -4,15 +4,16 @@ import { notifyUser } from './websocket.service';
 import { logger } from '../utils/logger';
 import { RiskLevel, AlertType, Blockchain } from '@prisma/client';
 
-// APIs gratuitas para dados blockchain
+// APIs gratuitas para dados blockchain (V2)
 const BLOCKCHAIN_APIS = {
   bitcoin: 'https://blockstream.info/api',
-  ethereum: 'https://api.etherscan.io/api',
-  polygon: 'https://api.polygonscan.com/api',
-  arbitrum: 'https://api.arbiscan.io/api',
-  optimism: 'https://api-optimistic.etherscan.io/api',
-  bsc: 'https://api.bscscan.com/api',
-  base: 'https://api.basescan.org/api'
+  ethereum: { url: 'https://api.etherscan.io/v2/api', chainid: 1 },
+  sepolia: { url: 'https://api-sepolia.etherscan.io/v2/api', chainid: 11155111 },
+  polygon: { url: 'https://api.polygonscan.com/v2/api', chainid: 137 },
+  arbitrum: { url: 'https://api.arbiscan.io/v2/api', chainid: 42161 },
+  optimism: { url: 'https://api-optimistic.etherscan.io/v2/api', chainid: 10 },
+  bsc: { url: 'https://api.bscscan.com/v2/api', chainid: 56 },
+  base: { url: 'https://api.basescan.org/v2/api', chainid: 8453 }
 };
 
 export class BlockchainMonitor {
@@ -59,7 +60,7 @@ export class BlockchainMonitor {
       return [];
     }
     
-    const evmChains = [Blockchain.ETHEREUM, Blockchain.POLYGON, Blockchain.ARBITRUM, Blockchain.OPTIMISM, Blockchain.BASE, Blockchain.BNB_CHAIN];
+    const evmChains = [Blockchain.ETHEREUM, Blockchain.SEPOLIA, Blockchain.POLYGON, Blockchain.ARBITRUM, Blockchain.OPTIMISM, Blockchain.BASE, Blockchain.BNB_CHAIN];
     if (evmChains.includes(blockchain) && !address.startsWith('0x')) {
       logger.warn(`Invalid EVM address format: ${address}`);
       return [];
@@ -69,17 +70,19 @@ export class BlockchainMonitor {
       case Blockchain.BITCOIN:
         return this.fetchBitcoinTransactions(address);
       case Blockchain.ETHEREUM:
-        return this.fetchEVMTransactions(address, blockchain, BLOCKCHAIN_APIS.ethereum);
+        return this.fetchEVMTransactionsV2(address, blockchain, BLOCKCHAIN_APIS.ethereum);
+      case Blockchain.SEPOLIA:
+        return this.fetchSepoliaTransactionsViaAlchemy(address, blockchain);
       case Blockchain.POLYGON:
-        return this.fetchEVMTransactions(address, blockchain, BLOCKCHAIN_APIS.polygon);
+        return this.fetchEVMTransactionsV2(address, blockchain, BLOCKCHAIN_APIS.polygon);
       case Blockchain.ARBITRUM:
-        return this.fetchEVMTransactions(address, blockchain, BLOCKCHAIN_APIS.arbitrum);
+        return this.fetchEVMTransactionsV2(address, blockchain, BLOCKCHAIN_APIS.arbitrum);
       case Blockchain.OPTIMISM:
-        return this.fetchEVMTransactions(address, blockchain, BLOCKCHAIN_APIS.optimism);
+        return this.fetchEVMTransactionsV2(address, blockchain, BLOCKCHAIN_APIS.optimism);
       case Blockchain.BNB_CHAIN:
-        return this.fetchEVMTransactions(address, blockchain, BLOCKCHAIN_APIS.bsc);
+        return this.fetchEVMTransactionsV2(address, blockchain, BLOCKCHAIN_APIS.bsc);
       case Blockchain.BASE:
-        return this.fetchEVMTransactions(address, blockchain, BLOCKCHAIN_APIS.base);
+        return this.fetchEVMTransactionsV2(address, blockchain, BLOCKCHAIN_APIS.base);
       default:
         logger.warn(`Blockchain ${blockchain} not supported yet`);
         return [];
@@ -104,30 +107,140 @@ export class BlockchainMonitor {
     }
   }
 
-  // EVM chains via Etherscan-like APIs (gratuita com rate limit)
-  private async fetchEVMTransactions(address: string, blockchain: Blockchain, apiUrl: string) {
+  // Sepolia via Alchemy (Etherscan API deprecated)
+  private async fetchSepoliaTransactionsViaAlchemy(address: string, blockchain: Blockchain) {
     try {
-      const apiKey = process.env.ETHERSCAN_API_KEY || 'YourApiKeyToken';
-      const response = await axios.get(apiUrl, {
+      const alchemyKey = process.env.ALCHEMY_API_KEY;
+      
+      if (!alchemyKey) {
+        logger.warn('No Alchemy API key, using public RPC');
+        return this.fetchSepoliaViaPublicRPC(address, blockchain);
+      }
+
+      // Fetch sent transactions
+      const sentResponse = await axios.post(
+        `https://eth-sepolia.g.alchemy.com/v2/${alchemyKey}`,
+        {
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'alchemy_getAssetTransfers',
+          params: [{
+            fromBlock: '0x0',
+            toBlock: 'latest',
+            fromAddress: address,
+            category: ['external', 'internal'],
+            maxCount: '0x32',
+            order: 'desc'
+          }]
+        },
+        { timeout: 15000 }
+      );
+
+      // Fetch received transactions
+      const receivedResponse = await axios.post(
+        `https://eth-sepolia.g.alchemy.com/v2/${alchemyKey}`,
+        {
+          jsonrpc: '2.0',
+          id: 2,
+          method: 'alchemy_getAssetTransfers',
+          params: [{
+            fromBlock: '0x0',
+            toBlock: 'latest',
+            toAddress: address,
+            category: ['external', 'internal'],
+            maxCount: '0x32',
+            order: 'desc'
+          }]
+        },
+        { timeout: 15000 }
+      );
+
+      const sentTxs = sentResponse.data.result?.transfers || [];
+      const receivedTxs = receivedResponse.data.result?.transfers || [];
+      const allTxs = [...sentTxs, ...receivedTxs];
+
+      if (allTxs.length === 0) {
+        logger.info('No Sepolia transactions found via Alchemy');
+        return [];
+      }
+
+      // Remove duplicates by hash
+      const uniqueTxs = Array.from(
+        new Map(allTxs.map(tx => [tx.hash, tx])).values()
+      );
+
+      logger.info(`Fetched ${uniqueTxs.length} Sepolia transactions via Alchemy`);
+
+      return uniqueTxs.map((tx: any) => ({
+        hash: tx.hash,
+        fromAddress: tx.from,
+        toAddress: tx.to || 'contract',
+        amount: parseFloat(tx.value || 0),
+        timestamp: new Date(tx.metadata?.blockTimestamp || Date.now()),
+        blockchain
+      }));
+    } catch (error: any) {
+      logger.error('Alchemy failed for Sepolia', { error: error.message });
+      return [];
+    }
+  }
+
+  // Fallback: Sepolia via public RPC (limited)
+  private async fetchSepoliaViaPublicRPC(address: string, blockchain: Blockchain) {
+    try {
+      const response = await axios.post(
+        'https://rpc.sepolia.org',
+        {
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'eth_getBalance',
+          params: [address, 'latest']
+        },
+        { timeout: 10000 }
+      );
+
+      logger.info(`Sepolia RPC: balance check only, no transaction history`);
+      return [];
+    } catch (error) {
+      logger.error('Sepolia RPC failed', { error });
+      return [];
+    }
+  }
+
+  // EVM chains via Etherscan V2 API
+  private async fetchEVMTransactionsV2(address: string, blockchain: Blockchain, apiConfig: { url: string, chainid: number }) {
+    try {
+      const apiKey = process.env.ETHERSCAN_API_KEY;
+      
+      if (!apiKey || apiKey === 'YourApiKeyToken') {
+        logger.warn(`No valid API key for ${blockchain}`);
+        return [];
+      }
+
+      const response = await axios.get(apiConfig.url, {
         params: {
+          chainid: apiConfig.chainid,
           module: 'account',
           action: 'txlist',
           address,
           startblock: 0,
           endblock: 99999999,
           page: 1,
-          offset: 100, // Limit to last 100 transactions
+          offset: 50,
           sort: 'desc',
           apikey: apiKey
         },
-        timeout: 10000
+        timeout: 15000
       });
 
-      if (!response.data.result || !Array.isArray(response.data.result)) {
+      if (response.data.status !== '1' || !response.data.result || !Array.isArray(response.data.result)) {
+        logger.warn(`API returned no results for ${blockchain}`);
         return [];
       }
 
-      return response.data.result.slice(0, 50).map((tx: any) => ({
+      logger.info(`Fetched ${response.data.result.length} transactions for ${blockchain}`);
+
+      return response.data.result.map((tx: any) => ({
         hash: tx.hash,
         fromAddress: tx.from,
         toAddress: tx.to,
@@ -135,8 +248,8 @@ export class BlockchainMonitor {
         timestamp: new Date(parseInt(tx.timeStamp) * 1000),
         blockchain
       }));
-    } catch (error) {
-      logger.error(`Failed to fetch ${blockchain} transactions`, { error, address });
+    } catch (error: any) {
+      logger.error(`Failed to fetch ${blockchain} transactions`, { error: error.message, address });
       return [];
     }
   }
