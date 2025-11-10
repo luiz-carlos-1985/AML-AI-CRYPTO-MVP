@@ -28,6 +28,7 @@ import exportRoutes from './routes/export.routes';
 import { errorHandler } from './middleware/errorHandler';
 import { blockchainMonitor } from './services/blockchain.service';
 import { initializeWebSocket } from './services/websocket.service';
+import { startMLService, stopMLService } from './services/ml-local.service';
 
 dotenv.config();
 
@@ -99,11 +100,27 @@ app.use(errorHandler);
 
 initializeWebSocket(server);
 
-server.listen(PORT, () => {
+server.listen(PORT, async () => {
   logger.info(`Server running on port ${PORT}`);
   logger.info(`Environment: ${process.env.NODE_ENV}`);
   logger.info('WebSocket initialized');
   
+  // Start ML Service automatically
+  await startMLService();
+  
   blockchainMonitor.startContinuousMonitoring();
   logger.info('Blockchain monitoring started');
+});
+
+// Cleanup on exit
+process.on('SIGINT', () => {
+  logger.info('Shutting down...');
+  stopMLService();
+  process.exit(0);
+});
+
+process.on('SIGTERM', () => {
+  logger.info('Shutting down...');
+  stopMLService();
+  process.exit(0);
 });

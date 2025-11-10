@@ -4,6 +4,18 @@ import { RiskLevel, AlertType } from '@prisma/client';
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://localhost:8000';
 
+// Check if ML service is available
+let mlServiceAvailable = false;
+axios.get(`${ML_SERVICE_URL}/health`, { timeout: 2000 })
+  .then(() => {
+    mlServiceAvailable = true;
+    console.log('✅ ML Service connected');
+  })
+  .catch(() => {
+    mlServiceAvailable = false;
+    console.log('⚠️ ML Service offline, using fallback');
+  });
+
 export const analyzeWalletRisk = async (walletId: string) => {
   try {
     const wallet = await prisma.wallet.findUnique({

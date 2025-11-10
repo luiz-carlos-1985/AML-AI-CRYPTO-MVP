@@ -30,6 +30,21 @@
 
 ---
 
+## ⚠️ IMPORTANTE - Configuração Obrigatória
+
+**A função principal do sistema (monitoramento de transações) requer API keys válidas:**
+
+1. **Etherscan API Key** - Para Ethereum, Polygon, Arbitrum, etc.
+2. **Alchemy API Key** - Para rede Sepolia (testnet)
+
+📚 **Guia completo:** [API_KEYS_SETUP.md](./API_KEYS_SETUP.md)
+
+⚡ **Obtenha suas chaves gratuitas em 5 minutos:**
+- Etherscan: https://etherscan.io/myapikey
+- Alchemy: https://www.alchemy.com/
+
+---
+
 ## ⚡ Início Rápido
 
 ### Opção 1: Docker (Recomendado)

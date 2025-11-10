@@ -4,14 +4,16 @@ Backend API for CryptoAML - Anti-Money Laundering platform for cryptocurrency mo
 
 ## Features
 
-- 🔐 JWT Authentication + 2FA
-- 💰 Multi-blockchain wallet monitoring (305+ blockchains)
-- 🤖 ML-powered risk analysis
-- 📊 Real-time transaction monitoring
-- 🚨 Automated alert system
-- 📄 Report generation (PDF, CSV, JSON)
-- 🔄 WebSocket real-time updates
-- 🛡️ Enterprise-grade security
+- 🔐 JWT Authentication + 2FA ✅
+- 💰 Multi-blockchain wallet monitoring (Bitcoin, Ethereum, Sepolia, Polygon, Arbitrum, Optimism, Base, BNB Chain) ✅
+- 🤖 Rule-based risk analysis with ML fallback ⚠️
+- 📊 Transaction monitoring (30s polling) ⚠️
+- 🚨 Automated alert system ✅
+- 📄 Report generation (PDF, CSV, JSON) ✅
+- 🔄 WebSocket real-time notifications ✅
+- 🛡️ Enterprise-grade security ✅
+
+**Note:** ML service and real-time webhooks require additional setup. See REAL_STATUS.md for details.
 
 ## Tech Stack
 

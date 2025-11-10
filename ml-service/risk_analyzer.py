@@ -75,22 +75,24 @@ class RiskAnalyzer:
             risk_score += 35
             flags.append('TO_MIXER')
         
-        # 2. Verificar valor da transação
-        if amount > 50:
-            risk_score += 20
-            flags.append('LARGE_AMOUNT')
-        elif amount > 100:
+        # 2. Verificar valor da transação (corrigido)
+        if amount > 100:
             risk_score += 30
             flags.append('VERY_LARGE_AMOUNT')
+        elif amount > 50:
+            risk_score += 20
+            flags.append('LARGE_AMOUNT')
+        elif amount < 0.001:
+            risk_score += 15
+            flags.append('DUST_TRANSACTION')
         
-        # 3. Verificar padrões suspeitos no hash (exemplo simplificado)
+        # 3. Verificar padrões suspeitos no hash
         if self._has_suspicious_pattern(tx_hash):
             risk_score += 10
             flags.append('SUSPICIOUS_PATTERN')
         
         # 4. Análise de blockchain específica
         if blockchain in ['BITCOIN', 'ETHEREUM']:
-            # Blockchains mais monitoradas têm análise mais rigorosa
             risk_score += 5
         
         risk_level = self._calculate_risk_level(risk_score)
@@ -110,22 +112,23 @@ class RiskAnalyzer:
         if not transactions:
             return {'score': 0, 'flags': []}
         
-        # Verificar movimentação rápida (churning)
-        timestamps = [tx.get('timestamp') for tx in transactions if tx.get('timestamp')]
-        if len(timestamps) > 1:
-            # Simular análise de velocidade
-            if len(transactions) > 10:
-                score += 15
-                flags.append('RAPID_MOVEMENT')
+        # Verificar movimentação rápida
+        if len(transactions) > 20:
+            score += 20
+            flags.append('RAPID_MOVEMENT')
+        elif len(transactions) > 10:
+            score += 10
+            flags.append('HIGH_ACTIVITY')
         
         # Verificar valores similares (possível estruturação)
-        amounts = [tx.get('amount', 0) for tx in transactions]
+        amounts = [tx.get('amount', 0) for tx in transactions if tx.get('amount')]
         if len(amounts) > 3:
             avg_amount = np.mean(amounts)
-            similar_amounts = sum(1 for a in amounts if abs(a - avg_amount) < avg_amount * 0.1)
-            if similar_amounts > len(amounts) * 0.7:
-                score += 20
-                flags.append('STRUCTURING_PATTERN')
+            if avg_amount > 0:
+                similar_amounts = sum(1 for a in amounts if abs(a - avg_amount) < avg_amount * 0.15)
+                if similar_amounts > len(amounts) * 0.6:
+                    score += 25
+                    flags.append('STRUCTURING_PATTERN')
         
         return {'score': score, 'flags': flags}
     
@@ -167,8 +170,10 @@ class RiskAnalyzer:
                 'TO_MIXER': 'Transaction sent to mixer',
                 'LARGE_AMOUNT': 'Unusually large transaction amount',
                 'VERY_LARGE_AMOUNT': 'Extremely large transaction amount',
+                'DUST_TRANSACTION': 'Very small transaction (possible dusting attack)',
                 'HIGH_VOLUME': 'High cumulative transaction volume',
                 'HIGH_FREQUENCY': 'Unusually high transaction frequency',
+                'HIGH_ACTIVITY': 'High transaction activity detected',
                 'RAPID_MOVEMENT': 'Rapid movement of funds detected',
                 'STRUCTURING_PATTERN': 'Possible structuring pattern detected',
                 'SUSPICIOUS_PATTERN': 'Suspicious transaction pattern'

@@ -104,6 +104,12 @@ router.post('/', async (req: AuthRequest, res) => {
     return res.status(400).json({ error: 'Address and blockchain required' });
   }
 
+  // Check if wallet already exists
+  const existing = await prisma.wallet.findUnique({ where: { address } });
+  if (existing) {
+    return res.status(400).json({ error: 'Wallet already exists' });
+  }
+
   const wallet = await prisma.wallet.create({
     data: {
       address,

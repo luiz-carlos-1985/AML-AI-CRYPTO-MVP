@@ -4,16 +4,21 @@ import { notifyUser } from './websocket.service';
 import { logger } from '../utils/logger';
 import { RiskLevel, AlertType, Blockchain } from '@prisma/client';
 
-// APIs gratuitas para dados blockchain (V2)
+// APIs blockchain
 const BLOCKCHAIN_APIS = {
   bitcoin: 'https://blockstream.info/api',
+  litecoin: 'https://api.blockcypher.com/v1/ltc/main',
+  dash: 'https://api.blockcypher.com/v1/dash/main',
   ethereum: { url: 'https://api.etherscan.io/v2/api', chainid: 1 },
-  sepolia: { url: 'https://api-sepolia.etherscan.io/v2/api', chainid: 11155111 },
+  sepolia: { url: 'https://api.etherscan.io/v2/api', chainid: 11155111 },
   polygon: { url: 'https://api.polygonscan.com/v2/api', chainid: 137 },
   arbitrum: { url: 'https://api.arbiscan.io/v2/api', chainid: 42161 },
   optimism: { url: 'https://api-optimistic.etherscan.io/v2/api', chainid: 10 },
   bsc: { url: 'https://api.bscscan.com/v2/api', chainid: 56 },
-  base: { url: 'https://api.basescan.org/v2/api', chainid: 8453 }
+  base: { url: 'https://api.basescan.org/v2/api', chainid: 8453 },
+  avalanche: { url: 'https://api.snowtrace.io/v2/api', chainid: 43114 },
+  fantom: { url: 'https://api.ftmscan.com/v2/api', chainid: 250 },
+  cronos: { url: 'https://api.cronoscan.com/v2/api', chainid: 25 }
 };
 
 export class BlockchainMonitor {
@@ -60,7 +65,11 @@ export class BlockchainMonitor {
       return [];
     }
     
-    const evmChains = [Blockchain.ETHEREUM, Blockchain.SEPOLIA, Blockchain.POLYGON, Blockchain.ARBITRUM, Blockchain.OPTIMISM, Blockchain.BASE, Blockchain.BNB_CHAIN];
+    const evmChains = [
+      Blockchain.ETHEREUM, Blockchain.SEPOLIA, Blockchain.POLYGON, 
+      Blockchain.ARBITRUM, Blockchain.OPTIMISM, Blockchain.BASE, 
+      Blockchain.BNB_CHAIN, Blockchain.AVALANCHE, Blockchain.FANTOM, Blockchain.CRONOS
+    ];
     if (evmChains.includes(blockchain) && !address.startsWith('0x')) {
       logger.warn(`Invalid EVM address format: ${address}`);
       return [];
@@ -72,7 +81,7 @@ export class BlockchainMonitor {
       case Blockchain.ETHEREUM:
         return this.fetchEVMTransactionsV2(address, blockchain, BLOCKCHAIN_APIS.ethereum);
       case Blockchain.SEPOLIA:
-        return this.fetchSepoliaTransactionsViaAlchemy(address, blockchain);
+        return this.fetchEVMTransactionsV2(address, blockchain, BLOCKCHAIN_APIS.sepolia);
       case Blockchain.POLYGON:
         return this.fetchEVMTransactionsV2(address, blockchain, BLOCKCHAIN_APIS.polygon);
       case Blockchain.ARBITRUM:
@@ -83,13 +92,45 @@ export class BlockchainMonitor {
         return this.fetchEVMTransactionsV2(address, blockchain, BLOCKCHAIN_APIS.bsc);
       case Blockchain.BASE:
         return this.fetchEVMTransactionsV2(address, blockchain, BLOCKCHAIN_APIS.base);
+      case Blockchain.LITECOIN:
+        return this.fetchBlockCypherTx(address, 'ltc', blockchain);
+      case Blockchain.DASH:
+        return this.fetchBlockCypherTx(address, 'dash', blockchain);
+      case Blockchain.AVALANCHE:
+        return this.fetchEVMTransactionsV2(address, blockchain, BLOCKCHAIN_APIS.avalanche);
+      case Blockchain.FANTOM:
+        return this.fetchEVMTransactionsV2(address, blockchain, BLOCKCHAIN_APIS.fantom);
+      case Blockchain.CRONOS:
+        return this.fetchEVMTransactionsV2(address, blockchain, BLOCKCHAIN_APIS.cronos);
       default:
         logger.warn(`Blockchain ${blockchain} not supported yet`);
         return [];
     }
   }
 
-  // Bitcoin via Blockstream API (gratuita)
+  // BlockCypher for Bitcoin-like chains
+  private async fetchBlockCypherTx(address: string, coin: string, blockchain: Blockchain) {
+    try {
+      const response = await axios.get(
+        `https://api.blockcypher.com/v1/${coin}/main/addrs/${address}/full`,
+        { params: { limit: 50 }, timeout: 10000 }
+      );
+      if (!response.data.txs) return [];
+      return response.data.txs.map((tx: any) => ({
+        hash: tx.hash,
+        fromAddress: tx.inputs[0]?.addresses?.[0] || 'unknown',
+        toAddress: tx.outputs[0]?.addresses?.[0] || 'unknown',
+        amount: (tx.outputs[0]?.value || 0) / 1e8,
+        timestamp: new Date(tx.confirmed || Date.now()),
+        blockchain
+      }));
+    } catch (error: any) {
+      logger.error(`Failed to fetch ${coin}`, { error: error.message });
+      return [];
+    }
+  }
+
+  // Bitcoin via Blockstream API
   private async fetchBitcoinTransactions(address: string) {
     try {
       const response = await axios.get(`${BLOCKCHAIN_APIS.bitcoin}/address/${address}/txs`);
@@ -107,113 +148,15 @@ export class BlockchainMonitor {
     }
   }
 
-  // Sepolia via Alchemy (Etherscan API deprecated)
-  private async fetchSepoliaTransactionsViaAlchemy(address: string, blockchain: Blockchain) {
-    try {
-      const alchemyKey = process.env.ALCHEMY_API_KEY;
-      
-      if (!alchemyKey) {
-        logger.warn('No Alchemy API key, using public RPC');
-        return this.fetchSepoliaViaPublicRPC(address, blockchain);
-      }
 
-      // Fetch sent transactions
-      const sentResponse = await axios.post(
-        `https://eth-sepolia.g.alchemy.com/v2/${alchemyKey}`,
-        {
-          jsonrpc: '2.0',
-          id: 1,
-          method: 'alchemy_getAssetTransfers',
-          params: [{
-            fromBlock: '0x0',
-            toBlock: 'latest',
-            fromAddress: address,
-            category: ['external', 'internal'],
-            maxCount: '0x32',
-            order: 'desc'
-          }]
-        },
-        { timeout: 15000 }
-      );
 
-      // Fetch received transactions
-      const receivedResponse = await axios.post(
-        `https://eth-sepolia.g.alchemy.com/v2/${alchemyKey}`,
-        {
-          jsonrpc: '2.0',
-          id: 2,
-          method: 'alchemy_getAssetTransfers',
-          params: [{
-            fromBlock: '0x0',
-            toBlock: 'latest',
-            toAddress: address,
-            category: ['external', 'internal'],
-            maxCount: '0x32',
-            order: 'desc'
-          }]
-        },
-        { timeout: 15000 }
-      );
-
-      const sentTxs = sentResponse.data.result?.transfers || [];
-      const receivedTxs = receivedResponse.data.result?.transfers || [];
-      const allTxs = [...sentTxs, ...receivedTxs];
-
-      if (allTxs.length === 0) {
-        logger.info('No Sepolia transactions found via Alchemy');
-        return [];
-      }
-
-      // Remove duplicates by hash
-      const uniqueTxs = Array.from(
-        new Map(allTxs.map(tx => [tx.hash, tx])).values()
-      );
-
-      logger.info(`Fetched ${uniqueTxs.length} Sepolia transactions via Alchemy`);
-
-      return uniqueTxs.map((tx: any) => ({
-        hash: tx.hash,
-        fromAddress: tx.from,
-        toAddress: tx.to || 'contract',
-        amount: parseFloat(tx.value || 0),
-        timestamp: new Date(tx.metadata?.blockTimestamp || Date.now()),
-        blockchain
-      }));
-    } catch (error: any) {
-      logger.error('Alchemy failed for Sepolia', { error: error.message });
-      return [];
-    }
-  }
-
-  // Fallback: Sepolia via public RPC (limited)
-  private async fetchSepoliaViaPublicRPC(address: string, blockchain: Blockchain) {
-    try {
-      const response = await axios.post(
-        'https://rpc.sepolia.org',
-        {
-          jsonrpc: '2.0',
-          id: 1,
-          method: 'eth_getBalance',
-          params: [address, 'latest']
-        },
-        { timeout: 10000 }
-      );
-
-      logger.info(`Sepolia RPC: balance check only, no transaction history`);
-      return [];
-    } catch (error) {
-      logger.error('Sepolia RPC failed', { error });
-      return [];
-    }
-  }
-
-  // EVM chains via Etherscan V2 API
+  // EVM chains via Etherscan API V2
   private async fetchEVMTransactionsV2(address: string, blockchain: Blockchain, apiConfig: { url: string, chainid: number }) {
     try {
       const apiKey = process.env.ETHERSCAN_API_KEY;
       
-      if (!apiKey || apiKey === 'YourApiKeyToken') {
-        logger.warn(`No valid API key for ${blockchain}`);
+      if (!apiKey || apiKey === 'YourApiKeyToken' || apiKey.length < 20) {
+        logger.warn(`Invalid or missing API key for ${blockchain}`);
         return [];
       }
 
@@ -272,9 +215,7 @@ export class BlockchainMonitor {
           flags: [],
           analyzed: false
         },
-        update: {
-          updatedAt: new Date()
-        }
+        update: {}
       });
 
       const wallet = await prisma.wallet.findUnique({ where: { id: walletId } });
@@ -394,25 +335,53 @@ export class BlockchainMonitor {
       return;
     }
 
+    // Smart polling: 10s for active wallets, 60s for others
     this.monitoringInterval = setInterval(async () => {
       try {
-        const walletsToMonitor = await prisma.wallet.findMany({
+        const now = Date.now();
+        
+        // Active wallets (had transaction in last hour) - check every 10s
+        const activeWallets = await prisma.wallet.findMany({
+          where: {
+            isMonitored: true,
+            transactions: {
+              some: {
+                timestamp: {
+                  gte: new Date(now - 60 * 60 * 1000)
+                }
+              }
+            },
+            updatedAt: {
+              lt: new Date(now - 10 * 1000)
+            }
+          },
+          take: 50
+        });
+
+        // Inactive wallets - check every 60s
+        const inactiveWallets = await prisma.wallet.findMany({
           where: {
             isMonitored: true,
             updatedAt: {
-              lt: new Date(Date.now() - 2 * 60 * 1000)
+              lt: new Date(now - 60 * 1000)
+            },
+            NOT: {
+              id: { in: activeWallets.map(w => w.id) }
             }
           },
-          take: 100
+          take: 50
         });
 
-        for (const wallet of walletsToMonitor) {
+        const allWallets = [...activeWallets, ...inactiveWallets];
+        logger.info(`Monitoring ${activeWallets.length} active + ${inactiveWallets.length} inactive wallets`);
+
+        for (const wallet of allWallets) {
           await this.monitorWallet(wallet.address, wallet.blockchain, wallet.userId);
         }
       } catch (error) {
         logger.error('Monitoring cycle failed', { error });
       }
-    }, 30000);
+    }, 10000); // Check every 10s
   }
 
   stopContinuousMonitoring() {
