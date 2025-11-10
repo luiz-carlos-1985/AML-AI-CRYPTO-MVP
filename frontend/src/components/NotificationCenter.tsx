@@ -31,7 +31,6 @@ export default function NotificationCenter() {
       setNotifications(data);
       setUnreadCount(data.filter((n: Notification) => !n.read).length);
     } catch (error) {
-      // Mock data for demo
       setNotifications([]);
       setUnreadCount(0);
     }

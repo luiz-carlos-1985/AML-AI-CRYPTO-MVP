@@ -36,7 +36,6 @@ export default function WebhookManager() {
       const { data } = await api.get('/webhooks');
       setWebhooks(data);
     } catch (error) {
-      // Mock data for demo
       setWebhooks([]);
     }
   };

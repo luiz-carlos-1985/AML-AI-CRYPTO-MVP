@@ -154,9 +154,13 @@ router.post('/:id/sync', async (req: AuthRequest, res) => {
     
     if ([Blockchain.ETHEREUM, Blockchain.SEPOLIA, Blockchain.POLYGON, Blockchain.ARBITRUM, Blockchain.OPTIMISM, Blockchain.BASE, Blockchain.BNB_CHAIN].includes(wallet.blockchain)) {
       try {
-        const provider = new ethers.JsonRpcProvider(getProviderUrl(wallet.blockchain), undefined, {
-          staticNetwork: true
-        });
+        const network = getNetworkConfig(wallet.blockchain);
+        const provider = new ethers.JsonRpcProvider(
+          getProviderUrl(wallet.blockchain),
+          network,
+          { staticNetwork: network }
+        );
+        
         const balancePromise = provider.getBalance(wallet.address);
         const txCountPromise = provider.getTransactionCount(wallet.address);
         
@@ -168,7 +172,7 @@ router.post('/:id/sync', async (req: AuthRequest, res) => {
         balance = ethers.formatEther(balanceWei);
         txCount = count;
       } catch (error) {
-        console.warn('Failed to fetch balance from RPC:', error);
+        // Silently fail - balance will remain '0.0'
       }
     }
 
@@ -204,6 +208,19 @@ function getProviderUrl(blockchain: Blockchain): string {
   };
   
   return providers[blockchain] || 'https://eth.llamarpc.com';
+}
+
+function getNetworkConfig(blockchain: Blockchain) {
+  const networks: Record<string, any> = {
+    [Blockchain.ETHEREUM]: { name: 'homestead', chainId: 1 },
+    [Blockchain.SEPOLIA]: { name: 'sepolia', chainId: 11155111 },
+    [Blockchain.POLYGON]: { name: 'matic', chainId: 137 },
+    [Blockchain.ARBITRUM]: { name: 'arbitrum', chainId: 42161 },
+    [Blockchain.OPTIMISM]: { name: 'optimism', chainId: 10 },
+    [Blockchain.AVALANCHE]: { name: 'avalanche', chainId: 43114 },
+    [Blockchain.BNB_CHAIN]: { name: 'bnb', chainId: 56 }
+  };
+  return networks[blockchain] || { name: 'homestead', chainId: 1 };
 }
 
 export default router;

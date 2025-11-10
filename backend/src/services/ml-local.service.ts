@@ -18,15 +18,18 @@ export const startMLService = async () => {
 
   mlProcess.stdout?.on('data', (data) => {
     const output = data.toString();
-    logger.info(`ML Service: ${output.trim()}`);
     if (output.includes('Running on')) {
       mlServiceReady = true;
-      logger.info('✅ ML Service ready');
+      logger.info('✅ ML Service ready on http://localhost:8000');
     }
   });
 
   mlProcess.stderr?.on('data', (data) => {
-    logger.error(`ML Service error: ${data.toString()}`);
+    const output = data.toString();
+    // Ignore Flask development server warnings
+    if (!output.includes('WARNING') && !output.includes('development server')) {
+      logger.error(`ML Service error: ${output}`);
+    }
   });
 
   mlProcess.on('close', (code) => {
@@ -35,7 +38,7 @@ export const startMLService = async () => {
   });
 
   // Wait for service to be ready
-  await new Promise(resolve => setTimeout(resolve, 3000));
+  await new Promise(resolve => setTimeout(resolve, 2000));
   
   // Verify it's running
   try {
