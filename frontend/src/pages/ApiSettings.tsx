@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Key, Plus, Trash2, Eye, EyeOff, ExternalLink, CheckCircle, XCircle, Copy, AlertCircle, Shield, Lock, Zap, RefreshCw, Download } from 'lucide-react';
+import { Key, Plus, Trash2, Eye, EyeOff, ExternalLink, CheckCircle, XCircle, Shield, Zap, RefreshCw, Download } from 'lucide-react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 interface ApiConfig {
   id: string;
@@ -12,6 +13,7 @@ interface ApiConfig {
 }
 
 export default function ApiSettings() {
+  const { t } = useTranslation();
   const [configs, setConfigs] = useState<ApiConfig[]>([]);
   const [newConfig, setNewConfig] = useState({ provider: 'etherscan', apiKey: '' });
   const [showModal, setShowModal] = useState(false);
@@ -140,10 +142,10 @@ export default function ApiSettings() {
           <div className="flex items-start justify-between mb-4">
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2 flex items-center gap-3">
-                🔑 Configuração de API Keys
+                🔑 {t('apiKeys.title')}
               </h1>
               <p className="text-slate-300 text-sm sm:text-base">
-                Configure suas chaves para monitoramento blockchain em tempo real
+                {t('apiKeys.subtitle')}
               </p>
             </div>
             <button
@@ -151,7 +153,7 @@ export default function ApiSettings() {
               className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-emerald-700 transition-all shadow-lg shadow-emerald-500/30 hover:scale-105"
             >
               <Plus className="w-5 h-5" />
-              <span className="hidden sm:inline">Adicionar Chave</span>
+              <span className="hidden sm:inline">{t('apiKeys.addKey')}</span>
             </button>
           </div>
           
@@ -161,7 +163,7 @@ export default function ApiSettings() {
                 <Shield className="w-5 h-5 text-emerald-400" />
               </div>
               <div>
-                <p className="text-xs text-slate-400">Segurança</p>
+                <p className="text-xs text-slate-400">{t('apiKeys.security')}</p>
                 <p className="text-sm font-bold text-white">AES-256</p>
               </div>
             </div>
@@ -170,7 +172,7 @@ export default function ApiSettings() {
                 <Zap className="w-5 h-5 text-blue-400" />
               </div>
               <div>
-                <p className="text-xs text-slate-400">APIs Configuradas</p>
+                <p className="text-xs text-slate-400">{t('apiKeys.configured')}</p>
                 <p className="text-sm font-bold text-white">{configs.length}</p>
               </div>
             </div>
@@ -179,9 +181,9 @@ export default function ApiSettings() {
                 <CheckCircle className="w-5 h-5 text-purple-400" />
               </div>
               <div>
-                <p className="text-xs text-slate-400">Status</p>
+                <p className="text-xs text-slate-400">{t('apiKeys.status')}</p>
                 <p className="text-sm font-bold text-white">
-                  {configs.filter(c => c.isActive).length} Ativas
+                  {configs.filter(c => c.isActive).length} {t('apiKeys.active')}
                 </p>
               </div>
             </div>
@@ -201,28 +203,28 @@ export default function ApiSettings() {
             <Download className="w-5 h-5 text-blue-400" />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-bold text-blue-400 mb-3">⚡ Setup Rápido em 3 Passos</h3>
+            <h3 className="text-lg font-bold text-blue-400 mb-3">⚡ {t('apiKeys.quickSetup')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
                 <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center mb-2">
                   <span className="text-emerald-400 font-bold">1</span>
                 </div>
-                <p className="text-sm font-medium text-white mb-1">Escolha o Provedor</p>
-                <p className="text-xs text-slate-400">Etherscan ou Alchemy</p>
+                <p className="text-sm font-medium text-white mb-1">{t('apiKeys.step1')}</p>
+                <p className="text-xs text-slate-400">{t('apiKeys.step1Desc')}</p>
               </div>
               <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
                 <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center mb-2">
                   <span className="text-blue-400 font-bold">2</span>
                 </div>
-                <p className="text-sm font-medium text-white mb-1">Obtenha a Chave</p>
-                <p className="text-xs text-slate-400">Grátis em segundos</p>
+                <p className="text-sm font-medium text-white mb-1">{t('apiKeys.step2')}</p>
+                <p className="text-xs text-slate-400">{t('apiKeys.step2Desc')}</p>
               </div>
               <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
                 <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center mb-2">
                   <span className="text-purple-400 font-bold">3</span>
                 </div>
-                <p className="text-sm font-medium text-white mb-1">Cole Aqui</p>
-                <p className="text-xs text-slate-400">Pronto para usar!</p>
+                <p className="text-sm font-medium text-white mb-1">{t('apiKeys.step3')}</p>
+                <p className="text-xs text-slate-400">{t('apiKeys.step3Desc')}</p>
               </div>
             </div>
           </div>
@@ -238,7 +240,7 @@ export default function ApiSettings() {
       >
         <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
           <Key className="w-5 h-5 text-emerald-400" />
-          Suas APIs Configuradas
+          {t('apiKeys.yourApis')}
         </h2>
         
         {configs.length > 0 ? (
@@ -267,7 +269,7 @@ export default function ApiSettings() {
                       {config.isActive ? (
                         <div className="flex items-center gap-1 px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-lg text-xs font-bold">
                           <CheckCircle className="w-3 h-3" />
-                          Ativa
+                          {t('apiKeys.active')}
                         </div>
                       ) : (
                         <div className="flex items-center gap-1 px-3 py-1 bg-slate-700/50 text-slate-400 rounded-lg text-xs font-bold">
@@ -282,22 +284,20 @@ export default function ApiSettings() {
                     <button
                       onClick={() => toggleKeyVisibility(config.id)}
                       className="flex items-center gap-2 px-3 py-2 bg-slate-800/50 hover:bg-slate-700 rounded-lg transition-all text-sm text-slate-300"
-                      title="Mostrar/Ocultar"
                     >
                       {visibleKeys.has(config.id) ? (
-                        <><EyeOff className="w-4 h-4" /> Ocultar</>
+                        <><EyeOff className="w-4 h-4" /> {t('apiKeys.hide')}</>
                       ) : (
-                        <><Eye className="w-4 h-4" /> Mostrar</>
+                        <><Eye className="w-4 h-4" /> {t('apiKeys.show')}</>
                       )}
                     </button>
                     <button
                       onClick={() => testApiKey(config.id, config.provider)}
                       disabled={testingKey === config.id}
                       className="flex items-center gap-2 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-lg transition-all text-sm text-blue-400 disabled:opacity-50"
-                      title="Testar"
                     >
                       <RefreshCw className={`w-4 h-4 ${testingKey === config.id ? 'animate-spin' : ''}`} />
-                      {testingKey === config.id ? 'Testando...' : 'Testar'}
+                      {testingKey === config.id ? t('apiKeys.testing') : t('apiKeys.test')}
                     </button>
                     <button
                       onClick={() => toggleConfig(config.id, config.isActive)}
@@ -307,20 +307,19 @@ export default function ApiSettings() {
                           : 'bg-slate-700/50 text-slate-400 hover:bg-slate-700'
                       }`}
                     >
-                      {config.isActive ? 'Desativar' : 'Ativar'}
+                      {config.isActive ? t('apiKeys.deactivate') : t('apiKeys.activate')}
                     </button>
                     <button
                       onClick={() => deleteConfig(config.id)}
                       className="flex items-center gap-2 px-3 py-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg transition-all text-sm text-red-400 ml-auto"
-                      title="Deletar"
                     >
                       <Trash2 className="w-4 h-4" />
-                      Deletar
+                      {t('apiKeys.delete')}
                     </button>
                   </div>
 
                   <p className="text-xs text-slate-500 mt-3">
-                    Adicionada em {new Date(config.createdAt).toLocaleDateString('pt-BR')}
+                    {t('apiKeys.addedOn')} {new Date(config.createdAt).toLocaleDateString()}
                   </p>
                 </motion.div>
               );
@@ -331,16 +330,16 @@ export default function ApiSettings() {
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-blue-500/20 flex items-center justify-center mx-auto mb-4">
               <Key className="w-8 h-8 text-emerald-400" />
             </div>
-            <p className="text-lg text-slate-300 mb-2 font-medium">Nenhuma API configurada</p>
+            <p className="text-lg text-slate-300 mb-2 font-medium">{t('apiKeys.noApis')}</p>
             <p className="text-sm text-slate-500 mb-6 max-w-md mx-auto">
-              Configure suas chaves de API para começar a monitorar transações blockchain em tempo real
+              {t('apiKeys.noApisDesc')}
             </p>
             <button
               onClick={() => setShowModal(true)}
               className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-emerald-700 transition-all shadow-lg shadow-emerald-500/30"
             >
               <Plus className="w-5 h-5" />
-              Adicionar Primeira Chave
+              {t('apiKeys.addFirstKey')}
             </button>
           </div>
         )}
@@ -353,7 +352,7 @@ export default function ApiSettings() {
         transition={{ delay: 0.3 }}
         className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 rounded-2xl p-4 sm:p-6"
       >
-        <h2 className="text-xl font-bold text-white mb-4">🌐 Provedores Disponíveis</h2>
+        <h2 className="text-xl font-bold text-white mb-4">🌐 {t('apiKeys.providers')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {providers.map((provider) => (
             <a
@@ -391,21 +390,18 @@ export default function ApiSettings() {
           >
             <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
               <Plus className="w-6 h-6 text-emerald-400" />
-              Adicionar API Key
+              {t('apiKeys.modalTitle')}
             </h3>
             
             <div className="space-y-4">
-              {/* Provider Selection */}
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">
-                  1️⃣ Escolha o Provedor
+                  1️⃣ {t('apiKeys.chooseProvider')}
                 </label>
                 <select
                   value={newConfig.provider}
                   onChange={(e) => setNewConfig({...newConfig, provider: e.target.value})}
                   className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  aria-label="Selecione o provedor de API"
-                  title="Selecione o provedor de API"
                 >
                   {providers.map(provider => (
                     <option key={provider.value} value={provider.value}>
@@ -421,29 +417,27 @@ export default function ApiSettings() {
                 )}
               </div>
 
-              {/* Get API Key Link */}
               <div className="p-4 bg-gradient-to-r from-emerald-500/10 to-blue-500/10 border border-emerald-500/30 rounded-xl">
-                <p className="text-sm font-medium text-white mb-2">2️⃣ Obtenha sua chave gratuita</p>
+                <p className="text-sm font-medium text-white mb-2">2️⃣ {t('apiKeys.getKey')}</p>
                 <a
                   href={selectedProvider?.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-all text-sm font-medium"
                 >
-                  Ir para {selectedProvider?.label}
+                  {t('apiKeys.goTo')} {selectedProvider?.label}
                   <ExternalLink className="w-4 h-4" />
                 </a>
               </div>
               
-              {/* API Key Input */}
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">
-                  3️⃣ Cole sua API Key aqui
+                  3️⃣ {t('apiKeys.pasteKey')}
                 </label>
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Cole sua chave aqui (Ctrl+V ou Cmd+V)"
+                    placeholder={t('apiKeys.pasteKeyPlaceholder')}
                     value={newConfig.apiKey}
                     onChange={(e) => setNewConfig({...newConfig, apiKey: e.target.value})}
                     className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 pr-12"
@@ -457,32 +451,30 @@ export default function ApiSettings() {
                 </div>
                 {newConfig.apiKey && (
                   <p className="text-xs text-slate-500 mt-2">
-                    ✓ {newConfig.apiKey.length} caracteres
+                    ✓ {newConfig.apiKey.length} {t('apiKeys.characters')}
                   </p>
                 )}
               </div>
 
-              {/* Security Notice */}
               <div className="p-3 bg-purple-500/10 border border-purple-500/30 rounded-xl">
                 <div className="flex gap-2">
                   <Shield className="w-4 h-4 text-purple-400 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-xs font-bold text-purple-400 mb-1">🔒 100% Seguro</p>
+                    <p className="text-xs font-bold text-purple-400 mb-1">🔒 {t('apiKeys.secureNotice')}</p>
                     <p className="text-xs text-purple-300/80">
-                      Sua chave é criptografada com AES-256 e nunca é compartilhada com terceiros.
+                      {t('apiKeys.secureDesc')}
                     </p>
                   </div>
                 </div>
               </div>
               
-              {/* Action Buttons */}
               <div className="flex gap-3 pt-2">
                 <button
                   onClick={saveConfig}
                   disabled={!newConfig.apiKey.trim()}
                   className="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-emerald-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-emerald-500/30"
                 >
-                  Salvar Configuração
+                  {t('apiKeys.save')}
                 </button>
                 <button
                   onClick={() => {
@@ -491,7 +483,7 @@ export default function ApiSettings() {
                   }}
                   className="px-6 py-3 bg-slate-700/50 text-slate-300 rounded-xl font-medium hover:bg-slate-700 transition-all"
                 >
-                  Cancelar
+                  {t('apiKeys.cancel')}
                 </button>
               </div>
             </div>
