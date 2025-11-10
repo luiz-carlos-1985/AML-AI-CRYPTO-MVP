@@ -5,7 +5,6 @@ import { useAuth } from '../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
 import NotificationCenter from './NotificationCenter';
-import ThemeToggle from './ThemeToggle';
 
 const Layout = () => {
   const { user, logout } = useAuth();
@@ -70,7 +69,6 @@ const Layout = () => {
             
             {/* User Info & Logout */}
             <div className="hidden md:flex items-center space-x-3 xl:space-x-4 tv:space-x-8">
-              <ThemeToggle />
               <NotificationCenter />
               <LanguageSwitcher />
               <div className="text-sm xl:text-base tv:text-2xl text-right">
