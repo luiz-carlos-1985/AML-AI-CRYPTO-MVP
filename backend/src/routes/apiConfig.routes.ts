@@ -10,5 +10,8 @@ router.get('/', getApiConfigurations);
 router.post('/', saveApiConfiguration);
 router.patch('/:id/toggle', toggleApiConfiguration);
 router.delete('/:id', deleteApiConfiguration);
+router.get('/:id/test', async (req, res) => {
+  res.json({ success: true, message: 'API key test endpoint' });
+});
 
 export default router;

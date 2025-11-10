@@ -84,7 +84,7 @@ model = AMLRiskModel()
 
 @app.route('/health', methods=['GET'])
 def health():
-    return jsonify({'status': 'ok', 'service': 'ml-aml'})
+    return jsonify({'status': 'ok', 'service': 'ml-aml', 'version': '1.0.0'})
 
 @app.route('/analyze/transaction', methods=['POST'])
 def analyze_transaction():
@@ -142,6 +142,6 @@ def analyze_wallet():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    print('🤖 ML Service starting...')
-    print('📊 Model loaded and ready')
+    print('ML Service starting...')
+    print('Model loaded and ready')
     app.run(host='0.0.0.0', port=8000, debug=False)

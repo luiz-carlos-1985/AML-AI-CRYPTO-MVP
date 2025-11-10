@@ -105,8 +105,12 @@ server.listen(PORT, async () => {
   logger.info(`Environment: ${process.env.NODE_ENV}`);
   logger.info('WebSocket initialized');
   
-  // Start ML Service automatically
-  await startMLService();
+  // Start ML Service if enabled
+  if (process.env.ENABLE_ML_SERVICE === 'true') {
+    await startMLService();
+  } else {
+    logger.info('⚠️ ML Service disabled (set ENABLE_ML_SERVICE=true to enable)');
+  }
   
   blockchainMonitor.startContinuousMonitoring();
   logger.info('Blockchain monitoring started');
