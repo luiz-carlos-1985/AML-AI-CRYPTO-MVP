@@ -23,7 +23,7 @@ const Layout = () => {
     { name: 'Tools', href: '/tools', icon: Wrench },
     { name: t('nav.reports'), href: '/reports', icon: FileText },
     { name: 'Team', href: '/team', icon: Users },
-    { name: 'Integrations', href: '/integrations', icon: Settings },
+    { name: 'API Keys', href: '/api-settings', icon: Settings },
     { name: 'Account', href: '/account', icon: User },
   ];
 

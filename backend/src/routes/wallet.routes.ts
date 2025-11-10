@@ -154,10 +154,19 @@ router.post('/:id/sync', async (req: AuthRequest, res) => {
     
     if ([Blockchain.ETHEREUM, Blockchain.SEPOLIA, Blockchain.POLYGON, Blockchain.ARBITRUM, Blockchain.OPTIMISM, Blockchain.BASE, Blockchain.BNB_CHAIN].includes(wallet.blockchain)) {
       try {
-        const provider = new ethers.JsonRpcProvider(getProviderUrl(wallet.blockchain));
-        const balanceWei = await provider.getBalance(wallet.address);
+        const provider = new ethers.JsonRpcProvider(getProviderUrl(wallet.blockchain), undefined, {
+          staticNetwork: true
+        });
+        const balancePromise = provider.getBalance(wallet.address);
+        const txCountPromise = provider.getTransactionCount(wallet.address);
+        
+        const [balanceWei, count] = await Promise.race([
+          Promise.all([balancePromise, txCountPromise]),
+          new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000))
+        ]);
+        
         balance = ethers.formatEther(balanceWei);
-        txCount = await provider.getTransactionCount(wallet.address);
+        txCount = count;
       } catch (error) {
         console.warn('Failed to fetch balance from RPC:', error);
       }

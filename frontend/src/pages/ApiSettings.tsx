@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Key, Plus, Trash2, Eye, EyeOff, ExternalLink, CheckCircle, XCircle, Copy, AlertCircle, Shield, Lock } from 'lucide-react';
+import { Key, Plus, Trash2, Eye, EyeOff, ExternalLink, CheckCircle, XCircle, Copy, AlertCircle, Shield, Lock, Zap, RefreshCw, Download } from 'lucide-react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
 
@@ -19,14 +19,36 @@ export default function ApiSettings() {
   const [testingKey, setTestingKey] = useState<string | null>(null);
 
   const providers = [
-    { value: 'etherscan', label: 'Etherscan', blockchain: 'Ethereum', url: 'https://etherscan.io/apis', icon: '⟠', color: 'from-blue-500 to-blue-600' },
-    { value: 'blockstream', label: 'Blockstream', blockchain: 'Bitcoin', url: 'https://blockstream.info/api', icon: '₿', color: 'from-orange-500 to-orange-600' },
-    { value: 'polygonscan', label: 'PolygonScan', blockchain: 'Polygon', url: 'https://polygonscan.com/apis', icon: '⬡', color: 'from-purple-500 to-purple-600' },
-    { value: 'bscscan', label: 'BscScan', blockchain: 'BSC', url: 'https://bscscan.com/apis', icon: '◆', color: 'from-yellow-500 to-yellow-600' },
-    { value: 'arbiscan', label: 'Arbiscan', blockchain: 'Arbitrum', url: 'https://arbiscan.io/apis', icon: '🔷', color: 'from-blue-400 to-blue-500' },
-    { value: 'optimistic', label: 'Optimistic Etherscan', blockchain: 'Optimism', url: 'https://optimistic.etherscan.io/apis', icon: '🔴', color: 'from-red-500 to-red-600' },
-    { value: 'snowtrace', label: 'Snowtrace', blockchain: 'Avalanche', url: 'https://snowtrace.io/apis', icon: '🔺', color: 'from-red-400 to-red-500' },
-    { value: 'ftmscan', label: 'FTMScan', blockchain: 'Fantom', url: 'https://ftmscan.com/apis', icon: '👻', color: 'from-blue-300 to-blue-400' }
+    { 
+      value: 'etherscan', 
+      label: 'Etherscan', 
+      blockchain: 'Ethereum, Polygon, BSC, Arbitrum, Optimism', 
+      url: 'https://etherscan.io/apis', 
+      icon: '⟠', 
+      color: 'from-blue-500 to-blue-600',
+      description: 'API universal para múltiplas redes EVM',
+      free: '100k req/dia'
+    },
+    { 
+      value: 'alchemy', 
+      label: 'Alchemy', 
+      blockchain: 'Ethereum Sepolia (Testnet)', 
+      url: 'https://www.alchemy.com/', 
+      icon: '🔮', 
+      color: 'from-purple-500 to-purple-600',
+      description: 'Infraestrutura blockchain profissional',
+      free: '300M compute units/mês'
+    },
+    { 
+      value: 'blockstream', 
+      label: 'Blockstream', 
+      blockchain: 'Bitcoin', 
+      url: 'https://blockstream.info/api', 
+      icon: '₿', 
+      color: 'from-orange-500 to-orange-600',
+      description: 'API pública Bitcoin (sem chave necessária)',
+      free: 'Ilimitado'
+    }
   ];
 
   const loadConfigs = async () => {
@@ -34,46 +56,46 @@ export default function ApiSettings() {
       const { data } = await api.get('/config');
       setConfigs(data);
     } catch (error) {
-      toast.error('Failed to load configurations');
+      toast.error('Erro ao carregar configurações');
     }
   };
 
   const saveConfig = async () => {
     if (!newConfig.apiKey.trim()) {
-      toast.error('Please enter an API key');
+      toast.error('Por favor, insira uma API key');
       return;
     }
 
     try {
       await api.post('/config', newConfig);
-      toast.success('API configuration saved!');
+      toast.success('✅ API configurada com sucesso!');
       loadConfigs();
       setNewConfig({ provider: 'etherscan', apiKey: '' });
       setShowModal(false);
     } catch (error: any) {
-      toast.error(error.response?.data?.error || 'Failed to save configuration');
+      toast.error(error.response?.data?.error || 'Erro ao salvar configuração');
     }
   };
 
   const toggleConfig = async (id: string, isActive: boolean) => {
     try {
       await api.patch(`/config/${id}/toggle`);
-      toast.success(isActive ? 'API disabled' : 'API enabled');
+      toast.success(isActive ? 'API desativada' : 'API ativada');
       loadConfigs();
     } catch (error) {
-      toast.error('Failed to toggle configuration');
+      toast.error('Erro ao alternar configuração');
     }
   };
 
   const deleteConfig = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this API configuration?')) return;
+    if (!confirm('Tem certeza que deseja deletar esta configuração?')) return;
 
     try {
       await api.delete(`/config/${id}`);
-      toast.success('Configuration deleted');
+      toast.success('Configuração deletada');
       loadConfigs();
     } catch (error) {
-      toast.error('Failed to delete configuration');
+      toast.error('Erro ao deletar configuração');
     }
   };
 
@@ -91,9 +113,9 @@ export default function ApiSettings() {
     setTestingKey(id);
     try {
       await api.get(`/config/${id}/test`);
-      toast.success('API key is working! ✅');
+      toast.success('✅ API key funcionando perfeitamente!');
     } catch (error) {
-      toast.error('API key test failed');
+      toast.error('❌ Falha no teste da API key');
     } finally {
       setTestingKey(null);
     }
@@ -103,47 +125,107 @@ export default function ApiSettings() {
     loadConfigs();
   }, []);
 
+  const selectedProvider = providers.find(p => p.value === newConfig.provider);
+
   return (
     <div className="space-y-6">
-      {/* Security Notice */}
+      {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="backdrop-blur-xl bg-purple-500/10 border border-purple-500/30 rounded-2xl p-4 sm:p-6"
+        className="relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-emerald-500/10 via-blue-500/10 to-purple-500/10 border border-emerald-500/20 rounded-2xl p-6 sm:p-8"
       >
-        <div className="flex items-start gap-3">
-          <Lock className="w-6 h-6 text-purple-400 flex-shrink-0" />
-          <div className="flex-1">
-            <h3 className="text-base sm:text-lg font-bold text-purple-400 mb-2">🔒 Your Privacy & Data Security</h3>
-            <div className="space-y-1.5 text-xs sm:text-sm text-purple-300/80">
-              <p>• <strong>Encryption:</strong> All API keys encrypted with AES-256 before storage</p>
-              <p>• <strong>Usage:</strong> Keys only used to fetch blockchain data on your behalf</p>
-              <p>• <strong>Privacy:</strong> Never shared with third parties or logged</p>
-              <p>• <strong>Control:</strong> Delete configurations anytime - data permanently removed</p>
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-blue-500/5 animate-pulse"></div>
+        <div className="relative">
+          <div className="flex items-start justify-between mb-4">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2 flex items-center gap-3">
+                🔑 Configuração de API Keys
+              </h1>
+              <p className="text-slate-300 text-sm sm:text-base">
+                Configure suas chaves para monitoramento blockchain em tempo real
+              </p>
+            </div>
+            <button
+              onClick={() => setShowModal(true)}
+              className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-emerald-700 transition-all shadow-lg shadow-emerald-500/30 hover:scale-105"
+            >
+              <Plus className="w-5 h-5" />
+              <span className="hidden sm:inline">Adicionar Chave</span>
+            </button>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+            <div className="flex items-center gap-3 p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
+              <div className="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                <Shield className="w-5 h-5 text-emerald-400" />
+              </div>
+              <div>
+                <p className="text-xs text-slate-400">Segurança</p>
+                <p className="text-sm font-bold text-white">AES-256</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
+              <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                <Zap className="w-5 h-5 text-blue-400" />
+              </div>
+              <div>
+                <p className="text-xs text-slate-400">APIs Configuradas</p>
+                <p className="text-sm font-bold text-white">{configs.length}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
+              <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                <CheckCircle className="w-5 h-5 text-purple-400" />
+              </div>
+              <div>
+                <p className="text-xs text-slate-400">Status</p>
+                <p className="text-sm font-bold text-white">
+                  {configs.filter(c => c.isActive).length} Ativas
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </motion.div>
 
-      {/* Header */}
+      {/* Quick Setup Guide */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="backdrop-blur-xl bg-gradient-to-r from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl p-4 sm:p-6"
+        className="backdrop-blur-xl bg-blue-500/10 border border-blue-500/30 rounded-2xl p-4 sm:p-6"
       >
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-white mb-1 sm:mb-2">Blockchain API Configuration</h1>
-            <p className="text-sm sm:text-base text-slate-400">Configure your blockchain API keys</p>
+        <div className="flex items-start gap-3">
+          <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+            <Download className="w-5 h-5 text-blue-400" />
           </div>
-          <button
-            onClick={() => setShowModal(true)}
-            className="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-emerald-700 transition-all text-sm sm:text-base whitespace-nowrap"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add API Key
-          </button>
+          <div className="flex-1">
+            <h3 className="text-lg font-bold text-blue-400 mb-3">⚡ Setup Rápido em 3 Passos</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center mb-2">
+                  <span className="text-emerald-400 font-bold">1</span>
+                </div>
+                <p className="text-sm font-medium text-white mb-1">Escolha o Provedor</p>
+                <p className="text-xs text-slate-400">Etherscan ou Alchemy</p>
+              </div>
+              <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
+                <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center mb-2">
+                  <span className="text-blue-400 font-bold">2</span>
+                </div>
+                <p className="text-sm font-medium text-white mb-1">Obtenha a Chave</p>
+                <p className="text-xs text-slate-400">Grátis em segundos</p>
+              </div>
+              <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
+                <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center mb-2">
+                  <span className="text-purple-400 font-bold">3</span>
+                </div>
+                <p className="text-sm font-medium text-white mb-1">Cole Aqui</p>
+                <p className="text-xs text-slate-400">Pronto para usar!</p>
+              </div>
+            </div>
+          </div>
         </div>
       </motion.div>
 
@@ -151,117 +233,149 @@ export default function ApiSettings() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
+        transition={{ delay: 0.2 }}
         className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 rounded-2xl p-4 sm:p-6"
       >
-        <h2 className="text-lg sm:text-xl font-bold text-white mb-4">Configured APIs</h2>
+        <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+          <Key className="w-5 h-5 text-emerald-400" />
+          Suas APIs Configuradas
+        </h2>
         
         {configs.length > 0 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+          <div className="grid grid-cols-1 gap-4">
             {configs.map((config) => {
               const provider = providers.find(p => p.value === config.provider);
               return (
-                <div key={config.id} className="p-3 sm:p-4 bg-slate-900/50 rounded-xl border border-slate-700/50 hover:border-slate-600/50 transition-all">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-2 sm:gap-3">
-                      <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-r ${provider?.color} flex items-center justify-center text-xl sm:text-2xl flex-shrink-0`}>
+                <motion.div
+                  key={config.id}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="p-4 bg-gradient-to-br from-slate-900/80 to-slate-900/50 rounded-xl border border-slate-700/50 hover:border-emerald-500/50 transition-all"
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-3 flex-1">
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${provider?.color} flex items-center justify-center text-2xl shadow-lg`}>
                         {provider?.icon}
                       </div>
-                      <div className="min-w-0">
-                        <h3 className="text-sm sm:text-base text-white font-medium truncate">{provider?.label}</h3>
-                        <p className="text-xs text-slate-500">{provider?.blockchain}</p>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-lg text-white font-bold">{provider?.label}</h3>
+                        <p className="text-xs text-slate-400 truncate">{provider?.blockchain}</p>
+                        <p className="text-xs text-emerald-400 mt-1">✓ {provider?.free}</p>
                       </div>
                     </div>
-                    {config.isActive ? (
-                      <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400 flex-shrink-0" />
-                    ) : (
-                      <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-slate-500 flex-shrink-0" />
-                    )}
+                    <div className="flex items-center gap-2">
+                      {config.isActive ? (
+                        <div className="flex items-center gap-1 px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-lg text-xs font-bold">
+                          <CheckCircle className="w-3 h-3" />
+                          Ativa
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-1 px-3 py-1 bg-slate-700/50 text-slate-400 rounded-lg text-xs font-bold">
+                          <XCircle className="w-3 h-3" />
+                          Inativa
+                        </div>
+                      )}
+                    </div>
                   </div>
 
-                  <div className="flex items-center gap-1.5 sm:gap-2 mb-3">
+                  <div className="flex flex-wrap items-center gap-2">
                     <button
                       onClick={() => toggleKeyVisibility(config.id)}
-                      className="p-1.5 sm:p-2 hover:bg-slate-700 rounded transition-all touch-target"
-                      title="Show/Hide"
+                      className="flex items-center gap-2 px-3 py-2 bg-slate-800/50 hover:bg-slate-700 rounded-lg transition-all text-sm text-slate-300"
+                      title="Mostrar/Ocultar"
                     >
                       {visibleKeys.has(config.id) ? (
-                        <EyeOff className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400" />
+                        <><EyeOff className="w-4 h-4" /> Ocultar</>
                       ) : (
-                        <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400" />
+                        <><Eye className="w-4 h-4" /> Mostrar</>
                       )}
                     </button>
                     <button
                       onClick={() => testApiKey(config.id, config.provider)}
                       disabled={testingKey === config.id}
-                      className="p-1.5 sm:p-2 hover:bg-blue-500/20 rounded transition-all disabled:opacity-50 touch-target"
-                      title="Test"
+                      className="flex items-center gap-2 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-lg transition-all text-sm text-blue-400 disabled:opacity-50"
+                      title="Testar"
                     >
-                      <Key className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400" />
+                      <RefreshCw className={`w-4 h-4 ${testingKey === config.id ? 'animate-spin' : ''}`} />
+                      {testingKey === config.id ? 'Testando...' : 'Testar'}
                     </button>
                     <button
                       onClick={() => toggleConfig(config.id, config.isActive)}
-                      className={`flex-1 px-2 sm:px-3 py-1.5 rounded-lg text-xs font-medium transition-all touch-target ${
+                      className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-sm font-medium ${
                         config.isActive
                           ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'
                           : 'bg-slate-700/50 text-slate-400 hover:bg-slate-700'
                       }`}
                     >
-                      {config.isActive ? 'Active' : 'Inactive'}
+                      {config.isActive ? 'Desativar' : 'Ativar'}
                     </button>
                     <button
                       onClick={() => deleteConfig(config.id)}
-                      className="p-1.5 sm:p-2 hover:bg-red-500/20 rounded transition-all touch-target"
-                      title="Delete"
+                      className="flex items-center gap-2 px-3 py-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg transition-all text-sm text-red-400 ml-auto"
+                      title="Deletar"
                     >
-                      <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-400" />
+                      <Trash2 className="w-4 h-4" />
+                      Deletar
                     </button>
                   </div>
 
-                  <p className="text-xs text-slate-500">
-                    Added {new Date(config.createdAt).toLocaleDateString()}
+                  <p className="text-xs text-slate-500 mt-3">
+                    Adicionada em {new Date(config.createdAt).toLocaleDateString('pt-BR')}
                   </p>
-                </div>
+                </motion.div>
               );
             })}
           </div>
         ) : (
-          <div className="text-center py-8 sm:py-12 bg-slate-900/50 rounded-xl border border-slate-700/50">
-            <Key className="w-10 h-10 sm:w-12 sm:h-12 text-slate-600 mx-auto mb-3 sm:mb-4" />
-            <p className="text-sm sm:text-base text-slate-400 mb-3 sm:mb-4 px-4">No API configurations yet</p>
+          <div className="text-center py-12 bg-slate-900/50 rounded-xl border border-slate-700/50">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-blue-500/20 flex items-center justify-center mx-auto mb-4">
+              <Key className="w-8 h-8 text-emerald-400" />
+            </div>
+            <p className="text-lg text-slate-300 mb-2 font-medium">Nenhuma API configurada</p>
+            <p className="text-sm text-slate-500 mb-6 max-w-md mx-auto">
+              Configure suas chaves de API para começar a monitorar transações blockchain em tempo real
+            </p>
             <button
               onClick={() => setShowModal(true)}
-              className="px-4 sm:px-6 py-2 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-all text-sm sm:text-base touch-target"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-emerald-700 transition-all shadow-lg shadow-emerald-500/30"
             >
-              Add Your First API Key
+              <Plus className="w-5 h-5" />
+              Adicionar Primeira Chave
             </button>
           </div>
         )}
       </motion.div>
 
-      {/* Available Providers */}
+      {/* Providers Grid */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
+        transition={{ delay: 0.3 }}
         className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 rounded-2xl p-4 sm:p-6"
       >
-        <h2 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Supported Providers</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
+        <h2 className="text-xl font-bold text-white mb-4">🌐 Provedores Disponíveis</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {providers.map((provider) => (
             <a
               key={provider.value}
               href={provider.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2.5 sm:p-3 bg-slate-900/50 rounded-xl border border-slate-700/50 hover:border-emerald-500/50 transition-all group touch-target"
+              className="group p-4 bg-gradient-to-br from-slate-900/80 to-slate-900/50 rounded-xl border border-slate-700/50 hover:border-emerald-500/50 transition-all hover:scale-105"
             >
-              <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
-                <span className="text-xl sm:text-2xl">{provider.icon}</span>
-                <ExternalLink className="w-3 h-3 text-slate-500 group-hover:text-emerald-400 transition-all" />
+              <div className="flex items-start justify-between mb-3">
+                <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${provider.color} flex items-center justify-center text-2xl shadow-lg`}>
+                  {provider.icon}
+                </div>
+                <ExternalLink className="w-4 h-4 text-slate-500 group-hover:text-emerald-400 transition-all" />
               </div>
-              <p className="text-xs sm:text-sm text-white font-medium truncate">{provider.label}</p>
-              <p className="text-xs text-slate-500">{provider.blockchain}</p>
+              <h3 className="text-base font-bold text-white mb-1">{provider.label}</h3>
+              <p className="text-xs text-slate-400 mb-2">{provider.blockchain}</p>
+              <p className="text-xs text-slate-500 mb-3">{provider.description}</p>
+              <div className="flex items-center gap-1 text-xs text-emerald-400 font-medium">
+                <Zap className="w-3 h-3" />
+                {provider.free}
+              </div>
             </a>
           ))}
         </div>
@@ -269,88 +383,113 @@ export default function ApiSettings() {
 
       {/* Add API Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="backdrop-blur-xl bg-slate-800/90 border border-slate-700/50 rounded-2xl p-4 sm:p-6 max-w-md w-full max-h-[90vh] overflow-y-auto"
+            className="backdrop-blur-xl bg-slate-800/95 border border-slate-700/50 rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto"
           >
-            <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Add API Configuration</h3>
+            <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+              <Plus className="w-6 h-6 text-emerald-400" />
+              Adicionar API Key
+            </h3>
             
-            <div className="p-2.5 sm:p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl mb-3 sm:mb-4">
-              <div className="flex gap-2">
-                <Shield className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-xs font-bold text-emerald-400 mb-1">Security Guarantee</p>
-                  <p className="text-xs text-emerald-300/80">
-                    Your API keys are encrypted with AES-256 before storage. We never share, sell, or expose your keys to third parties.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-3 sm:space-y-4">
+            <div className="space-y-4">
+              {/* Provider Selection */}
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-slate-300 mb-2">Provider</label>
+                <label className="block text-sm font-medium text-slate-300 mb-2">
+                  1️⃣ Escolha o Provedor
+                </label>
                 <select
                   value={newConfig.provider}
                   onChange={(e) => setNewConfig({...newConfig, provider: e.target.value})}
-                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 >
                   {providers.map(provider => (
                     <option key={provider.value} value={provider.value}>
-                      {provider.icon} {provider.label} ({provider.blockchain})
+                      {provider.icon} {provider.label} - {provider.blockchain}
                     </option>
                   ))}
                 </select>
-              </div>
-              
-              <div>
-                <label className="block text-xs sm:text-sm font-medium text-slate-300 mb-2">API Key</label>
-                <input
-                  type="password"
-                  placeholder="Paste your API key here"
-                  value={newConfig.apiKey}
-                  onChange={(e) => setNewConfig({...newConfig, apiKey: e.target.value})}
-                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  autoFocus
-                  onKeyPress={(e) => e.key === 'Enter' && saveConfig()}
-                />
-                <a
-                  href={providers.find(p => p.value === newConfig.provider)?.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-xs text-emerald-400 hover:text-emerald-300 mt-2 touch-target"
-                >
-                  Get API key from {providers.find(p => p.value === newConfig.provider)?.label}
-                  <ExternalLink className="w-3 h-3" />
-                </a>
+                {selectedProvider && (
+                  <div className="mt-2 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                    <p className="text-xs text-blue-400">{selectedProvider.description}</p>
+                    <p className="text-xs text-emerald-400 mt-1">✓ Plano gratuito: {selectedProvider.free}</p>
+                  </div>
+                )}
               </div>
 
-              <div className="p-2.5 sm:p-3 bg-blue-500/10 border border-blue-500/30 rounded-xl">
-                <div className="flex gap-2">
-                  <AlertCircle className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
-                  <p className="text-xs text-blue-400">
-                    Your API keys are encrypted and stored securely. They're only used for blockchain data retrieval.
+              {/* Get API Key Link */}
+              <div className="p-4 bg-gradient-to-r from-emerald-500/10 to-blue-500/10 border border-emerald-500/30 rounded-xl">
+                <p className="text-sm font-medium text-white mb-2">2️⃣ Obtenha sua chave gratuita</p>
+                <a
+                  href={selectedProvider?.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-all text-sm font-medium"
+                >
+                  Ir para {selectedProvider?.label}
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              </div>
+              
+              {/* API Key Input */}
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">
+                  3️⃣ Cole sua API Key aqui
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Cole sua chave aqui (Ctrl+V ou Cmd+V)"
+                    value={newConfig.apiKey}
+                    onChange={(e) => setNewConfig({...newConfig, apiKey: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 pr-12"
+                    autoFocus
+                    onKeyPress={(e) => e.key === 'Enter' && saveConfig()}
+                    onPaste={() => toast.success('✅ Chave colada!')}
+                  />
+                  {newConfig.apiKey && (
+                    <CheckCircle className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
+                  )}
+                </div>
+                {newConfig.apiKey && (
+                  <p className="text-xs text-slate-500 mt-2">
+                    ✓ {newConfig.apiKey.length} caracteres
                   </p>
+                )}
+              </div>
+
+              {/* Security Notice */}
+              <div className="p-3 bg-purple-500/10 border border-purple-500/30 rounded-xl">
+                <div className="flex gap-2">
+                  <Shield className="w-4 h-4 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-xs font-bold text-purple-400 mb-1">🔒 100% Seguro</p>
+                    <p className="text-xs text-purple-300/80">
+                      Sua chave é criptografada com AES-256 e nunca é compartilhada com terceiros.
+                    </p>
+                  </div>
                 </div>
               </div>
               
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-2">
                 <button
                   onClick={saveConfig}
-                  className="flex-1 py-2.5 sm:py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-emerald-700 transition-all text-sm sm:text-base touch-target"
+                  disabled={!newConfig.apiKey.trim()}
+                  className="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-emerald-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-emerald-500/30"
                 >
-                  Save Configuration
+                  Salvar Configuração
                 </button>
                 <button
                   onClick={() => {
                     setShowModal(false);
                     setNewConfig({ provider: 'etherscan', apiKey: '' });
                   }}
-                  className="flex-1 py-2.5 sm:py-3 bg-slate-700/50 text-slate-300 rounded-xl font-medium hover:bg-slate-700 transition-all text-sm sm:text-base touch-target"
+                  className="px-6 py-3 bg-slate-700/50 text-slate-300 rounded-xl font-medium hover:bg-slate-700 transition-all"
                 >
-                  Cancel
+                  Cancelar
                 </button>
               </div>
             </div>
