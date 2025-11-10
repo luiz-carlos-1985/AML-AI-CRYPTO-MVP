@@ -2,7 +2,7 @@ import { Response } from 'express';
 import prisma from '../utils/prisma';
 import { AuthRequest } from '../middleware/auth';
 
-export const getTransactions = async (req: AuthRequest, res: Response) => {
+const getTransactions = async (req: AuthRequest, res: Response) => {
   try {
     const { walletId, riskLevel, limit = '50' } = req.query;
 
@@ -30,7 +30,7 @@ export const getTransactions = async (req: AuthRequest, res: Response) => {
   }
 };
 
-export const getTransaction = async (req: AuthRequest, res: Response) => {
+const getTransaction = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
 
@@ -54,3 +54,5 @@ export const getTransaction = async (req: AuthRequest, res: Response) => {
     res.status(500).json({ error: 'Failed to fetch transaction' });
   }
 };
+
+export { getTransactions, getTransaction };

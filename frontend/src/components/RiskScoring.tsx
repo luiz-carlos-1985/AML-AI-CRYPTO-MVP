@@ -34,14 +34,24 @@ export default function RiskScoring() {
             <p className="text-xs sm:text-sm text-slate-400">Multi-factor risk assessment</p>
           </div>
           <div className="flex items-center gap-3">
-            <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-${riskLevel.color}-500 to-${riskLevel.color}-600 flex items-center justify-center`}>
+            <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center ${
+              riskLevel.color === 'emerald' ? 'bg-gradient-to-br from-emerald-500 to-emerald-600' :
+              riskLevel.color === 'amber' ? 'bg-gradient-to-br from-amber-500 to-amber-600' :
+              riskLevel.color === 'orange' ? 'bg-gradient-to-br from-orange-500 to-orange-600' :
+              'bg-gradient-to-br from-red-500 to-red-600'
+            }`}>
               <RiskIcon className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
             </div>
             <div>
               <div className="text-3xl sm:text-4xl font-bold text-white">
                 <CountUp end={percentage} decimals={1} duration={2} />%
               </div>
-              <div className={`text-sm font-bold text-${riskLevel.color}-400`}>{riskLevel.label} RISK</div>
+              <div className={`text-sm font-bold ${
+                riskLevel.color === 'emerald' ? 'text-emerald-400' :
+                riskLevel.color === 'amber' ? 'text-amber-400' :
+                riskLevel.color === 'orange' ? 'text-orange-400' :
+                'text-red-400'
+              }`}>{riskLevel.label} RISK</div>
             </div>
           </div>
         </div>
@@ -51,7 +61,12 @@ export default function RiskScoring() {
             initial={{ width: 0 }}
             animate={{ width: `${percentage}%` }}
             transition={{ duration: 1.5, ease: 'easeOut' }}
-            className={`h-full bg-gradient-to-r from-${riskLevel.color}-500 to-${riskLevel.color}-600 rounded-full`}
+            className={`h-full rounded-full ${
+              riskLevel.color === 'emerald' ? 'bg-gradient-to-r from-emerald-500 to-emerald-600' :
+              riskLevel.color === 'amber' ? 'bg-gradient-to-r from-amber-500 to-amber-600' :
+              riskLevel.color === 'orange' ? 'bg-gradient-to-r from-orange-500 to-orange-600' :
+              'bg-gradient-to-r from-red-500 to-red-600'
+            }`}
           />
         </div>
         <div className="flex justify-between text-xs text-slate-500">
@@ -78,10 +93,10 @@ export default function RiskScoring() {
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <FactorIcon className={`w-4 h-4 text-${
-                      factor.status === 'low' ? 'emerald' :
-                      factor.status === 'medium' ? 'amber' : 'red'
-                    }-400`} />
+                    <FactorIcon className={`w-4 h-4 ${
+                      factor.status === 'low' ? 'text-emerald-400' :
+                      factor.status === 'medium' ? 'text-amber-400' : 'text-red-400'
+                    }`} />
                     <span className="text-sm text-white">{factor.name}</span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -94,13 +109,11 @@ export default function RiskScoring() {
                     initial={{ width: 0 }}
                     animate={{ width: `${factorPercentage}%` }}
                     transition={{ delay: index * 0.1 + 0.5, duration: 0.8 }}
-                    className={`h-full bg-gradient-to-r from-${
-                      factor.status === 'low' ? 'emerald' :
-                      factor.status === 'medium' ? 'amber' : 'red'
-                    }-500 to-${
-                      factor.status === 'low' ? 'emerald' :
-                      factor.status === 'medium' ? 'amber' : 'red'
-                    }-600 rounded-full`}
+                    className={`h-full rounded-full ${
+                      factor.status === 'low' ? 'bg-gradient-to-r from-emerald-500 to-emerald-600' :
+                      factor.status === 'medium' ? 'bg-gradient-to-r from-amber-500 to-amber-600' :
+                      'bg-gradient-to-r from-red-500 to-red-600'
+                    }`}
                   />
                 </div>
               </motion.div>

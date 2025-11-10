@@ -20,9 +20,10 @@ const Alerts = () => {
       
       const { data } = await api.get('/alerts', { params });
       console.log('Loaded alerts:', data);
-      setAlerts(data);
+      setAlerts(Array.isArray(data) ? data : []);
     } catch (error: any) {
       console.error('Failed to load alerts:', error);
+      setAlerts([]);
       toast.error(error.response?.data?.error || 'Failed to load alerts');
     }
   };

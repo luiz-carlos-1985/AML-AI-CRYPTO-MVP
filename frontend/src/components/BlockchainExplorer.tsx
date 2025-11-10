@@ -6,6 +6,8 @@ import toast from 'react-hot-toast';
 export default function BlockchainExplorer() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchType, setSearchType] = useState<'address' | 'transaction' | 'block'>('address');
+  const [searchResults, setSearchResults] = useState<any>(null);
+  const [isSearching, setIsSearching] = useState(false);
 
   const recentSearches = [
     { type: 'address', value: '0x742d35Cc6634C0532925a3b844Bc9e7595f3f8a', blockchain: 'Ethereum' },
@@ -13,12 +15,39 @@ export default function BlockchainExplorer() {
     { type: 'address', value: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984', blockchain: 'Polygon' },
   ];
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!searchQuery.trim()) {
       toast.error('Please enter a search query');
       return;
     }
-    toast.success('Searching blockchain...');
+    
+    setIsSearching(true);
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      const mockResult = {
+        type: searchType,
+        query: searchQuery,
+        found: true,
+        data: {
+          hash: searchQuery,
+          blockchain: 'Ethereum',
+          confirmations: 12,
+          timestamp: new Date().toISOString(),
+          value: searchType === 'address' ? '1.234 ETH' : '0.5 ETH',
+          gasUsed: '21000',
+          status: 'Success'
+        }
+      };
+      
+      setSearchResults(mockResult);
+      toast.success('Search completed!');
+    } catch (error) {
+      toast.error('Search failed');
+    } finally {
+      setIsSearching(false);
+    }
   };
 
   const copyToClipboard = (text: string) => {
@@ -56,9 +85,10 @@ export default function BlockchainExplorer() {
           
           <button
             onClick={handleSearch}
-            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-medium hover:from-blue-600 hover:to-purple-700 transition-all text-sm touch-target"
+            disabled={isSearching}
+            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-medium hover:from-blue-600 hover:to-purple-700 transition-all text-sm touch-target disabled:opacity-50"
           >
-            Search
+            {isSearching ? 'Searching...' : 'Search'}
           </button>
         </div>
 
@@ -122,6 +152,34 @@ export default function BlockchainExplorer() {
           ))}
         </div>
       </div>
+
+      {searchResults && (
+        <div className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 rounded-2xl p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-bold text-white mb-4">Search Results</h3>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between p-3 bg-slate-900/50 rounded-xl">
+              <span className="text-sm text-slate-400">Type</span>
+              <span className="text-sm text-white font-medium capitalize">{searchResults.type}</span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-slate-900/50 rounded-xl">
+              <span className="text-sm text-slate-400">Hash</span>
+              <span className="text-sm text-white font-mono truncate ml-2">{searchResults.data.hash}</span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-slate-900/50 rounded-xl">
+              <span className="text-sm text-slate-400">Blockchain</span>
+              <span className="text-sm text-white">{searchResults.data.blockchain}</span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-slate-900/50 rounded-xl">
+              <span className="text-sm text-slate-400">Value</span>
+              <span className="text-sm text-emerald-400 font-medium">{searchResults.data.value}</span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-slate-900/50 rounded-xl">
+              <span className="text-sm text-slate-400">Status</span>
+              <span className="text-sm text-emerald-400">{searchResults.data.status}</span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -20,6 +20,46 @@ export default function SmartAlerts() {
   ]);
 
   const [showModal, setShowModal] = useState(false);
+  const [newRule, setNewRule] = useState({
+    name: '',
+    condition: 'risk_score',
+    threshold: 50,
+    channels: [] as string[]
+  });
+
+  const addRule = () => {
+    if (!newRule.name.trim()) {
+      toast.error('Please enter a rule name');
+      return;
+    }
+    if (newRule.channels.length === 0) {
+      toast.error('Please select at least one notification channel');
+      return;
+    }
+    
+    const rule: AlertRule = {
+      id: Date.now().toString(),
+      name: newRule.name,
+      condition: newRule.condition,
+      threshold: newRule.threshold,
+      channels: newRule.channels,
+      isActive: true
+    };
+    
+    setRules([...rules, rule]);
+    setNewRule({ name: '', condition: 'risk_score', threshold: 50, channels: [] });
+    setShowModal(false);
+    toast.success('Alert rule created successfully');
+  };
+
+  const toggleChannel = (channelId: string) => {
+    setNewRule(prev => ({
+      ...prev,
+      channels: prev.channels.includes(channelId)
+        ? prev.channels.filter(c => c !== channelId)
+        : [...prev.channels, channelId]
+    }));
+  };
 
   const channels = [
     { id: 'email', name: 'Email', icon: Mail, color: 'blue' },
@@ -76,9 +116,19 @@ export default function SmartAlerts() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className={`backdrop-blur-xl bg-gradient-to-br from-${channel.color}-500/10 to-${channel.color}-600/5 border border-${channel.color}-500/20 rounded-2xl p-3 sm:p-4`}
+              className={`backdrop-blur-xl bg-slate-800/30 border rounded-2xl p-3 sm:p-4 ${
+                channel.color === 'blue' ? 'border-blue-500/20 bg-gradient-to-br from-blue-500/10 to-blue-600/5' :
+                channel.color === 'emerald' ? 'border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 to-emerald-600/5' :
+                channel.color === 'purple' ? 'border-purple-500/20 bg-gradient-to-br from-purple-500/10 to-purple-600/5' :
+                'border-amber-500/20 bg-gradient-to-br from-amber-500/10 to-amber-600/5'
+              }`}
             >
-              <Icon className={`w-6 h-6 sm:w-8 sm:h-8 text-${channel.color}-400 mb-2 sm:mb-3`} />
+              <Icon className={`w-6 h-6 sm:w-8 sm:h-8 mb-2 sm:mb-3 ${
+                channel.color === 'blue' ? 'text-blue-400' :
+                channel.color === 'emerald' ? 'text-emerald-400' :
+                channel.color === 'purple' ? 'text-purple-400' :
+                'text-amber-400'
+              }`} />
               <div className="text-2xl sm:text-3xl font-bold text-white mb-1">{activeCount}</div>
               <div className="text-xs sm:text-sm text-slate-400">{channel.name}</div>
             </motion.div>
@@ -117,7 +167,12 @@ export default function SmartAlerts() {
                       const channel = channels.find(c => c.id === ch);
                       const Icon = channel?.icon || Bell;
                       return (
-                        <span key={ch} className={`inline-flex items-center gap-1 px-2 py-1 bg-${channel?.color}-500/20 text-${channel?.color}-400 rounded text-xs`}>
+                        <span key={ch} className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs ${
+                          channel?.color === 'blue' ? 'bg-blue-500/20 text-blue-400' :
+                          channel?.color === 'emerald' ? 'bg-emerald-500/20 text-emerald-400' :
+                          channel?.color === 'purple' ? 'bg-purple-500/20 text-purple-400' :
+                          'bg-amber-500/20 text-amber-400'
+                        }`}>
                           <Icon className="w-3 h-3" />
                           {channel?.name}
                         </span>
@@ -144,6 +199,90 @@ export default function SmartAlerts() {
           ))}
         </div>
       </div>
+
+      {showModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 w-full max-w-md">
+            <h3 className="text-xl font-bold text-white mb-4">Create Alert Rule</h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Rule Name</label>
+                <input
+                  type="text"
+                  value={newRule.name}
+                  onChange={(e) => setNewRule(prev => ({ ...prev, name: e.target.value }))}
+                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  placeholder="Enter rule name"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Condition</label>
+                <select
+                  value={newRule.condition}
+                  onChange={(e) => setNewRule(prev => ({ ...prev, condition: e.target.value }))}
+                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                >
+                  {conditions.map(condition => (
+                    <option key={condition.value} value={condition.value}>{condition.label}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Threshold</label>
+                <input
+                  type="number"
+                  value={newRule.threshold}
+                  onChange={(e) => setNewRule(prev => ({ ...prev, threshold: Number(e.target.value) }))}
+                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  min="0"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Notification Channels</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {channels.map(channel => {
+                    const Icon = channel.icon;
+                    const isSelected = newRule.channels.includes(channel.id);
+                    return (
+                      <button
+                        key={channel.id}
+                        onClick={() => toggleChannel(channel.id)}
+                        className={`flex items-center gap-2 p-3 rounded-lg border transition-all ${
+                          isSelected
+                            ? 'bg-amber-500/20 border-amber-500/50 text-amber-400'
+                            : 'bg-slate-900/50 border-slate-700 text-slate-400 hover:border-slate-600'
+                        }`}
+                      >
+                        <Icon className="w-4 h-4" />
+                        <span className="text-sm">{channel.name}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => setShowModal(false)}
+                className="flex-1 px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={addRule}
+                className="flex-1 px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all"
+              >
+                Create Rule
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
