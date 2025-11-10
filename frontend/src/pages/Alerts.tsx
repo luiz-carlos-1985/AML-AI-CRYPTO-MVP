@@ -19,9 +19,11 @@ const Alerts = () => {
       if (filter === 'unresolved') params.isResolved = 'false';
       
       const { data } = await api.get('/alerts', { params });
+      console.log('Loaded alerts:', data);
       setAlerts(data);
-    } catch (error) {
-      console.error('Failed to load alerts');
+    } catch (error: any) {
+      console.error('Failed to load alerts:', error);
+      toast.error(error.response?.data?.error || 'Failed to load alerts');
     }
   };
 
@@ -61,7 +63,17 @@ const Alerts = () => {
       </div>
 
       <div className="space-y-4">
-        {alerts.map((alert) => (
+        {alerts.length === 0 ? (
+          <div className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 rounded-2xl p-8 text-center">
+            <p className="text-slate-400 text-lg">No alerts found.</p>
+            <p className="text-slate-500 text-sm mt-2">
+              {filter === 'unread' && 'You have no unread alerts.'}
+              {filter === 'unresolved' && 'You have no unresolved alerts.'}
+              {filter === 'all' && 'No alerts have been generated yet.'}
+            </p>
+          </div>
+        ) : (
+          alerts.map((alert) => (
           <div
             key={alert.id}
             className={`backdrop-blur-xl bg-slate-800/50 border-l-4 rounded-2xl p-6 shadow-2xl transition-all duration-200 hover:scale-[1.01] ${
@@ -121,7 +133,8 @@ const Alerts = () => {
               </div>
             </div>
           </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );

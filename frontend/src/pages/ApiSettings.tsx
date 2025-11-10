@@ -404,6 +404,8 @@ export default function ApiSettings() {
                   value={newConfig.provider}
                   onChange={(e) => setNewConfig({...newConfig, provider: e.target.value})}
                   className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  aria-label="Selecione o provedor de API"
+                  title="Selecione o provedor de API"
                 >
                   {providers.map(provider => (
                     <option key={provider.value} value={provider.value}>

@@ -90,6 +90,8 @@ export default function NotificationCenter() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="relative p-2 hover:bg-slate-700/50 rounded-xl transition-all"
+        title="Notifications"
+        aria-label="Open notifications"
       >
         <Bell className="w-6 h-6 text-slate-300" />
         {unreadCount > 0 && (
@@ -136,6 +138,8 @@ export default function NotificationCenter() {
                   <button
                     onClick={() => setIsOpen(false)}
                     className="p-1 hover:bg-slate-700 rounded transition-all"
+                    title="Close notifications"
+                    aria-label="Close notifications panel"
                   >
                     <X className="w-5 h-5 text-slate-400" />
                   </button>
@@ -168,6 +172,8 @@ export default function NotificationCenter() {
                             <button
                               onClick={() => deleteNotification(notification.id)}
                               className="flex-shrink-0 p-1 hover:bg-slate-700 rounded transition-all"
+                              title="Delete notification"
+                              aria-label={`Delete notification: ${notification.title}`}
                             >
                               <X className="w-3 h-3 text-slate-400" />
                             </button>

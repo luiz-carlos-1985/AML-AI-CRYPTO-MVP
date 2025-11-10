@@ -126,12 +126,24 @@ export default function WebhookManager() {
                 type={visibleSecrets.has(webhook.id) ? 'text' : 'password'}
                 value={webhook.secret}
                 readOnly
+                aria-label="Webhook secret"
+                title="Webhook secret key"
                 className="flex-1 px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-xs text-slate-400 font-mono"
               />
-              <button onClick={() => toggleSecret(webhook.id)} className="p-2 hover:bg-slate-700 rounded">
+              <button 
+                onClick={() => toggleSecret(webhook.id)} 
+                className="p-2 hover:bg-slate-700 rounded"
+                title={visibleSecrets.has(webhook.id) ? 'Hide secret' : 'Show secret'}
+                aria-label={visibleSecrets.has(webhook.id) ? 'Hide webhook secret' : 'Show webhook secret'}
+              >
                 {visibleSecrets.has(webhook.id) ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
-              <button onClick={() => copySecret(webhook.secret)} className="p-2 hover:bg-slate-700 rounded">
+              <button 
+                onClick={() => copySecret(webhook.secret)} 
+                className="p-2 hover:bg-slate-700 rounded"
+                title="Copy secret"
+                aria-label="Copy webhook secret to clipboard"
+              >
                 <Copy className="w-4 h-4" />
               </button>
             </div>
@@ -147,6 +159,8 @@ export default function WebhookManager() {
               <button
                 onClick={() => deleteWebhook(webhook.id)}
                 className="px-3 py-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30"
+                title="Delete webhook"
+                aria-label="Delete this webhook"
               >
                 <Trash2 className="w-4 h-4" />
               </button>

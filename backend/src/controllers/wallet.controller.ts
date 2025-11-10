@@ -56,12 +56,16 @@ export const getWallets = async (req: AuthRequest, res: Response) => {
       where: { userId: req.userId },
       include: {
         _count: {
-          select: { transactions: true, alerts: true }
+          select: { 
+            transactions: true, 
+            alerts: true 
+          }
         }
       },
       orderBy: { createdAt: 'desc' }
     });
 
+    console.log(`Fetched ${wallets.length} wallets for user ${req.userId}`);
     res.json(wallets);
   } catch (error) {
     console.error('Get wallets error:', error);

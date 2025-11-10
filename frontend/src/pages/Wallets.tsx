@@ -35,9 +35,11 @@ const Wallets = () => {
   const loadWallets = async () => {
     try {
       const { data } = await api.get('/wallets');
+      console.log('Loaded wallets:', data);
       setWallets(data);
-    } catch (error) {
-      toast.error('Failed to load wallets');
+    } catch (error: any) {
+      console.error('Failed to load wallets:', error);
+      toast.error(error.response?.data?.error || 'Failed to load wallets');
     }
   };
 
@@ -132,8 +134,14 @@ const Wallets = () => {
       </div>
 
       <div className="backdrop-blur-xl bg-slate-800/50 border border-slate-700/50 shadow-2xl overflow-hidden rounded-2xl">
-        <ul className="divide-y divide-slate-700/50">
-          {wallets.map((wallet) => (
+        {wallets.length === 0 ? (
+          <div className="p-8 text-center">
+            <p className="text-slate-400 text-lg">No wallets added yet.</p>
+            <p className="text-slate-500 text-sm mt-2">Click "Add Wallet" to start monitoring your crypto addresses.</p>
+          </div>
+        ) : (
+          <ul className="divide-y divide-slate-700/50">
+            {wallets.map((wallet) => (
             <li key={wallet.id} className="px-4 md:px-6 py-4 md:py-5 hover:bg-slate-700/30 transition-all duration-200">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0">
                 <div className="flex-1">
@@ -179,8 +187,9 @@ const Wallets = () => {
                 </div>
               </div>
             </li>
-          ))}
-        </ul>
+            ))}
+          </ul>
+        )}
       </div>
 
       {showModal && (
