@@ -63,3 +63,7 @@ htmlcov/
 *.tmp
 *.temp
 *.cache
+
+# Office temporary files
+~$*
+*.tmp
