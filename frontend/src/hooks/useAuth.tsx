@@ -35,23 +35,39 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const { data } = await api.get('/auth/profile');
       setUser(data);
       setIsAuthenticated(true);
-    } catch (error) {
-      localStorage.removeItem('token');
+    } catch (error: any) {
+      if (!error.offline) {
+        localStorage.removeItem('token');
+      }
     }
   };
 
   const login = async (email: string, password: string) => {
-    const { data } = await api.post('/auth/login', { email, password });
-    localStorage.setItem('token', data.token);
-    setUser(data.user);
-    setIsAuthenticated(true);
+    try {
+      const { data } = await api.post('/auth/login', { email, password });
+      localStorage.setItem('token', data.token);
+      setUser(data.user);
+      setIsAuthenticated(true);
+    } catch (error: any) {
+      if (error.offline) {
+        throw new Error('Servidor offline. Tente novamente mais tarde.');
+      }
+      throw error;
+    }
   };
 
   const register = async (userData: any) => {
-    const { data } = await api.post('/auth/register', userData);
-    localStorage.setItem('token', data.token);
-    setUser(data.user);
-    setIsAuthenticated(true);
+    try {
+      const { data } = await api.post('/auth/register', userData);
+      localStorage.setItem('token', data.token);
+      setUser(data.user);
+      setIsAuthenticated(true);
+    } catch (error: any) {
+      if (error.offline) {
+        throw new Error('Servidor offline. Tente novamente mais tarde.');
+      }
+      throw error;
+    }
   };
 
   const logout = () => {

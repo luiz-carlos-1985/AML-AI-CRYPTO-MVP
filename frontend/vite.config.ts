@@ -7,6 +7,21 @@ export default defineConfig({
   plugins: [
     react()
   ],
+  customLogger: {
+    info: (msg) => console.log(msg),
+    warn: (msg) => console.warn(msg),
+    error: (msg) => {
+      // Silencia erros de proxy quando backend está offline
+      if (msg.includes('http proxy error') || msg.includes('ECONNREFUSED')) {
+        return;
+      }
+      console.error(msg);
+    },
+    clearScreen: () => {},
+    hasErrorLogged: () => false,
+    hasWarned: false,
+    warnOnce: (msg) => console.warn(msg)
+  },
   server: {
     port: 3000,
     host: '0.0.0.0',
@@ -19,7 +34,16 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:3001',
         changeOrigin: true,
-        secure: false
+        secure: false,
+        configure: (proxy, options) => {
+          proxy.on('error', (err, req, res) => {
+            // Silencia erros de proxy quando backend está offline
+          });
+          proxy.on('proxyReq', (proxyReq, req, res) => {
+            // Adiciona timeout
+            proxyReq.setTimeout(5000);
+          });
+        }
       }
     }
   },

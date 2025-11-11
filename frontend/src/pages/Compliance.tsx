@@ -67,8 +67,8 @@ const Compliance: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 px-2 py-3 sm:p-4 lg:p-6">
-      <div className="max-w-7xl mx-auto w-full overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 px-2 py-3 sm:p-4 lg:p-6 overflow-x-hidden">
+      <div className="max-w-7xl mx-auto w-full">
         {/* Header Mobile-First */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -90,7 +90,7 @@ const Compliance: React.FC = () => {
 
         {/* Tabs Mobile-First */}
         <div className="mb-4 sm:mb-6">
-          <div className="flex flex-wrap gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {[
               { id: 'overview', label: t('compliance.overview') },
               { id: 'lgpd', label: t('compliance.lgpd') },
@@ -100,13 +100,13 @@ const Compliance: React.FC = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex-1 sm:flex-none min-w-0 ${
+                className={`px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
                   activeTab === tab.id
                     ? 'bg-purple-600 text-white'
                     : 'bg-slate-800 text-gray-300 hover:bg-slate-700'
                 }`}
               >
-                <span className="truncate">{tab.label}</span>
+                {tab.label}
               </button>
             ))}
           </div>
