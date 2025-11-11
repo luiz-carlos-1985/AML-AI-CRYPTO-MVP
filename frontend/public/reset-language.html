@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Reset Language - CryptoAML</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+        button {
+            background: linear-gradient(to right, #10b981, #3b82f6);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .success {
+            background: #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>🌍 Reset Language Settings</h1>
+    <p>Click a button to set the default language:</p>
+    
+    <button onclick="setLanguage('en')">🇺🇸 English</button>
+    <button onclick="setLanguage('pt')">🇧🇷 Português</button>
+    <button onclick="setLanguage('es')">🇪🇸 Español</button>
+    <button onclick="setLanguage('fr')">🇫🇷 Français</button>
+    <button onclick="setLanguage('de')">🇩🇪 Deutsch</button>
+    
+    <div id="success" class="success"></div>
+    
+    <script>
+        function setLanguage(lang) {
+            localStorage.clear();
+            localStorage.setItem('i18nextLng', lang);
+            
+            const langNames = {
+                'en': 'English',
+                'pt': 'Português',
+                'es': 'Español',
+                'fr': 'Français',
+                'de': 'Deutsch'
+            };
+            
+            document.getElementById('success').style.display = 'block';
+            document.getElementById('success').innerHTML = 
+                `✓ Language set to ${langNames[lang]}!<br><br>` +
+                `<strong>Now:</strong><br>` +
+                `1. Close this tab<br>` +
+                `2. Go back to the app<br>` +
+                `3. Press Ctrl+Shift+R (hard refresh)`;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fix i18n - CryptoAML</title>
+</head>
+<body>
+    <h1>Fixing i18n Configuration</h1>
+    <p id="status">Clearing localStorage...</p>
+    <script>
+        // Clear all i18n related localStorage
+        localStorage.removeItem('i18nextLng');
+        localStorage.removeItem('preferred-language');
+        
+        // Set default to English
+        localStorage.setItem('i18nextLng', 'en');
+        
+        document.getElementById('status').innerHTML = 
+            '<strong>✓ Done!</strong><br><br>' +
+            'localStorage cleared and set to English.<br>' +
+            'Please close this tab and refresh your application.';
+    </script>
+</body>
+</html>

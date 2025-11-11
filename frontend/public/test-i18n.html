@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Test i18n - CryptoAML</title>
+    <style>
+        body {
+            font-family: monospace;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #0f172a;
+            color: #10b981;
+        }
+        pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; }
+        h2 { color: #3b82f6; }
+    </style>
+</head>
+<body>
+    <h1>🧪 i18n Configuration Test</h1>
+    
+    <h2>Current localStorage:</h2>
+    <pre id="storage"></pre>
+    
+    <h2>Instructions:</h2>
+    <ol>
+        <li>Open browser DevTools (F12)</li>
+        <li>Go to Console tab</li>
+        <li>Type: <code>localStorage.getItem('i18nextLng')</code></li>
+        <li>If it shows 'pt-BR' or 'pt', run: <code>localStorage.setItem('i18nextLng', 'en')</code></li>
+        <li>Refresh the app with Ctrl+Shift+R</li>
+    </ol>
+    
+    <script>
+        const storage = {};
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            storage[key] = localStorage.getItem(key);
+        }
+        document.getElementById('storage').textContent = JSON.stringify(storage, null, 2);
+    </script>
+</body>
+</html>

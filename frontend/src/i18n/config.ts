@@ -14,6 +14,18 @@ import ru from './locales/ru.json';
 import ko from './locales/ko.json';
 import ar from './locales/ar.json';
 
+// Force English as default if no language is set
+const storedLang = localStorage.getItem('i18nextLng');
+if (!storedLang || storedLang.startsWith('pt')) {
+  localStorage.setItem('i18nextLng', 'en');
+}
+
+const detectionOptions = {
+  order: ['localStorage', 'navigator'],
+  lookupLocalStorage: 'i18nextLng',
+  caches: ['localStorage'],
+};
+
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -31,9 +43,11 @@ i18n
       ko: { translation: ko },
       ar: { translation: ar }
     },
+    detection: detectionOptions,
     fallbackLng: 'en',
-    lng: 'pt',
-    debug: true,
+    lng: 'en',
+    supportedLngs: ['en', 'pt', 'es', 'fr', 'de', 'it', 'ja', 'zh', 'ko', 'ru', 'ar'],
+    load: 'languageOnly',
     interpolation: {
       escapeValue: false
     },
@@ -42,7 +56,10 @@ i18n
     }
   });
 
-console.log('i18n initialized with language:', i18n.language);
-console.log('Available languages:', Object.keys(i18n.options.resources || {}));
+i18n.on('languageChanged', (lng) => {
+  const rtlLanguages = ['ar'];
+  document.dir = rtlLanguages.includes(lng) ? 'rtl' : 'ltr';
+  document.documentElement.lang = lng;
+});
 
 export default i18n;
