@@ -1,0 +1,182 @@
+{
+  "en": {
+    "advancedCompliance": {
+      "title": "Advanced Compliance & AI",
+      "subtitle": "AI-powered compliance with quantum security",
+      "aiAnalysis": "AI Analysis",
+      "quantumSecurity": "Quantum Security",
+      "blockchainIntelligence": "Blockchain Intelligence",
+      "behavioralAnalysis": "Behavioral Analysis",
+      "riskScoring": "Risk Scoring",
+      "complianceStatus": "Compliance Status",
+      "regulatoryReports": "Regulatory Reports",
+      "securityIncidents": "Security Incidents",
+      "systemIntegrity": "System Integrity",
+      "antiCloning": "Anti-Cloning Protection",
+      "dataWatermarking": "Data Watermarking",
+      "licenseValidation": "License Validation"
+    },
+    "aiCompliance": {
+      "analysisComplete": "AI analysis completed",
+      "riskScore": "Risk Score",
+      "confidence": "Confidence",
+      "flags": "Risk Flags",
+      "recommendations": "Recommendations",
+      "explanation": "Explanation",
+      "nextActions": "Next Actions",
+      "complianceViolation": "Compliance Violation",
+      "regulatoryReporting": "Regulatory Reporting Required",
+      "manualReview": "Manual Review Required",
+      "enhancedMonitoring": "Enhanced Monitoring Recommended"
+    },
+    "blockchainIntelligence": {
+      "addressAnalysis": "Address Analysis",
+      "sanctionCheck": "Sanction List Check",
+      "mixerDetection": "Mixer Detection",
+      "exchangeIdentification": "Exchange Identification",
+      "riskCategories": "Risk Categories",
+      "intelligenceSources": "Intelligence Sources",
+      "graphAnalysis": "Graph Analysis",
+      "clusterAnalysis": "Cluster Analysis",
+      "behaviorPatterns": "Behavior Patterns"
+    },
+    "quantumSecurity": {
+      "encryptionStatus": "Encryption Status",
+      "keyRotation": "Key Rotation",
+      "quantumResistant": "Quantum Resistant",
+      "multiLayerEncryption": "Multi-Layer Encryption",
+      "integrityCheck": "Integrity Check",
+      "secureStorage": "Secure Storage",
+      "cryptographicSignature": "Cryptographic Signature"
+    },
+    "regulatoryReports": {
+      "coafReport": "COAF Report",
+      "bacenReport": "BACEN Report",
+      "fatfCompliance": "FATF Compliance",
+      "lgpdCompliance": "LGPD Compliance",
+      "iso27001": "ISO 27001",
+      "soc2": "SOC 2 Type II",
+      "generateReport": "Generate Report",
+      "downloadReport": "Download Report",
+      "reportStatus": "Report Status",
+      "submissionDate": "Submission Date"
+    }
+  },
+  "pt": {
+    "advancedCompliance": {
+      "title": "Compliance Avançado & IA",
+      "subtitle": "Compliance com IA e segurança quântica",
+      "aiAnalysis": "Análise de IA",
+      "quantumSecurity": "Segurança Quântica",
+      "blockchainIntelligence": "Inteligência Blockchain",
+      "behavioralAnalysis": "Análise Comportamental",
+      "riskScoring": "Pontuação de Risco",
+      "complianceStatus": "Status de Compliance",
+      "regulatoryReports": "Relatórios Regulatórios",
+      "securityIncidents": "Incidentes de Segurança",
+      "systemIntegrity": "Integridade do Sistema",
+      "antiCloning": "Proteção Anti-Clonagem",
+      "dataWatermarking": "Marca D'água de Dados",
+      "licenseValidation": "Validação de Licença"
+    },
+    "aiCompliance": {
+      "analysisComplete": "Análise de IA concluída",
+      "riskScore": "Score de Risco",
+      "confidence": "Confiança",
+      "flags": "Flags de Risco",
+      "recommendations": "Recomendações",
+      "explanation": "Explicação",
+      "nextActions": "Próximas Ações",
+      "complianceViolation": "Violação de Compliance",
+      "regulatoryReporting": "Relatório Regulatório Necessário",
+      "manualReview": "Revisão Manual Necessária",
+      "enhancedMonitoring": "Monitoramento Intensificado Recomendado"
+    },
+    "blockchainIntelligence": {
+      "addressAnalysis": "Análise de Endereço",
+      "sanctionCheck": "Verificação de Sanções",
+      "mixerDetection": "Detecção de Mixer",
+      "exchangeIdentification": "Identificação de Exchange",
+      "riskCategories": "Categorias de Risco",
+      "intelligenceSources": "Fontes de Inteligência",
+      "graphAnalysis": "Análise de Grafo",
+      "clusterAnalysis": "Análise de Cluster",
+      "behaviorPatterns": "Padrões Comportamentais"
+    },
+    "quantumSecurity": {
+      "encryptionStatus": "Status de Criptografia",
+      "keyRotation": "Rotação de Chaves",
+      "quantumResistant": "Resistente a Quânticos",
+      "multiLayerEncryption": "Criptografia Multi-Camadas",
+      "integrityCheck": "Verificação de Integridade",
+      "secureStorage": "Armazenamento Seguro",
+      "cryptographicSignature": "Assinatura Criptográfica"
+    },
+    "regulatoryReports": {
+      "coafReport": "Relatório COAF",
+      "bacenReport": "Relatório BACEN",
+      "fatfCompliance": "Compliance FATF",
+      "lgpdCompliance": "Compliance LGPD",
+      "iso27001": "ISO 27001",
+      "soc2": "SOC 2 Type II",
+      "generateReport": "Gerar Relatório",
+      "downloadReport": "Baixar Relatório",
+      "reportStatus": "Status do Relatório",
+      "submissionDate": "Data de Submissão"
+    }
+  },
+  "es": {
+    "advancedCompliance": {
+      "title": "Cumplimiento Avanzado e IA",
+      "subtitle": "Cumplimiento con IA y seguridad cuántica",
+      "aiAnalysis": "Análisis de IA",
+      "quantumSecurity": "Seguridad Cuántica",
+      "blockchainIntelligence": "Inteligencia Blockchain",
+      "behavioralAnalysis": "Análisis Conductual",
+      "riskScoring": "Puntuación de Riesgo",
+      "complianceStatus": "Estado de Cumplimiento",
+      "regulatoryReports": "Informes Regulatorios",
+      "securityIncidents": "Incidentes de Seguridad",
+      "systemIntegrity": "Integridad del Sistema",
+      "antiCloning": "Protección Anti-Clonación",
+      "dataWatermarking": "Marca de Agua de Datos",
+      "licenseValidation": "Validación de Licencia"
+    }
+  },
+  "fr": {
+    "advancedCompliance": {
+      "title": "Conformité Avancée et IA",
+      "subtitle": "Conformité avec IA et sécurité quantique",
+      "aiAnalysis": "Analyse IA",
+      "quantumSecurity": "Sécurité Quantique",
+      "blockchainIntelligence": "Intelligence Blockchain",
+      "behavioralAnalysis": "Analyse Comportementale",
+      "riskScoring": "Score de Risque",
+      "complianceStatus": "Statut de Conformité",
+      "regulatoryReports": "Rapports Réglementaires",
+      "securityIncidents": "Incidents de Sécurité",
+      "systemIntegrity": "Intégrité du Système",
+      "antiCloning": "Protection Anti-Clonage",
+      "dataWatermarking": "Filigrane de Données",
+      "licenseValidation": "Validation de Licence"
+    }
+  },
+  "de": {
+    "advancedCompliance": {
+      "title": "Erweiterte Compliance & KI",
+      "subtitle": "Compliance mit KI und Quantensicherheit",
+      "aiAnalysis": "KI-Analyse",
+      "quantumSecurity": "Quantensicherheit",
+      "blockchainIntelligence": "Blockchain-Intelligence",
+      "behavioralAnalysis": "Verhaltensanalyse",
+      "riskScoring": "Risikobewertung",
+      "complianceStatus": "Compliance-Status",
+      "regulatoryReports": "Regulatorische Berichte",
+      "securityIncidents": "Sicherheitsvorfälle",
+      "systemIntegrity": "Systemintegrität",
+      "antiCloning": "Anti-Klon-Schutz",
+      "dataWatermarking": "Daten-Wasserzeichen",
+      "licenseValidation": "Lizenzvalidierung"
+    }
+  }
+}

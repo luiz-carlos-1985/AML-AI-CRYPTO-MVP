@@ -301,12 +301,7 @@ export const syncWallet = async (req: AuthRequest, res: Response) => {
     
     if ([Blockchain.ETHEREUM, Blockchain.SEPOLIA, Blockchain.POLYGON, Blockchain.ARBITRUM, Blockchain.OPTIMISM, Blockchain.BASE, Blockchain.BNB_CHAIN].includes(wallet.blockchain)) {
       try {
-        const network = getNetworkConfig(wallet.blockchain);
-        const provider = new ethers.JsonRpcProvider(
-          getProviderUrl(wallet.blockchain),
-          network,
-          { staticNetwork: network }
-        );
+        const provider = new ethers.JsonRpcProvider(getProviderUrl(wallet.blockchain));
         
         const [balanceWei, count] = await Promise.race([
           Promise.all([provider.getBalance(wallet.address), provider.getTransactionCount(wallet.address)]),

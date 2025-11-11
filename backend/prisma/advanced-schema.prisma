@@ -1,0 +1,363 @@
+// Schema Avançado para Funcionalidades Anti-Cópia e Compliance
+
+// Modelos de Segurança Avançada
+model SystemConfig {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String
+  encrypted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SecurityIncident {
+  id          String   @id @default(uuid())
+  type        String   // SYSTEM_INTEGRITY_VIOLATION, SUSPICIOUS_BEHAVIOR, etc.
+  description String
+  metadata    String?  // JSON
+  severity    String   // LOW, MEDIUM, HIGH, CRITICAL
+  resolved    Boolean  @default(false)
+  resolvedAt  DateTime?
+  resolvedBy  String?
+  timestamp   DateTime @default(now())
+  
+  @@index([type, severity, resolved])
+}
+
+model DataProcessingLog {
+  id          String   @id @default(uuid())
+  userId      String?
+  action      String   // GET, POST, PUT, DELETE
+  endpoint    String
+  ipAddress   String
+  userAgent   String
+  timestamp   DateTime @default(now())
+  legalBasis  String   // consent, legitimate_interest, etc.
+  purpose     String   // aml_monitoring, compliance, etc.
+  
+  @@index([userId, timestamp])
+  @@index([action, endpoint])
+}
+
+// Modelos de Inteligência de Blockchain
+model AddressIntelligence {
+  id           String   @id @default(uuid())
+  address      String   @unique
+  blockchain   Blockchain
+  riskScore    Float    @default(0)
+  riskLevel    RiskLevel @default(LOW)
+  categories   String[] // MIXER, EXCHANGE, SANCTIONED, etc.
+  flags        String[] // HIGH_CENTRALITY, PEEL_CHAIN_PATTERN, etc.
+  confidence   Float    @default(0)
+  sources      String[] // SANCTIONS, GRAPH, BEHAVIOR, etc.
+  metadata     String?  // JSON com detalhes da análise
+  lastAnalyzed DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  @@index([address, blockchain])
+  @@index([riskLevel, riskScore])
+}
+
+model TransactionGraph {
+  id          String   @id @default(uuid())
+  fromAddress String
+  toAddress   String
+  amount      Float
+  timestamp   DateTime
+  txHash      String   @unique
+  blockchain  Blockchain
+  riskScore   Float    @default(0)
+  flags       String[]
+  
+  // Métricas de grafo
+  centrality  Float?   // Centralidade do nó
+  clustering  Float?   // Coeficiente de clustering
+  pathLength  Int?     // Distância para endereços de alto risco
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([fromAddress, toAddress])
+  @@index([timestamp, blockchain])
+  @@index([riskScore])
+}
+
+model AddressCluster {
+  id                   String   @id @default(uuid())
+  clusterId            String   @unique
+  addresses            String[] // Lista de endereços no cluster
+  blockchain           Blockchain
+  clusterType          String?  // EXCHANGE, MIXER, SERVICE, etc.
+  size                 Int      @default(0)
+  totalVolume          Float    @default(0)
+  highRiskAddresses    Int      @default(0)
+  coordinatedActivity  Float    @default(0)
+  firstSeen            DateTime
+  lastSeen             DateTime
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  
+  @@index([clusterId, blockchain])
+  @@index([clusterType, size])
+}
+
+// Modelos de Compliance Avançado
+model ComplianceRule {
+  id          String   @id @default(uuid())
+  ruleId      String   @unique // FATF_R10, COAF_BR_001, etc.
+  name        String
+  description String
+  regulation  String   // FATF, COAF, BACEN, LGPD, etc.
+  riskWeight  Float    @default(0)
+  triggers    String[] // Condições que ativam a regra
+  actions     String[] // Ações requeridas
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([regulation, isActive])
+}
+
+model ComplianceViolation {
+  id            String   @id @default(uuid())
+  userId        String?
+  walletId      String?
+  transactionId String?
+  ruleId        String
+  rule          ComplianceRule @relation(fields: [ruleId], references: [id])
+  severity      RiskLevel
+  description   String
+  evidence      String?  // JSON com evidências
+  status        String   @default("OPEN") // OPEN, INVESTIGATING, RESOLVED, FALSE_POSITIVE
+  assignedTo    String?
+  resolvedAt    DateTime?
+  resolution    String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@index([status, severity])
+  @@index([userId, createdAt])
+}
+
+model RegulatoryReport {
+  id           String   @id @default(uuid())
+  reportType   String   // COAF_SOS, BACEN_MONTHLY, CVM_QUARTERLY
+  period       String   // 2024-11, 2024-Q4, etc.
+  status       String   @default("DRAFT") // DRAFT, SUBMITTED, ACKNOWLEDGED
+  data         String   // JSON com dados do relatório
+  fileUrl      String?
+  submittedAt  DateTime?
+  acknowledgedAt DateTime?
+  createdBy    String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  @@index([reportType, period])
+  @@index([status, submittedAt])
+}
+
+// Modelos de Criptografia Quântica
+model QuantumKey {
+  id          String   @id @default(uuid())
+  keyId       String   @unique
+  keyType     String   // SYMMETRIC, ASYMMETRIC_PRIVATE, ASYMMETRIC_PUBLIC
+  algorithm   String   // AES_256_GCM, CRYSTALS_KYBER, etc.
+  keyData     String   // Chave criptografada
+  isActive    Boolean  @default(true)
+  rotatedAt   DateTime?
+  expiresAt   DateTime?
+  createdAt   DateTime @default(now())
+  
+  @@index([keyType, isActive])
+  @@index([expiresAt])
+}
+
+model QuantumSignature {
+  id          String   @id @default(uuid())
+  dataHash    String
+  signature   String
+  algorithm   String   // CRYSTALS_DILITHIUM, etc.
+  publicKeyId String
+  timestamp   DateTime @default(now())
+  verified    Boolean  @default(false)
+  
+  @@index([dataHash, verified])
+}
+
+// Modelos de Análise de IA
+model AIAnalysisResult {
+  id             String   @id @default(uuid())
+  entityType     String   // TRANSACTION, WALLET, ADDRESS
+  entityId       String
+  analysisType   String   // ML_RISK, PATTERN_DETECTION, BEHAVIOR_ANALYSIS
+  riskScore      Float
+  confidence     Float
+  flags          String[]
+  explanation    String?
+  recommendations String[]
+  modelVersion   String
+  processingTime Int      // milliseconds
+  createdAt      DateTime @default(now())
+  
+  @@index([entityType, entityId])
+  @@index([analysisType, riskScore])
+  @@index([createdAt])
+}
+
+model MLModel {
+  id           String   @id @default(uuid())
+  name         String   @unique
+  version      String
+  modelType    String   // RISK_SCORING, PATTERN_DETECTION, etc.
+  accuracy     Float?
+  precision    Float?
+  recall       Float?
+  f1Score      Float?
+  isActive     Boolean  @default(false)
+  trainingData String?  // Metadata sobre dados de treino
+  deployedAt   DateTime?
+  createdAt    DateTime @default(now())
+  
+  @@index([name, version])
+  @@index([isActive, modelType])
+}
+
+// Modelos de Auditoria Avançada
+model AuditTrail {
+  id          String   @id @default(uuid())
+  userId      String?
+  sessionId   String?
+  action      String
+  resource    String
+  resourceId  String?
+  oldValue    String?  // JSON
+  newValue    String?  // JSON
+  ipAddress   String
+  userAgent   String
+  geolocation String?  // JSON com lat/lng
+  riskScore   Float    @default(0)
+  flags       String[]
+  timestamp   DateTime @default(now())
+  
+  @@index([userId, timestamp])
+  @@index([action, resource])
+  @@index([riskScore])
+}
+
+model SystemMetrics {
+  id          String   @id @default(uuid())
+  metricType  String   // CPU_USAGE, MEMORY_USAGE, API_CALLS, etc.
+  value       Float
+  unit        String   // percentage, bytes, count, etc.
+  tags        String[] // environment, service, etc.
+  timestamp   DateTime @default(now())
+  
+  @@index([metricType, timestamp])
+}
+
+// Modelos de Proteção Anti-Cópia
+model LicenseValidation {
+  id           String   @id @default(uuid())
+  fingerprint  String   @unique
+  licenseKey   String
+  isValid      Boolean  @default(true)
+  features     String[] // AML, COMPLIANCE, ADVANCED_SECURITY
+  expiresAt    DateTime?
+  lastChecked  DateTime @default(now())
+  violations   Int      @default(0)
+  
+  @@index([fingerprint, isValid])
+}
+
+model SystemFingerprint {
+  id          String   @id @default(uuid())
+  component   String   // DATABASE, JWT_SECRET, ENCRYPTION_KEY
+  hash        String
+  algorithm   String   @default("SHA256")
+  createdAt   DateTime @default(now())
+  
+  @@unique([component])
+}
+
+// Modelos de Monitoramento Comportamental
+model BehaviorProfile {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  normalPatterns  String   // JSON com padrões normais
+  anomalyScore    Float    @default(0)
+  lastActivity    DateTime?
+  riskFactors     String[] // UNUSUAL_HOURS, HIGH_FREQUENCY, etc.
+  adaptiveThreshold Float  @default(0.5)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([anomalyScore])
+}
+
+model GeolocationRisk {
+  id          String   @id @default(uuid())
+  country     String
+  region      String?
+  city        String?
+  riskLevel   RiskLevel @default(LOW)
+  riskFactors String[] // SANCTIONS, HIGH_CRIME, WEAK_AML, etc.
+  lastUpdated DateTime @default(now())
+  
+  @@unique([country, region, city])
+  @@index([riskLevel])
+}
+
+// Extensões dos modelos existentes
+model WalletRiskProfile {
+  id                String   @id @default(uuid())
+  walletId          String   @unique
+  wallet            Wallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  baselineRisk      Float    @default(0)
+  currentRisk       Float    @default(0)
+  riskTrend         String   @default("STABLE") // INCREASING, DECREASING, STABLE
+  lastRiskUpdate    DateTime @default(now())
+  riskFactors       String[] // HIGH_VALUE, MIXER_INTERACTION, etc.
+  mitigationActions String[] // ENHANCED_MONITORING, KYC_UPDATE, etc.
+  
+  @@index([currentRisk, riskTrend])
+}
+
+model TransactionRiskFactors {
+  id            String      @id @default(uuid())
+  transactionId String      @unique
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  
+  // Fatores de risco específicos
+  amountRisk       Float @default(0)
+  timingRisk       Float @default(0)
+  frequencyRisk    Float @default(0)
+  geographicRisk   Float @default(0)
+  counterpartyRisk Float @default(0)
+  behaviorRisk     Float @default(0)
+  
+  // Análise de padrões
+  isStructured     Boolean @default(false)
+  isRoundAmount    Boolean @default(false)
+  isWeekendTx      Boolean @default(false)
+  isUnusualHour    Boolean @default(false)
+  
+  createdAt        DateTime @default(now())
+  
+  @@index([amountRisk, timingRisk])
+}
+
+// Adicionar relações aos modelos existentes
+model Wallet {
+  // ... campos existentes ...
+  riskProfile WalletRiskProfile?
+}
+
+model Transaction {
+  // ... campos existentes ...
+  riskFactors TransactionRiskFactors?
+}
+
+model User {
+  // ... campos existentes ...
+  behaviorProfile BehaviorProfile?
+}

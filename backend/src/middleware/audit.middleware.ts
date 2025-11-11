@@ -23,7 +23,7 @@ export const auditMiddleware = (req: AuditRequest, res: Response, next: NextFunc
               userId: (req as any).userId || null,
               action: `${req.method} ${req.path}`,
               resource: req.path.split('/')[2] || 'unknown',
-              resourceId: req.params.id || null,
+              // resourceId: req.params.id || null,
               oldValues: req.method === 'PUT' ? req.originalBody : null,
               newValues: req.method !== 'DELETE' ? req.body : null,
               ipAddress: req.ip,

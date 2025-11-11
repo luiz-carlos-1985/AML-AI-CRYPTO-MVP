@@ -61,6 +61,11 @@
     "download": "تحميل",
     "status": "الحالة"
   },
+  "pwa": {
+    "installTitle": "تثبيت CryptoAML",
+    "installDescription": "ثبّت تطبيقنا للوصول السريع والعمل دون اتصال",
+    "installNow": "ثبّت الآن"
+  },
   "auth": {
     "welcomeBack": "مرحباً بعودتك",
     "email": "عنوان البريد الإلكتروني",

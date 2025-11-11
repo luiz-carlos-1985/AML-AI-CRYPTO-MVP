@@ -14,6 +14,120 @@ Authorization: Bearer <token>
 
 ---
 
+## 🛡️ Security & Audit Endpoints
+
+### Run Security Audit
+```http
+GET /security/audit
+```
+
+**Response:**
+```json
+{
+  "overallScore": 92,
+  "status": "PASSED",
+  "categories": {
+    "authentication": { "score": 88, "status": "PASSED" },
+    "authorization": { "score": 85, "status": "PASSED" },
+    "cryptography": { "score": 96, "status": "PASSED" },
+    "inputValidation": { "score": 94, "status": "PASSED" },
+    "networkSecurity": { "score": 90, "status": "PASSED" },
+    "sessionManagement": { "score": 92, "status": "PASSED" },
+    "logging": { "score": 95, "status": "PASSED" },
+    "dataProtection": { "score": 93, "status": "PASSED" }
+  },
+  "vulnerabilities": [
+    {
+      "id": "RBAC_001",
+      "severity": "HIGH",
+      "title": "Excess Admin Users",
+      "description": "7 users with admin privileges detected"
+    }
+  ]
+}
+```
+
+### Get Security Certificates
+```http
+GET /security/certificates
+```
+
+**Response:**
+```json
+[
+  {
+    "id": "CERT-ISO27001-1731340800000",
+    "type": "ISO_27001",
+    "issuer": "CryptoAML Security Audit System",
+    "validFrom": "2024-11-11T00:00:00Z",
+    "validUntil": "2025-11-11T00:00:00Z",
+    "status": "VALID",
+    "score": 95
+  }
+]
+```
+
+### Security Dashboard
+```http
+GET /security/dashboard
+```
+
+**Response:**
+```json
+{
+  "securityScore": 92,
+  "threatLevel": "LOW",
+  "activeThreats": 0,
+  "lastAudit": "2024-11-11T10:30:00Z",
+  "certificationsStatus": {
+    "iso27001": "VALID",
+    "soc2": "VALID",
+    "owasp": "VALID",
+    "nist": "VALID"
+  },
+  "recentIncidents": []
+}
+```
+
+### Manual Security Scan
+```http
+POST /security/scan
+```
+
+**Body:**
+```json
+{
+  "scanType": "FULL",
+  "components": ["authentication", "authorization", "cryptography"]
+}
+```
+
+### Active Threat Detection
+```http
+GET /security/threats
+```
+
+**Response:**
+```json
+{
+  "activeThreats": [],
+  "suspiciousActivities": [
+    {
+      "id": "THREAT_001",
+      "type": "BRUTE_FORCE_ATTEMPT",
+      "severity": "MEDIUM",
+      "source": "192.168.1.100",
+      "timestamp": "2024-11-11T10:30:00Z",
+      "status": "BLOCKED"
+    }
+  ],
+  "blockedIPs": ["192.168.1.100"],
+  "riskLevel": "LOW"
+}
+```
+
+---
+
 ## 🔐 Authentication Endpoints
 
 ### Register
@@ -40,7 +154,8 @@ POST /auth/register
     "email": "user@example.com",
     "name": "John Doe",
     "company": "Acme Corp",
-    "plan": "STARTER"
+    "plan": "STARTER",
+    "twoFactorEnabled": false
   }
 }
 ```
@@ -54,13 +169,40 @@ POST /auth/login
 ```json
 {
   "email": "user@example.com",
-  "password": "password123"
+  "password": "password123",
+  "twoFactorToken": "123456"
 }
 ```
 
 ### Get Profile
 ```http
 GET /auth/profile
+```
+
+### Setup 2FA
+```http
+POST /auth/2fa/setup
+```
+
+**Response:**
+```json
+{
+  "qrCode": "data:image/png;base64,...",
+  "secret": "JBSWY3DPEHPK3PXP",
+  "backupCodes": ["12345678", "87654321"]
+}
+```
+
+### Verify 2FA
+```http
+POST /auth/2fa/verify
+```
+
+**Body:**
+```json
+{
+  "token": "123456"
+}
 ```
 
 ---

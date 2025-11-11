@@ -3,7 +3,7 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Wallet, ArrowLeftRight, Bell, FileText, User, Settings, LogOut, Menu, X, BarChart3, Users, Wrench, Shield } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from './LanguageSwitcher';
+import AdvancedLanguageSwitcher from './AdvancedLanguageSwitcher';
 import NotificationCenter from './NotificationCenter';
 import ComplianceNotification from './ComplianceNotification';
 
@@ -19,12 +19,12 @@ const Layout = () => {
     { name: t('nav.wallets'), href: '/wallets', icon: Wallet },
     { name: t('nav.transactions'), href: '/transactions', icon: ArrowLeftRight },
     { name: t('nav.alerts'), href: '/alerts', icon: Bell },
-    { name: 'Analytics', href: '/analytics', icon: BarChart3 },
-    { name: 'Tools', href: '/tools', icon: Wrench },
+    { name: t('nav.analytics'), href: '/analytics', icon: BarChart3 },
+    { name: t('nav.tools'), href: '/tools', icon: Wrench },
     { name: t('nav.reports'), href: '/reports', icon: FileText },
-    { name: 'Team', href: '/team', icon: Users },
-    { name: 'Compliance', href: '/compliance', icon: Shield },
-    { name: 'API Keys', href: '/api-settings', icon: Settings },
+    { name: t('nav.team'), href: '/team', icon: Users },
+    { name: t('nav.compliance'), href: '/compliance', icon: Shield },
+    { name: t('nav.apiKeys'), href: '/api-settings', icon: Settings },
     { name: 'Account', href: '/account', icon: User },
   ];
 
@@ -72,7 +72,7 @@ const Layout = () => {
             {/* User Info & Logout */}
             <div className="hidden md:flex items-center space-x-3 xl:space-x-4 tv:space-x-8">
               <NotificationCenter />
-              <LanguageSwitcher />
+              <AdvancedLanguageSwitcher />
               <div className="text-sm xl:text-base tv:text-2xl text-right">
                 <p className="font-medium text-slate-200">{user?.name}</p>
                 <p className="text-emerald-400 text-xs xl:text-sm tv:text-xl">{user?.plan}</p>
@@ -128,7 +128,7 @@ const Layout = () => {
                   <p className="text-emerald-400 text-sm">{user?.plan}</p>
                 </div>
                 <div className="px-4 py-2">
-                  <LanguageSwitcher />
+                  <AdvancedLanguageSwitcher />
                 </div>
                 <button
                   onClick={() => { logout(); setMobileMenuOpen(false); }}

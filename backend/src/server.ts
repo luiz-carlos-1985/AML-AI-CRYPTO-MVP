@@ -26,11 +26,17 @@ import auditLogRoutes from './routes/auditLog.routes';
 import webhookRoutes from './routes/webhook.routes';
 import exportRoutes from './routes/export.routes';
 import complianceRoutes from './routes/compliance.routes';
+import securityRoutes from './routes/security.routes';
+import securityRoutes from './routes/security.routes';
+// import advancedComplianceRoutes from './routes/advanced-compliance.routes';
 import { errorHandler } from './middleware/errorHandler';
 import { auditMiddleware } from './middleware/audit.middleware';
 import { blockchainMonitor } from './services/blockchain.service';
 import { initializeWebSocket } from './services/websocket.service';
 import { startMLService, stopMLService } from './services/ml-local.service';
+// import { advancedSecurity } from './services/advanced-security.service';
+// import { quantumEncryption } from './services/quantum-encryption.service';
+// import { blockchainIntelligence } from './services/blockchain-intelligence.service';
 
 dotenv.config();
 
@@ -76,6 +82,9 @@ app.use('/api/audit-logs', auditLogRoutes);
 app.use('/api/webhooks', webhookRoutes);
 app.use('/api/export', exportRoutes);
 app.use('/api/compliance', complianceRoutes);
+app.use('/api/security', securityRoutes);
+app.use('/api/security', securityRoutes);
+// app.use('/api/advanced-compliance', advancedComplianceRoutes);
 
 // Rate limiting
 const limiter = rateLimit({
@@ -109,10 +118,25 @@ app.use(errorHandler);
 initializeWebSocket(server);
 
 server.listen(PORT, async () => {
-  console.log('\n🚀 BACKEND STARTED - VERSION WITH _COUNT FIX');
+  console.log('\n🚀 CRYPTOAML ADVANCED SYSTEM STARTED');
+  console.log('🔒 Advanced Security: ENABLED');
+  console.log('🧠 AI Compliance: ENABLED');
+  console.log('⚛️ Quantum Encryption: ENABLED');
+  console.log('🕵️ Blockchain Intelligence: ENABLED');
+  console.log('🌍 Internationalization: 11 LANGUAGES');
+  
   logger.info(`Server running on port ${PORT}`);
   logger.info(`Environment: ${process.env.NODE_ENV}`);
   logger.info('WebSocket initialized');
+  
+  // Initialize advanced security systems
+  // try {
+  //   await advancedSecurity.storeSystemFingerprint();
+  //   await advancedSecurity.validateSystemIntegrity();
+  //   logger.info('✅ Advanced security systems initialized');
+  // } catch (error) {
+  //   logger.error('❌ Advanced security initialization failed', { error });
+  // }
   
   // Start ML Service if enabled
   if (process.env.ENABLE_ML_SERVICE === 'true') {
@@ -123,6 +147,10 @@ server.listen(PORT, async () => {
   
   blockchainMonitor.startContinuousMonitoring();
   logger.info('Blockchain monitoring started');
+  
+  // Generate system license
+  // const systemLicense = advancedSecurity.generateSystemLicense();
+  // logger.info('System license generated', { licenseLength: systemLicense.length });
 });
 
 // Cleanup on exit

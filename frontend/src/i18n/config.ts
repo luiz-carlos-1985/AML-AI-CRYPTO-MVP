@@ -32,9 +32,17 @@ i18n
       ar: { translation: ar }
     },
     fallbackLng: 'en',
+    lng: 'pt',
+    debug: true,
     interpolation: {
       escapeValue: false
+    },
+    react: {
+      useSuspense: false
     }
   });
+
+console.log('i18n initialized with language:', i18n.language);
+console.log('Available languages:', Object.keys(i18n.options.resources || {}));
 
 export default i18n;

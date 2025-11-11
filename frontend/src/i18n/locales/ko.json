@@ -61,6 +61,11 @@
     "download": "다운로드",
     "status": "상태"
   },
+  "pwa": {
+    "installTitle": "CryptoAML 설치",
+    "installDescription": "빠른 액세스와 오프라인 기능을 위해 앱을 설치하세요",
+    "installNow": "지금 설치"
+  },
   "auth": {
     "welcomeBack": "환영합니다",
     "email": "이메일 주소",

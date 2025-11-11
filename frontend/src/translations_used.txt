@@ -1,0 +1,184 @@
+components\AdvancedCharts.tsx:        api.get('/dashboard/risk-distribution')
+components\ApiKeys.tsx:      const { data } = await api.get('/keys');
+components\ApiKeys.tsx:                    {(selectedLang[apiKey.id] || 'curl') === 'php' && `$ch = curl_init('https://api.cryptoaml.com/wallets'); curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ${apiKey.key}']);`}
+components\ApiKeys.tsx:                        php: `$ch = curl_init('https://api.cryptoaml.com/wallets');\ncurl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ${apiKey.key}']);`,
+components\AuditLog.tsx:    const exportFileDefaultName = `audit-logs-${new Date().toISOString().split('T')[0]}.json`;
+components\AuditLog.tsx:    const linkElement = document.createElement('a');
+components\BiometricAuth.tsx:          <h3 className="text-lg font-bold text-white">{t('security.biometricAuth')}</h3>
+components\BiometricAuth.tsx:          <p className="text-cyan-400 text-sm">{t('security.fidoCertified') || 'FIDO2 Alliance Certified • ISO/IEC 30107-3'}</p>
+components\BlockchainForensics.tsx:          <h3 className="text-lg font-bold text-white">{t('security.blockchainForensics')}</h3>
+components\BlockchainForensics.tsx:          <p className="text-red-400 text-sm">{t('security.lawEnforcement') || 'Law Enforcement Grade • Chainalysis Compatible'}</p>
+components\ComplianceReports.tsx:          onClick={() => generateReport('Custom')}
+components\ExportData.tsx:      const link = document.createElement('a');
+components\InstallPWA.tsx:              {t('pwa.installTitle')}
+components\InstallPWA.tsx:              {t('pwa.installDescription')}
+components\InstallPWA.tsx:              {t('pwa.installNow')}
+components\Layout.tsx:    { name: t('nav.dashboard'), href: '/', icon: LayoutDashboard },
+components\Layout.tsx:    { name: t('nav.wallets'), href: '/wallets', icon: Wallet },
+components\Layout.tsx:    { name: t('nav.transactions'), href: '/transactions', icon: ArrowLeftRight },
+components\Layout.tsx:    { name: t('nav.alerts'), href: '/alerts', icon: Bell },
+components\Layout.tsx:    { name: t('nav.analytics'), href: '/analytics', icon: BarChart3 },
+components\Layout.tsx:    { name: t('nav.tools'), href: '/tools', icon: Wrench },
+components\Layout.tsx:    { name: t('nav.reports'), href: '/reports', icon: FileText },
+components\Layout.tsx:    { name: t('nav.team'), href: '/team', icon: Users },
+components\Layout.tsx:    { name: t('nav.compliance'), href: '/compliance', icon: Shield },
+components\Layout.tsx:    { name: t('nav.apiKeys'), href: '/api-settings', icon: Settings },
+components\Layout.tsx:                <span className="hidden xl:inline">{t('nav.logout')}</span>
+components\Layout.tsx:                  {t('nav.logout')}
+components\NotificationCenter.tsx:      const { data } = await api.get('/notifications');
+components\QuantumSecurity.tsx:          <h3 className="text-lg font-bold text-white">{t('security.quantumSecurity')}</h3>
+components\QuantumSecurity.tsx:          <p className="text-purple-400 text-sm">{t('security.quantumReady')}</p>
+components\QuantumSecurity.tsx:          <div className="text-xs text-purple-300">{t('security.quantumResistant') || 'Quantum Resistant'}</div>
+components\QuantumSecurity.tsx:          <div className="text-xs text-indigo-300">{t('security.keyExchange') || 'Key Exchange'}</div>
+components\QuantumSecurity.tsx:          <div className="text-xs text-cyan-300">{t('security.digitalSignature') || 'Digital Signature'}</div>
+components\QuantumSecurity.tsx:          <div className="text-xs text-emerald-300">{t('security.privacyProofs') || 'Privacy Proofs'}</div>
+components\RealTimeMetrics.tsx:      const { data } = await api.get('/dashboard/metrics');
+components\RegulatoryOracle.tsx:          <h3 className="text-lg font-bold text-white">{t('security.regulatoryOracle')}</h3>
+components\RegulatoryOracle.tsx:          <p className="text-indigo-400 text-sm">{t('security.regulatoryIntelligence') || 'Real-time Regulatory Intelligence • 47 Jurisdictions'}</p>
+components\SecurityAuditDashboard.tsx:        name: t('security.metrics.authentication'),
+components\SecurityAuditDashboard.tsx:        description: t('security.metrics.authDescription'),
+components\SecurityAuditDashboard.tsx:        name: t('security.metrics.encryption'),
+components\SecurityAuditDashboard.tsx:        description: t('security.metrics.encryptionDescription'),
+components\SecurityAuditDashboard.tsx:        name: t('security.metrics.accessControl'),
+components\SecurityAuditDashboard.tsx:        description: t('security.metrics.accessDescription'),
+components\SecurityAuditDashboard.tsx:        name: t('security.metrics.monitoring'),
+components\SecurityAuditDashboard.tsx:        description: t('security.metrics.monitoringDescription'),
+components\SecurityAuditDashboard.tsx:        name: t('security.metrics.compliance'),
+components\SecurityAuditDashboard.tsx:        description: t('security.metrics.complianceDescription'),
+components\SecurityAuditDashboard.tsx:        name: t('security.metrics.networkSecurity'),
+components\SecurityAuditDashboard.tsx:        description: t('security.metrics.networkDescription'),
+components\SecurityAuditDashboard.tsx:        description: t('security.threats.bruteForce'),
+components\SecurityAuditDashboard.tsx:        description: t('security.threats.suspiciousLogin'),
+components\SecurityAuditDashboard.tsx:        description: t('security.threats.xssAttempt'),
+components\SecurityAuditDashboard.tsx:                {t('security.audit.title')}
+components\SecurityAuditDashboard.tsx:                {t('security.audit.subtitle')}
+components\SecurityAuditDashboard.tsx:                  {t('security.audit.scanning')}
+components\SecurityAuditDashboard.tsx:                  {t('security.audit.runScan')}
+components\SecurityAuditDashboard.tsx:                  {t('security.audit.overallScore')}
+components\SecurityAuditDashboard.tsx:                  {securityScore >= 90 ? t('security.levels.excellent') :
+components\SecurityAuditDashboard.tsx:                   securityScore >= 70 ? t('security.levels.good') :
+components\SecurityAuditDashboard.tsx:                   securityScore >= 50 ? t('security.levels.warning') :
+components\SecurityAuditDashboard.tsx:                   t('security.levels.critical')}
+components\SecurityAuditDashboard.tsx:                    <div className="text-white font-medium">{t('security.certifications.iso27001')}</div>
+components\SecurityAuditDashboard.tsx:                    <div className="text-red-400 text-sm">{t('security.status.notCompliant')}</div>
+components\SecurityAuditDashboard.tsx:                    <div className="text-white font-medium">{t('security.certifications.soc2')}</div>
+components\SecurityAuditDashboard.tsx:                    <div className="text-yellow-400 text-sm">{t('security.status.inProgress')}</div>
+components\SecurityAuditDashboard.tsx:                    <div className="text-white font-medium">{t('security.certifications.pciDss')}</div>
+components\SecurityAuditDashboard.tsx:                    <div className="text-red-400 text-sm">{t('security.status.notStarted')}</div>
+components\SecurityAuditDashboard.tsx:              {t('security.audit.securityMetrics')}
+components\SecurityAuditDashboard.tsx:              {t('security.audit.recentThreats')}
+components\SecurityAuditDashboard.tsx:                        ✓ {t('security.threats.mitigated')}
+components\SecurityAuditDashboard.tsx:              {t('security.audit.criticalActions')}
+components\SecurityAuditDashboard.tsx:                {t('security.actions.implementMFA')}
+components\SecurityAuditDashboard.tsx:                {t('security.actions.mfaDescription')}
+components\SecurityAuditDashboard.tsx:                {t('security.priority.critical')}
+components\SecurityAuditDashboard.tsx:                {t('security.actions.upgradeEncryption')}
+components\SecurityAuditDashboard.tsx:                {t('security.actions.encryptionDescription')}
+components\SecurityAuditDashboard.tsx:                {t('security.priority.critical')}
+components\SecurityAuditDashboard.tsx:                {t('security.actions.implementSIEM')}
+components\SecurityAuditDashboard.tsx:                {t('security.actions.siemDescription')}
+components\SecurityAuditDashboard.tsx:                {t('security.priority.high')}
+components\TeamCollaboration.tsx:        name: inviteData.email.split('@')[0],
+components\TwoFactorAuth.tsx:      const response = await api.get('/2fa/status');
+components\WalletSync.tsx:      const { data } = await api.get('/wallets');
+components\WebhookManager.tsx:      const { data } = await api.get('/webhooks');
+hooks\useAuth.tsx:      const { data } = await api.get('/auth/profile');
+pages\Account.tsx:      const { data } = await api.get('/auth/profile');
+pages\Account.tsx:      const { data } = await api.get('/dashboard/stats');
+pages\Account.tsx:      const { data } = await api.get('/alerts?limit=5');
+pages\Alerts.tsx:        <h1 className="text-3xl font-bold text-white">{t('alerts.title')}</h1>
+pages\Alerts.tsx:          <option value="all">{t('alerts.all')}</option>
+pages\Alerts.tsx:          <option value="unread">{t('alerts.unread')}</option>
+pages\Alerts.tsx:          <option value="unresolved">{t('alerts.unresolved')}</option>
+pages\ApiSettings.tsx:      const { data } = await api.get('/config');
+pages\ApiSettings.tsx:                🔑 {t('apiKeys.title')}
+pages\ApiSettings.tsx:                {t('apiKeys.subtitle')}
+pages\ApiSettings.tsx:              <span className="hidden sm:inline">{t('apiKeys.addKey')}</span>
+pages\ApiSettings.tsx:                <p className="text-xs text-slate-400">{t('apiKeys.security')}</p>
+pages\ApiSettings.tsx:                <p className="text-xs text-slate-400">{t('apiKeys.configured')}</p>
+pages\ApiSettings.tsx:                <p className="text-xs text-slate-400">{t('apiKeys.status')}</p>
+pages\ApiSettings.tsx:                  {configs.filter(c => c.isActive).length} {t('apiKeys.active')}
+pages\ApiSettings.tsx:          {t('apiKeys.yourApis')}
+pages\ApiSettings.tsx:                          {t('apiKeys.active')}
+pages\ApiSettings.tsx:                        <><EyeOff className="w-4 h-4" /> {t('apiKeys.hide')}</>
+pages\ApiSettings.tsx:                        <><Eye className="w-4 h-4" /> {t('apiKeys.show')}</>
+pages\ApiSettings.tsx:                      {config.isActive ? t('apiKeys.deactivate') : t('apiKeys.activate')}
+pages\ApiSettings.tsx:                      {t('apiKeys.delete')}
+pages\ApiSettings.tsx:                    {t('apiKeys.addedOn')} {new Date(config.createdAt).toLocaleDateString()}
+pages\ApiSettings.tsx:            <p className="text-lg text-slate-300 mb-2 font-medium">{t('apiKeys.noApis')}</p>
+pages\ApiSettings.tsx:              {t('apiKeys.noApisDesc')}
+pages\ApiSettings.tsx:              {t('apiKeys.addFirstKey')}
+pages\ApiSettings.tsx:        <h2 className="text-xl font-bold text-white mb-4">🌐 {t('apiKeys.providers')}</h2>
+pages\ApiSettings.tsx:              {t('apiKeys.modalTitle')}
+pages\ApiSettings.tsx:                  1️⃣ {t('apiKeys.chooseProvider')}
+pages\ApiSettings.tsx:                <p className="text-sm font-medium text-white mb-2">2️⃣ {t('apiKeys.getKey')}</p>
+pages\ApiSettings.tsx:                  {t('apiKeys.goTo')} {selectedProvider?.label}
+pages\ApiSettings.tsx:                  3️⃣ {t('apiKeys.pasteKey')}
+pages\ApiSettings.tsx:                    placeholder={t('apiKeys.pasteKeyPlaceholder')}
+pages\ApiSettings.tsx:                    ✓ {newConfig.apiKey.length} {t('apiKeys.characters')}
+pages\ApiSettings.tsx:                    <p className="text-xs font-bold text-purple-400 mb-1">🔒 {t('apiKeys.secureNotice')}</p>
+pages\ApiSettings.tsx:                      {t('apiKeys.secureDesc')}
+pages\ApiSettings.tsx:                  {t('apiKeys.save')}
+pages\ApiSettings.tsx:                  {t('apiKeys.cancel')}
+pages\Compliance.tsx:      alert('Erro ao processar solicitação');
+pages\Compliance.tsx:                {t('compliance.title')}
+pages\Compliance.tsx:            {t('compliance.subtitle')}
+pages\Compliance.tsx:              { id: 'overview', label: t('compliance.overview') },
+pages\Compliance.tsx:              { id: 'lgpd', label: t('compliance.lgpd') },
+pages\Compliance.tsx:              { id: 'reports', label: t('compliance.reports') },
+pages\Compliance.tsx:              { id: 'audit', label: t('compliance.audit') }
+pages\Compliance.tsx:                  onClick={() => handleDataRequest('access')}
+pages\Compliance.tsx:                  onClick={() => handleDataRequest('rectification')}
+pages\Compliance.tsx:                  onClick={() => handleDataRequest('portability')}
+pages\Compliance.tsx:                  onClick={() => handleDataRequest('erasure')}
+pages\Dashboard.tsx:      const { data } = await api.get('/dashboard/stats');
+pages\Dashboard.tsx:    { icon: Wallet, label: t('dashboard.totalWallets'), value: stats?.totalWallets || 0, gradient: 'from-emerald-500/10 to-emerald-600/5', border: 'border-emerald-500/20', iconGradient: 'from-emerald-500 to-emerald-600', shadow: 'shadow-emerald-500/50' },
+pages\Dashboard.tsx:    { icon: ArrowLeftRight, label: t('dashboard.transactions'), value: stats?.totalTransactions || 0, gradient: 'from-blue-500/10 to-blue-600/5', border: 'border-blue-500/20', iconGradient: 'from-blue-500 to-blue-600', shadow: 'shadow-blue-500/50' },
+pages\Dashboard.tsx:    { icon: Bell, label: t('dashboard.unreadAlerts'), value: stats?.unreadAlerts || 0, gradient: 'from-amber-500/10 to-amber-600/5', border: 'border-amber-500/20', iconGradient: 'from-amber-500 to-amber-600', shadow: 'shadow-amber-500/50' },
+pages\Dashboard.tsx:    { icon: TrendingUp, label: t('dashboard.highRisk'), value: stats?.highRiskTransactions || 0, gradient: 'from-red-500/10 to-red-600/5', border: 'border-red-500/20', iconGradient: 'from-red-500 to-red-600', shadow: 'shadow-red-500/50' }
+pages\Dashboard.tsx:        {t('dashboard.title')}
+pages\Dashboard.tsx:            <h2 className="text-lg font-semibold mb-4 text-white">{t('dashboard.riskDistribution')}</h2>
+pages\Dashboard.tsx:            <h2 className="text-lg font-semibold mb-4 text-white">{t('dashboard.recentTransactions')}</h2>
+pages\Login.tsx:          <p className="mt-2 text-gray-400">{t('auth.welcomeBack')}</p>
+pages\Login.tsx:                {t('auth.email')}
+pages\Login.tsx:                {t('auth.password')}
+pages\Login.tsx:                  {t('auth.signingIn')}
+pages\Login.tsx:              ) : t('auth.signIn')}
+pages\Login.tsx:              {t('auth.dontHaveAccount')}{' '}
+pages\Login.tsx:                {t('auth.register')}
+pages\PaymentSettings.tsx:      const { data } = await api.get('/admin/payment-settings');
+pages\Register.tsx:            {t('auth.createAccount')}
+pages\Register.tsx:          <p className="mt-2 text-gray-400">{t('auth.joinToday')}</p>
+pages\Register.tsx:                {t('auth.fullName')}
+pages\Register.tsx:                {t('auth.email')}
+pages\Register.tsx:                {t('auth.company')} <span className="text-gray-500">(Optional)</span>
+pages\Register.tsx:                {t('auth.password')}
+pages\Register.tsx:                  {t('auth.creatingAccount')}
+pages\Register.tsx:              ) : t('auth.createAccount')}
+pages\Register.tsx:              {t('auth.alreadyHaveAccount')}{' '}
+pages\Register.tsx:                {t('auth.signIn')}
+pages\Reports.tsx:      const { data } = await api.get('/reports');
+pages\Reports.tsx:              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{t('reports.title')}</h1>
+pages\Reports.tsx:                    const filename = report.fileUrl.split('/').pop();
+pages\Reports.tsx:                    const link = document.createElement('a');
+pages\Reports.tsx:                            const filename = report.fileUrl.split('/').pop();
+pages\Reports.tsx:                            const link = document.createElement('a');
+pages\SecurityCenter.tsx:              <h1 className="text-2xl sm:text-3xl font-bold text-white">{t('security.title')}</h1>
+pages\SecurityCenter.tsx:              <p className="text-red-400 text-sm font-medium">🛡️ {t('security.subtitle')}</p>
+pages\SecurityCenter.tsx:            <span className="text-emerald-400 font-bold text-sm">{t('security.defconSecure')}</span>
+pages\SecurityCenter.tsx:          <div className="text-sm text-emerald-300">{t('security.securityScore')}</div>
+pages\SecurityCenter.tsx:          <div className="text-sm text-blue-300">{t('security.vulnerabilities')}</div>
+pages\SecurityCenter.tsx:          <div className="text-sm text-purple-300">{t('security.monitoring')}</div>
+pages\SecurityCenter.tsx:          <div className="text-sm text-red-300">{t('security.threatResponse')}</div>
+pages\SecurityCenter.tsx:          {t('security.threatIntelligence')}
+pages\SecuritySettings.tsx:    const token = prompt('Enter your 2FA code to disable:');
+pages\SecuritySettings.tsx:      alert('2FA disabled successfully');
+pages\SecuritySettings.tsx:            alert('2FA enabled successfully!');
+pages\Transactions.tsx:        <h1 className="text-2xl md:text-3xl font-bold text-white">{t('transactions.title')}</h1>
+pages\Transactions.tsx:            <option value="">{t('transactions.allRiskLevels')}</option>
+pages\Transactions.tsx:            <option value="LOW">{t('transactions.lowRisk')}</option>
+pages\Transactions.tsx:            <option value="MEDIUM">{t('transactions.mediumRisk')}</option>
+pages\Transactions.tsx:            <option value="HIGH">{t('transactions.highRisk')}</option>
+pages\Transactions.tsx:            <option value="CRITICAL">{t('transactions.criticalRisk')}</option>
+pages\Wallets.tsx:      const { data } = await api.get('/wallets');
+pages\Wallets.tsx:        <h1 className="text-3xl font-bold text-white">{t('wallets.title')}</h1>

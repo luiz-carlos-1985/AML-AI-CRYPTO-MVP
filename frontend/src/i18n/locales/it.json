@@ -61,6 +61,11 @@
     "download": "Scarica",
     "status": "Stato"
   },
+  "pwa": {
+    "installTitle": "Installa CryptoAML",
+    "installDescription": "Installa la nostra app per accesso rapido e funzionalità offline",
+    "installNow": "Installa Ora"
+  },
   "auth": {
     "welcomeBack": "Bentornato",
     "email": "Indirizzo Email",

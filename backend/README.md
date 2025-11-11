@@ -111,11 +111,20 @@ npm start
 
 ## API Documentation
 
+### Security & Audit
+- `GET /api/security/audit` - Run security audit
+- `GET /api/security/certificates` - List security certificates
+- `GET /api/security/dashboard` - Security dashboard metrics
+- `POST /api/security/scan` - Manual security scan
+- `GET /api/security/threats` - Active threat detection
+
 ### Authentication
 - `POST /api/auth/register` - Register new user
 - `POST /api/auth/login` - Login
 - `GET /api/auth/profile` - Get user profile
 - `PUT /api/auth/profile` - Update profile
+- `POST /api/auth/2fa/setup` - Setup 2FA
+- `POST /api/auth/2fa/verify` - Verify 2FA token
 
 ### Wallets
 - `GET /api/wallets` - List wallets
