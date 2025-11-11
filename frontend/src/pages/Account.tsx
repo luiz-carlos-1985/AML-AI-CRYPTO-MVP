@@ -5,7 +5,7 @@ import api from '../services/api';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
-import { QRCodeSVG } from 'qrcode.react';
+import QRCodeWrapper from '../components/QRCodeWrapper';
 import TwoFactorAuth from '../components/TwoFactorAuth';
 import { useResponsive } from '../hooks/useResponsive';
 import { countries } from '../utils/countries';
@@ -226,7 +226,7 @@ const Account = () => {
     if (paymentMethod === 'pix') {
       // Generate PIX payment data
       data.pixKey = 'cryptoaml@payment.com';
-      data.pixCode = `00020126580014br.gov.bcb.pix0136cryptoaml@payment.com520400005303986540${plan?.price}.005802BR5913CryptoAML Inc6009Sao Paulo62070503***6304`;
+      data.pixCode = `00020126580014br.gov.bcb.pix0136cryptoaml@payment.com5204000053039865405${plan?.price}5802BR5913CryptoAML6009SaoPaulo6304ABCD`;
     } else if (paymentMethod === 'bitcoin') {
       data.address = 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh';
       data.amount_btc = (plan?.price! / 45000).toFixed(8); // Approximate BTC conversion
@@ -788,10 +788,10 @@ const Account = () => {
                 <div className="space-y-4">
                   <p className="text-slate-400 mb-4">Scan the QR code with your banking app</p>
                   <div className="flex justify-center p-4 sm:p-6 bg-white rounded-xl">
-                    <QRCodeSVG
+                    <QRCodeWrapper
                       value={paymentData.pixCode}
                       size={isMobile ? 180 : 200}
-                      level="H"
+                      level="M"
                       includeMargin={true}
                     />
                   </div>
@@ -827,10 +827,10 @@ const Account = () => {
                 <div className="space-y-4">
                   <p className="text-slate-400 mb-4">Send exactly {paymentData.amount_btc} BTC to the address below</p>
                   <div className="flex justify-center p-4 sm:p-6 bg-white rounded-xl">
-                    <QRCodeSVG
-                      value={`bitcoin:${paymentData.address}?amount=${paymentData.amount_btc}`}
+                    <QRCodeWrapper
+                      value={paymentData.address}
                       size={isMobile ? 180 : 200}
-                      level="H"
+                      level="M"
                       includeMargin={true}
                     />
                   </div>
@@ -859,10 +859,10 @@ const Account = () => {
                 <div className="space-y-4">
                   <p className="text-slate-400 mb-4">Send exactly {paymentData.amount_eth} ETH to the address below</p>
                   <div className="flex justify-center p-4 sm:p-6 bg-white rounded-xl">
-                    <QRCodeSVG
-                      value={`ethereum:${paymentData.address}?value=${paymentData.amount_eth}`}
+                    <QRCodeWrapper
+                      value={paymentData.address}
                       size={isMobile ? 180 : 200}
-                      level="H"
+                      level="M"
                       includeMargin={true}
                     />
                   </div>
@@ -891,10 +891,10 @@ const Account = () => {
                 <div className="space-y-4">
                   <p className="text-slate-400 mb-4">Send exactly {paymentData.amount_usdt} USDT to the address below</p>
                   <div className="flex justify-center p-4 sm:p-6 bg-white rounded-xl">
-                    <QRCodeSVG
+                    <QRCodeWrapper
                       value={paymentData.address}
                       size={isMobile ? 180 : 200}
-                      level="H"
+                      level="M"
                       includeMargin={true}
                     />
                   </div>

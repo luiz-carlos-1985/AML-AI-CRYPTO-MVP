@@ -288,35 +288,93 @@ export default function ApiSettings() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="backdrop-blur-xl bg-blue-500/10 border border-blue-500/30 rounded-2xl p-4 sm:p-6"
+        className="backdrop-blur-xl bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-emerald-500/10 border border-blue-500/30 rounded-2xl p-4 sm:p-6 overflow-hidden relative"
       >
-        <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center flex-shrink-0">
-            <Download className="w-5 h-5 text-blue-400" />
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 animate-pulse"></div>
+        <div className="relative">
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center gap-2 mb-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                <Download className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+              </div>
+              <h3 className="text-lg sm:text-xl font-bold text-blue-400">⚡ Quick Setup in 3 Steps</h3>
+            </div>
+            <p className="text-sm text-slate-400 max-w-2xl mx-auto">Get your API keys configured in minutes with our streamlined process</p>
           </div>
-          <div className="flex-1">
-            <h3 className="text-lg font-bold text-blue-400 mb-3">⚡ {t('apiKeys.quickSetup')}</h3>
+          
+          {/* Mobile: Vertical Steps */}
+          <div className="block sm:hidden space-y-4">
+            <div className="flex items-start gap-4 p-4 bg-slate-900/50 rounded-xl border border-slate-700/50">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center flex-shrink-0">
+                <span className="text-white font-bold text-sm">1</span>
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-white mb-1">Choose Provider</p>
+                <p className="text-xs text-slate-400">Select from 12+ blockchain API providers</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-center">
+              <div className="w-px h-6 bg-gradient-to-b from-emerald-500 to-blue-500"></div>
+            </div>
+            
+            <div className="flex items-start gap-4 p-4 bg-slate-900/50 rounded-xl border border-slate-700/50">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0">
+                <span className="text-white font-bold text-sm">2</span>
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-white mb-1">Get API Key</p>
+                <p className="text-xs text-slate-400">Visit provider website and create free account</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-center">
+              <div className="w-px h-6 bg-gradient-to-b from-blue-500 to-purple-500"></div>
+            </div>
+            
+            <div className="flex items-start gap-4 p-4 bg-slate-900/50 rounded-xl border border-slate-700/50">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+                <span className="text-white font-bold text-sm">3</span>
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-white mb-1">Paste & Save</p>
+                <p className="text-xs text-slate-400">Add your key to CryptoAML and start monitoring</p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Desktop: Horizontal Steps */}
+          <div className="hidden sm:block">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center">
+                  <span className="text-white font-bold">1</span>
+                </div>
+                <div className="flex-1 h-px bg-gradient-to-r from-emerald-500 to-blue-500 hidden md:block"></div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+                  <span className="text-white font-bold">2</span>
+                </div>
+                <div className="flex-1 h-px bg-gradient-to-r from-blue-500 to-purple-500 hidden md:block"></div>
+              </div>
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
+                <span className="text-white font-bold">3</span>
+              </div>
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center mb-2">
-                  <span className="text-emerald-400 font-bold">1</span>
-                </div>
-                <p className="text-sm font-medium text-white mb-1">{t('apiKeys.step1')}</p>
-                <p className="text-xs text-slate-400">{t('apiKeys.step1Desc')}</p>
+              <div className="text-center p-4 bg-slate-900/30 rounded-xl border border-emerald-500/20">
+                <h4 className="text-base font-semibold text-emerald-400 mb-2">Choose Provider</h4>
+                <p className="text-sm text-slate-400">Select from 12+ blockchain API providers with free tiers</p>
               </div>
-              <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
-                <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center mb-2">
-                  <span className="text-blue-400 font-bold">2</span>
-                </div>
-                <p className="text-sm font-medium text-white mb-1">{t('apiKeys.step2')}</p>
-                <p className="text-xs text-slate-400">{t('apiKeys.step2Desc')}</p>
+              <div className="text-center p-4 bg-slate-900/30 rounded-xl border border-blue-500/20">
+                <h4 className="text-base font-semibold text-blue-400 mb-2">Get API Key</h4>
+                <p className="text-sm text-slate-400">Visit provider website and create your free account</p>
               </div>
-              <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
-                <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center mb-2">
-                  <span className="text-purple-400 font-bold">3</span>
-                </div>
-                <p className="text-sm font-medium text-white mb-1">{t('apiKeys.step3')}</p>
-                <p className="text-xs text-slate-400">{t('apiKeys.step3Desc')}</p>
+              <div className="text-center p-4 bg-slate-900/30 rounded-xl border border-purple-500/20">
+                <h4 className="text-base font-semibold text-purple-400 mb-2">Paste & Save</h4>
+                <p className="text-sm text-slate-400">Add your key to CryptoAML and start monitoring wallets</p>
               </div>
             </div>
           </div>
