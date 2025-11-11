@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import api from '../services/api';
 import AdvancedFilters from '../components/AdvancedFilters';
 import ExportData from '../components/ExportData';
 
 const Transactions = () => {
+  const { t } = useTranslation();
   const [transactions, setTransactions] = useState<any[]>([]);
   const [filter, setFilter] = useState('');
 
@@ -39,7 +41,7 @@ const Transactions = () => {
         animate={{ opacity: 1, y: 0 }}
         className="flex flex-col md:flex-row md:justify-between md:items-center gap-4"
       >
-        <h1 className="text-2xl md:text-3xl font-bold text-white">Transactions</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-white">{t('transactions.title')}</h1>
         <div className="flex flex-wrap gap-3">
           <AdvancedFilters onApply={handleApplyFilters} onReset={handleResetFilters} />
           <ExportData type="transactions" />
@@ -48,11 +50,11 @@ const Transactions = () => {
             onChange={(e) => setFilter(e.target.value)}
             className="px-4 py-2 bg-slate-800/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
           >
-            <option value="">All Risk Levels</option>
-            <option value="LOW">Low Risk</option>
-            <option value="MEDIUM">Medium Risk</option>
-            <option value="HIGH">High Risk</option>
-            <option value="CRITICAL">Critical Risk</option>
+            <option value="">{t('transactions.allRiskLevels')}</option>
+            <option value="LOW">{t('transactions.lowRisk')}</option>
+            <option value="MEDIUM">{t('transactions.mediumRisk')}</option>
+            <option value="HIGH">{t('transactions.highRisk')}</option>
+            <option value="CRITICAL">{t('transactions.criticalRisk')}</option>
           </select>
         </div>
       </motion.div>

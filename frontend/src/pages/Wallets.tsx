@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Plus, Trash2, Search, Lock, RefreshCw } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import api from '../services/api';
 import toast from 'react-hot-toast';
 import { BLOCKCHAINS, getBlockchainInfo } from '../utils/blockchains';
@@ -8,6 +9,7 @@ import UpgradePrompt from '../components/UpgradePrompt';
 import { useAuth } from '../hooks/useAuth';
 
 const Wallets = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [wallets, setWallets] = useState<any[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -131,7 +133,7 @@ const Wallets = () => {
       </div>
 
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-white">Wallets</h1>
+        <h1 className="text-3xl font-bold text-white">{t('wallets.title')}</h1>
         <button
           onClick={handleAddWalletClick}
           disabled={!canAdd}

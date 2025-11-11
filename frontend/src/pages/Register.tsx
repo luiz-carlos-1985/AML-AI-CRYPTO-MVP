@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';
 
 const Register = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -42,16 +44,16 @@ const Register = () => {
             </svg>
           </div>
           <h2 className="text-4xl font-bold bg-gradient-to-r from-emerald-400 to-blue-500 bg-clip-text text-transparent">
-            Create Account
+            {t('auth.createAccount')}
           </h2>
-          <p className="mt-2 text-gray-400">Join CryptoAML today</p>
+          <p className="mt-2 text-gray-400">{t('auth.joinToday')}</p>
         </div>
 
         <div className="backdrop-blur-xl bg-white/5 rounded-2xl shadow-2xl border border-white/10 p-8">
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
-                Full Name
+                {t('auth.fullName')}
               </label>
               <input
                 id="name"
@@ -67,7 +69,7 @@ const Register = () => {
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
-                Email Address
+                {t('auth.email')}
               </label>
               <input
                 id="email"
@@ -83,7 +85,7 @@ const Register = () => {
 
             <div>
               <label htmlFor="company" className="block text-sm font-medium text-gray-300 mb-2">
-                Company <span className="text-gray-500">(Optional)</span>
+                {t('auth.company')} <span className="text-gray-500">(Optional)</span>
               </label>
               <input
                 id="company"
@@ -98,7 +100,7 @@ const Register = () => {
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
-                Password
+                {t('auth.password')}
               </label>
               <input
                 id="password"
@@ -124,17 +126,17 @@ const Register = () => {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Creating account...
+                  {t('auth.creatingAccount')}
                 </span>
-              ) : 'Create Account'}
+              ) : t('auth.createAccount')}
             </button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-gray-400">
-              Already have an account?{' '}
+              {t('auth.alreadyHaveAccount')}{' '}
               <Link to="/login" className="text-emerald-400 hover:text-emerald-300 font-medium transition-colors">
-                Sign in
+                {t('auth.signIn')}
               </Link>
             </p>
           </div>

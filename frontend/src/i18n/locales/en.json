@@ -129,5 +129,27 @@
     "privacyDesc": "Never shared with third parties",
     "control": "Control:",
     "controlDesc": "Delete your configurations anytime"
+  },
+  "compliance": {
+    "title": "Compliance & Certifications",
+    "subtitle": "System compliant with Brazilian and international regulations",
+    "overview": "Overview",
+    "lgpd": "LGPD",
+    "reports": "Reports",
+    "audit": "Audit",
+    "compliant": "Compliant",
+    "implemented": "Implemented",
+    "inProgress": "In Progress",
+    "viewDetails": "View Details",
+    "lgpdRights": "Your LGPD Rights",
+    "accessData": "Access My Data",
+    "correctData": "Correct Data",
+    "portability": "Portability",
+    "anonymizeData": "Anonymize Data",
+    "legalBasis": "Legal Basis for Processing",
+    "coafReports": "COAF Reports",
+    "bacenReports": "BACEN Reports",
+    "auditTrail": "Audit Trail",
+    "generateReport": "Generate Report"
   }
 }

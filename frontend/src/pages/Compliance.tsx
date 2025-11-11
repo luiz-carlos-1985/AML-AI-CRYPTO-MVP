@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Shield, FileText, Download, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const Compliance: React.FC = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('overview');
 
   const complianceStatus = {
@@ -55,20 +57,20 @@ const Compliance: React.FC = () => {
         >
           <div className="flex items-center gap-3 mb-4">
             <Shield className="w-8 h-8 text-purple-400" />
-            <h1 className="text-3xl font-bold text-white">Compliance & Certificações</h1>
+            <h1 className="text-3xl font-bold text-white">{t('compliance.title')}</h1>
           </div>
           <p className="text-gray-300">
-            Sistema em conformidade com regulamentações brasileiras e internacionais
+            {t('compliance.subtitle')}
           </p>
         </motion.div>
 
         {/* Tabs */}
         <div className="flex flex-wrap gap-2 mb-6 sm:mb-8">
           {[
-            { id: 'overview', label: 'Visão Geral' },
-            { id: 'lgpd', label: 'LGPD' },
-            { id: 'reports', label: 'Relatórios' },
-            { id: 'audit', label: 'Auditoria' }
+            { id: 'overview', label: t('compliance.overview') },
+            { id: 'lgpd', label: t('compliance.lgpd') },
+            { id: 'reports', label: t('compliance.reports') },
+            { id: 'audit', label: t('compliance.audit') }
           ].map((tab) => (
             <button
               key={tab.id}
@@ -108,8 +110,8 @@ const Compliance: React.FC = () => {
                       ? 'bg-blue-500/20 text-blue-400'
                       : 'bg-yellow-500/20 text-yellow-400'
                   }`}>
-                    {item.status === 'compliant' ? 'Conforme' : 
-                     item.status === 'implemented' ? 'Implementado' : 'Em Progresso'}
+                    {item.status === 'compliant' ? t('compliance.compliant') : 
+                     item.status === 'implemented' ? t('compliance.implemented') : t('compliance.inProgress')}
                   </span>
                 </div>
               </div>

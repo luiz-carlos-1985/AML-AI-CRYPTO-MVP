@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { CheckCircle, XCircle } from 'lucide-react';
 import { format } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 import api from '../services/api';
 import toast from 'react-hot-toast';
 
 const Alerts = () => {
+  const { t } = useTranslation();
   const [alerts, setAlerts] = useState<any[]>([]);
   const [filter, setFilter] = useState('unread');
 
@@ -51,15 +53,15 @@ const Alerts = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-white">Alerts</h1>
+        <h1 className="text-3xl font-bold text-white">{t('alerts.title')}</h1>
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
           className="px-4 py-2 bg-slate-800/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
         >
-          <option value="all">All Alerts</option>
-          <option value="unread">Unread</option>
-          <option value="unresolved">Unresolved</option>
+          <option value="all">{t('alerts.all')}</option>
+          <option value="unread">{t('alerts.unread')}</option>
+          <option value="unresolved">{t('alerts.unresolved')}</option>
         </select>
       </div>
 

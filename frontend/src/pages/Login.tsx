@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';
 
 const Login = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -40,14 +42,14 @@ const Login = () => {
           <h2 className="text-4xl font-bold bg-gradient-to-r from-emerald-400 to-blue-500 bg-clip-text text-transparent">
             CryptoAML
           </h2>
-          <p className="mt-2 text-gray-400">Welcome back</p>
+          <p className="mt-2 text-gray-400">{t('auth.welcomeBack')}</p>
         </div>
 
         <div className="backdrop-blur-xl bg-white/5 rounded-2xl shadow-2xl border border-white/10 p-8">
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
-                Email Address
+                {t('auth.email')}
               </label>
               <input
                 id="email"
@@ -63,7 +65,7 @@ const Login = () => {
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
-                Password
+                {t('auth.password')}
               </label>
               <input
                 id="password"
@@ -89,17 +91,17 @@ const Login = () => {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Signing in...
+                  {t('auth.signingIn')}
                 </span>
-              ) : 'Sign In'}
+              ) : t('auth.signIn')}
             </button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-gray-400">
-              Don't have an account?{' '}
+              {t('auth.dontHaveAccount')}{' '}
               <Link to="/register" className="text-emerald-400 hover:text-emerald-300 font-medium transition-colors">
-                Register
+                {t('auth.register')}
               </Link>
             </p>
           </div>
