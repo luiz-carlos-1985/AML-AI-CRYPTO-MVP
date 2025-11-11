@@ -191,6 +191,19 @@ button, a, input, select, textarea {
   justify-content: center;
 }
 
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .mobile-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .mobile-text {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+}
+
 /* Loading skeleton */
 .skeleton {
   background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
@@ -203,4 +216,19 @@ button, a, input, select, textarea {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Line clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

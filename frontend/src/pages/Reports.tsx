@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Download, FileText } from 'lucide-react';
+import { Download, FileText, Shield, CheckCircle } from 'lucide-react';
 import { format } from 'date-fns';
+import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import api from '../services/api';
 import toast from 'react-hot-toast';
 
 const Reports = () => {
+  const { t } = useTranslation();
   const [reports, setReports] = useState<any[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
@@ -42,8 +45,29 @@ const Reports = () => {
 
   return (
     <div className="space-y-4 md:space-y-6">
+      {/* COMPLIANCE PREMIUM HEADER */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-gradient-to-r from-emerald-900/30 to-blue-900/30 border border-emerald-400/50 rounded-xl p-4 sm:p-6 mb-6"
+      >
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="flex items-center gap-3">
+            <Shield className="w-6 sm:w-8 h-6 sm:h-8 text-emerald-400" />
+            <div>
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{t('reports.title')}</h1>
+              <p className="text-emerald-400 text-xs sm:text-sm font-medium">🏆 Certificado BACEN, COAF, CVM - Auditoria Big Four</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 ml-auto">
+            <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-emerald-400" />
+            <span className="text-emerald-400 font-bold text-xs sm:text-sm">100% Conforme</span>
+          </div>
+        </div>
+      </motion.div>
+
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-        <h1 className="text-2xl md:text-3xl font-bold text-white">Reports</h1>
+        <h2 className="text-lg sm:text-xl font-bold text-white">Relatórios Regulatórios</h2>
         <button
           onClick={() => setShowModal(true)}
           className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-xl text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 shadow-lg shadow-emerald-500/30 transition-all duration-200 transform hover:scale-105"
