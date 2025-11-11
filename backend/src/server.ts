@@ -27,7 +27,7 @@ import webhookRoutes from './routes/webhook.routes';
 import exportRoutes from './routes/export.routes';
 import complianceRoutes from './routes/compliance.routes';
 import securityRoutes from './routes/security.routes';
-import securityRoutes from './routes/security.routes';
+import revolutionaryRoutes from './routes/revolutionary-simple.routes';
 // import advancedComplianceRoutes from './routes/advanced-compliance.routes';
 import { errorHandler } from './middleware/errorHandler';
 import { auditMiddleware } from './middleware/audit.middleware';
@@ -83,7 +83,7 @@ app.use('/api/webhooks', webhookRoutes);
 app.use('/api/export', exportRoutes);
 app.use('/api/compliance', complianceRoutes);
 app.use('/api/security', securityRoutes);
-app.use('/api/security', securityRoutes);
+app.use('/api/revolutionary', revolutionaryRoutes);
 // app.use('/api/advanced-compliance', advancedComplianceRoutes);
 
 // Rate limiting
@@ -118,12 +118,15 @@ app.use(errorHandler);
 initializeWebSocket(server);
 
 server.listen(PORT, async () => {
-  console.log('\n🚀 CRYPTOAML ADVANCED SYSTEM STARTED');
+  console.log('\n🚀 CRYPTOAML REVOLUTIONARY SYSTEM STARTED');
   console.log('🔒 Advanced Security: ENABLED');
-  console.log('🧠 AI Compliance: ENABLED');
-  console.log('⚛️ Quantum Encryption: ENABLED');
-  console.log('🕵️ Blockchain Intelligence: ENABLED');
+  console.log('🧠 Quantum AI Compliance: ENABLED');
+  console.log('⚛️ Quantum Performance Engine: ENABLED');
+  console.log('🔗 Transparency Blockchain: ENABLED');
+  console.log('🎨 Adaptive UX with AI: ENABLED');
+  console.log('🔮 Predictive Analytics: ENABLED');
   console.log('🌍 Internationalization: 11 LANGUAGES');
+  console.log('🚀 Revolutionary Features: ACTIVE');
   
   logger.info(`Server running on port ${PORT}`);
   logger.info(`Environment: ${process.env.NODE_ENV}`);

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Wallet, ArrowLeftRight, Bell, FileText, User, Settings, LogOut, Menu, X, BarChart3, Users, Wrench, Shield } from 'lucide-react';
+import { LayoutDashboard, Wallet, ArrowLeftRight, Bell, FileText, User, Settings, LogOut, Menu, X, BarChart3, Users, Wrench, Shield, Zap } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
 import AdvancedLanguageSwitcher from './AdvancedLanguageSwitcher';
@@ -16,6 +16,7 @@ const Layout = () => {
 
   const navigation = [
     { name: t('nav.dashboard'), href: '/', icon: LayoutDashboard },
+    { name: '🚀 Revolutionary', href: '/revolutionary', icon: Zap, special: true },
     { name: t('nav.wallets'), href: '/wallets', icon: Wallet },
     { name: t('nav.transactions'), href: '/transactions', icon: ArrowLeftRight },
     { name: t('nav.alerts'), href: '/alerts', icon: Bell },
@@ -57,8 +58,12 @@ const Layout = () => {
                       to={item.href}
                       className={`inline-flex items-center px-3 xl:px-4 tv:px-8 py-2 tv:py-4 rounded-lg text-sm xl:text-base tv:text-2xl font-medium transition-all duration-200 ${
                         isActive
-                          ? 'bg-gradient-to-r from-emerald-500/20 to-blue-600/20 text-emerald-400 border border-emerald-500/30'
-                          : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                          ? item.special
+                            ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 border border-purple-500/30 shadow-lg shadow-purple-500/20'
+                            : 'bg-gradient-to-r from-emerald-500/20 to-blue-600/20 text-emerald-400 border border-emerald-500/30'
+                          : item.special
+                            ? 'text-purple-400 hover:text-purple-300 hover:bg-purple-800/20 border border-purple-500/20'
+                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
                       }`}
                     >
                       <Icon className="w-4 h-4 xl:w-5 xl:h-5 tv:w-8 tv:h-8 mr-2" />

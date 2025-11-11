@@ -1,0 +1,323 @@
+GLOBAL FINTECH & AML INVESTORS DATABASE
+==================================================
+
+
+VENTURE CAPITAL FIRMS
+---------------------
+
+• Andreessen Horowitz (a16z)
+  Email: crypto@a16z.com
+  Contact: Chris Dixon
+  Focus: Crypto/FinTech
+  Location: USA
+  AUM: $35B
+  Notable: Coinbase, Uniswap
+
+• Sequoia Capital
+  Email: info@sequoiacap.com
+  Contact: Alfred Lin
+  Focus: FinTech/Enterprise
+  Location: USA
+  AUM: $85B
+  Notable: Stripe, Klarna
+
+• Accel Partners
+  Email: info@accel.com
+  Contact: Sonali De Rycker
+  Focus: FinTech/SaaS
+  Location: USA/Europe
+  AUM: $25B
+  Notable: Wise, Checkout.com
+
+• Index Ventures
+  Email: info@indexventures.com
+  Contact: Jan Hammer
+  Focus: FinTech/B2B
+  Location: Europe/USA
+  AUM: $8B
+  Notable: Revolut, Robinhood
+
+• Lightspeed Venture Partners
+  Email: info@lsvp.com
+  Contact: Jeremy Liew
+  Focus: FinTech/Enterprise
+  Location: USA
+  AUM: $25B
+  Notable: Affirm, Mulesoft
+
+• Balderton Capital
+  Email: info@balderton.com
+  Contact: Suranga Chandratillake
+  Focus: FinTech/B2B
+  Location: UK
+  AUM: $3B
+  Notable: Revolut, GoCardless
+
+• Atomico
+  Email: info@atomico.com
+  Contact: Niklas Zennström
+  Focus: FinTech/Scale-ups
+  Location: UK
+  AUM: $2.7B
+  Notable: Klarna, MessageBird
+
+• Northzone
+  Email: info@northzone.com
+  Contact: Pär-Jörgen Pärson
+  Focus: FinTech/SaaS
+  Location: Europe
+  AUM: $2B
+  Notable: Klarna, iZettle
+
+• Creandum
+  Email: info@creandum.com
+  Contact: Carl Fritjofsson
+  Focus: FinTech/B2B
+  Location: Sweden
+  AUM: $500M
+  Notable: Klarna, iZettle
+
+• Dawn Capital
+  Email: info@dawncapital.com
+  Contact: Haakon Overli
+  Focus: B2B FinTech
+  Location: UK
+  AUM: $1B
+  Notable: Tink, Mambu
+
+• GGV Capital
+  Email: info@ggvc.com
+  Contact: Hans Tung
+  Focus: FinTech/Enterprise
+  Location: USA/China
+  AUM: $9.2B
+  Notable: Klarna, Airwallex
+
+• Vertex Ventures
+  Email: info@vertexventures.com
+  Contact: Chua Kee Lock
+  Focus: FinTech/B2B
+  Location: Singapore
+  AUM: $4.5B
+  Notable: Grab, Sea Limited
+
+CRYPTO/BLOCKCHAIN VCs
+---------------------
+
+• Paradigm
+  Email: hello@paradigm.xyz
+  Contact: Matt Huang
+  Focus: DeFi/Infrastructure
+  Location: USA
+  AUM: $13B
+  Notable: Uniswap, Compound
+
+• Pantera Capital
+  Email: info@panteracapital.com
+  Contact: Dan Morehead
+  Focus: Blockchain/DeFi
+  Location: USA
+  AUM: $5B
+  Notable: Bitstamp, Circle
+
+• Digital Currency Group
+  Email: info@dcg.co
+  Contact: Barry Silbert
+  Focus: Blockchain/FinTech
+  Location: USA
+  AUM: $1B
+  Notable: Coinbase, Ripple
+
+• Blockchain Capital
+  Email: info@blockchain.capital
+  Contact: Bart Stephens
+  Focus: Blockchain Infrastructure
+  Location: USA
+  AUM: $1.5B
+  Notable: Kraken, Coinbase
+
+• Polychain Capital
+  Email: info@polychain.capital
+  Contact: Olaf Carlson-Wee
+  Focus: Web3/DeFi
+  Location: USA
+  AUM: $3B
+  Notable: Compound, MakerDAO
+
+CORPORATE VENTURE CAPITAL
+-------------------------
+
+• JPMorgan Chase Strategic Investments
+  Email: innovation@jpmorgan.com
+  Contact: Matt Harris
+  Focus: FinTech/Payments
+  Location: USA
+  AUM: $50B
+  Notable: Digital Asset, Mosaic
+
+• Goldman Sachs Principal Strategic Investments
+  Email: psi@gs.com
+  Contact: David Campbell
+  Focus: FinTech/RegTech
+  Location: USA
+  AUM: $25B
+  Notable: Circle, Kensho
+
+• Visa Ventures
+  Email: ventures@visa.com
+  Contact: Terry Angelos
+  Focus: Payments/FinTech
+  Location: USA
+  AUM: $500M
+  Notable: Klarna, Plaid
+
+• Mastercard Start Path
+  Email: startpath@mastercard.com
+  Contact: Ken Moore
+  Focus: Payments/Security
+  Location: USA
+  AUM: $1B
+  Notable: R3, Digital Asset
+
+• American Express Ventures
+  Email: ventures@aexp.com
+  Contact: Harshul Sanghi
+  Focus: FinTech/B2B
+  Location: USA
+  AUM: $200M
+  Notable: Kabbage, Ramp
+
+• Tencent Investment
+  Email: investment@tencent.com
+  Contact: David Wallerstein
+  Focus: FinTech/Payments
+  Location: China
+  AUM: $50B
+  Notable: Nubank, Sea Limited
+
+• Ant Group
+  Email: investment@antgroup.com
+  Contact: Eric Jing
+  Focus: FinTech/Payments
+  Location: China
+  AUM: $10B
+  Notable: Paytm, Kakao Pay
+
+REGTECH/COMPLIANCE SPECIALISTS
+------------------------------
+
+• Illuminate Financial
+  Email: info@illuminate.com
+  Contact: Charley Ma
+  Focus: RegTech/Compliance
+  Location: USA
+  AUM: $500M
+  Notable: Chainalysis, Elliptic
+
+• FinTech Collective
+  Email: info@fintechcollective.com
+  Contact: Brooks Gibbins
+  Focus: FinTech/RegTech
+  Location: USA
+  AUM: $400M
+  Notable: Chainalysis, TRM Labs
+
+• Nyca Partners
+  Email: info@nyca.com
+  Contact: Hans Morris
+  Focus: FinTech/Infrastructure
+  Location: USA
+  AUM: $1B
+  Notable: Plaid, Alloy
+
+• Anthemis Group
+  Email: info@anthemis.com
+  Contact: Sean Park
+  Focus: FinTech/RegTech
+  Location: UK/USA
+  AUM: $500M
+  Notable: Chainalysis, Betterment
+
+• QED Investors
+  Email: info@qedinvestors.com
+  Contact: Nigel Morris
+  Focus: FinTech/Payments
+  Location: USA
+  AUM: $3B
+  Notable: Nubank, Credit Karma
+
+MEGA FUNDS
+----------
+
+• SoftBank Vision Fund
+  Email: info@visionfund.com
+  Contact: Rajeev Misra
+  Focus: FinTech/AI
+  Location: Japan
+  AUM: $100B
+  Notable: Paytm, Grab
+
+SOVEREIGN WEALTH FUNDS
+----------------------
+
+• CDPQ (Caisse de dépôt)
+  Email: info@cdpq.com
+  Contact: Charles Emond
+  Focus: FinTech/Infrastructure
+  Location: Canada
+  AUM: $420B
+  Notable: Paymi, Nuvei
+
+• Singapore GIC
+  Email: info@gic.com.sg
+  Contact: Lim Chow Kiat
+  Focus: FinTech/Tech
+  Location: Singapore
+  AUM: $690B
+  Notable: Ant Financial, Grab
+
+• Temasek Holdings
+  Email: info@temasek.com.sg
+  Contact: Ho Ching
+  Focus: FinTech/Digital
+  Location: Singapore
+  AUM: $380B
+  Notable: Ant Financial, FTX
+
+STRATEGIC INVESTORS
+-------------------
+
+• In-Q-Tel
+  Email: info@iqt.org
+  Contact: Christopher Darby
+  Focus: Security/RegTech
+  Location: USA
+  AUM: $3B
+  Notable: Palantir, Chainalysis
+
+ANGEL INVESTORS
+---------------
+
+• Naval Ravikant
+  Email: naval@angellist.com
+  Contact: Naval Ravikant
+  Focus: Crypto/FinTech
+  Location: USA
+  AUM: $100M+
+  Notable: Coinbase, AngelList
+
+• Reid Hoffman
+  Email: reid@greylock.com
+  Contact: Reid Hoffman
+  Focus: FinTech/B2B
+  Location: USA
+  AUM: $500M+
+  Notable: Airbnb, Facebook
+
+• Marc Benioff
+  Email: marc@salesforce.com
+  Contact: Marc Benioff
+  Focus: Enterprise/FinTech
+  Location: USA
+  AUM: $10B+
+  Notable: Uber, Slack

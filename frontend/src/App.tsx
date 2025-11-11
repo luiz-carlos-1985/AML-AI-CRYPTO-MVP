@@ -17,6 +17,7 @@ import Analytics from './pages/Analytics';
 import Team from './pages/Team';
 import Tools from './pages/Tools';
 import Compliance from './pages/Compliance';
+import RevolutionaryDashboard from './pages/RevolutionaryDashboard';
 import Layout from './components/Layout';
 import InstallPWA from './components/InstallPWA';
 import OfflineIndicator from './components/OfflineIndicator';
@@ -63,6 +64,7 @@ function App() {
             <Route path="team" element={<Team />} />
             <Route path="tools" element={<Tools />} />
             <Route path="compliance" element={<Compliance />} />
+            <Route path="revolutionary" element={<RevolutionaryDashboard />} />
           </Route>
         </Routes>
       </BrowserRouter>
