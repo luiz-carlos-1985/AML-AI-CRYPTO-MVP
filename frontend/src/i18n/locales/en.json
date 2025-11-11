@@ -156,7 +156,12 @@
     "nonce": "Nonce",
     "input": "Input Data",
     "logs": "Logs",
-    "receipt": "Receipt"
+    "receipt": "Receipt",
+    "allRiskLevels": "All Risk Levels",
+    "lowRisk": "Low Risk",
+    "mediumRisk": "Medium Risk",
+    "highRisk": "High Risk",
+    "criticalRisk": "Critical Risk"
   },
   "alerts": {
     "title": "Alerts",
@@ -171,7 +176,10 @@
     "dismiss": "Dismiss",
     "resolve": "Resolve",
     "investigate": "Investigate",
-    "escalate": "Escalate"
+    "escalate": "Escalate",
+    "all": "All",
+    "unread": "Unread",
+    "unresolved": "Unresolved"
   },
   "reports": {
     "title": "Reports",
@@ -222,6 +230,11 @@
   },
   "compliance": {
     "title": "Compliance",
+    "subtitle": "Data compliance and privacy management",
+    "overview": "Overview",
+    "lgpd": "LGPD",
+    "reports": "Reports",
+    "audit": "Audit",
     "status": "Status",
     "requirements": "Requirements",
     "certifications": "Certifications",
@@ -233,6 +246,7 @@
   },
   "apiKeys": {
     "title": "API Keys",
+    "subtitle": "Manage your blockchain API keys for transaction monitoring",
     "createKey": "Create Key",
     "deleteKey": "Delete Key",
     "keyName": "Key Name",
@@ -241,7 +255,35 @@
     "lastUsed": "Last Used",
     "expiresAt": "Expires At",
     "status": "Status",
-    "regenerate": "Regenerate"
+    "regenerate": "Regenerate",
+    "addKey": "Add Key",
+    "security": "Security",
+    "configured": "Configured",
+    "active": "Active",
+    "yourApis": "Your Configured APIs",
+    "hide": "Hide",
+    "show": "Show",
+    "deactivate": "Deactivate",
+    "activate": "Activate",
+    "delete": "Delete",
+    "addedOn": "Added on",
+    "noApis": "No APIs configured",
+    "noApisDesc": "Configure your first API keys to start monitoring blockchain transactions",
+    "addFirstKey": "Add First Key",
+    "providers": "Available Providers",
+    "modalTitle": "Add New API Key",
+    "chooseProvider": "Choose Provider",
+    "getKey": "Get Your Key",
+    "pasteKey": "Paste Your API Key",
+    "pasteKeyPlaceholder": "Paste your API key here...",
+    "characters": "characters",
+    "secureNotice": "Security Notice",
+    "secureDesc": "Your keys are encrypted with AES-256 and never exposed in logs or interface",
+    "save": "Save",
+    "cancel": "Cancel",
+    "goTo": "Go to",
+    "testing": "Testing...",
+    "test": "Test"
   },
   "auth": {
     "login": "Login",
@@ -278,6 +320,26 @@
     "installNow": "Install Now"
   },
   "security": {
+    "title": "Security Center",
+    "subtitle": "24/7 Security Monitoring and Auditing",
+    "biometricAuth": "Biometric Authentication",
+    "fidoCertified": "FIDO2 Alliance Certified • ISO/IEC 30107-3",
+    "blockchainForensics": "Blockchain Forensics",
+    "lawEnforcement": "Law Enforcement Grade • Chainalysis Compatible",
+    "quantumSecurity": "Quantum Security",
+    "quantumReady": "Post-Quantum Cryptography Ready",
+    "quantumResistant": "Quantum Resistant",
+    "keyExchange": "Key Exchange",
+    "digitalSignature": "Digital Signature",
+    "privacyProofs": "Privacy Proofs",
+    "regulatoryOracle": "Regulatory Oracle",
+    "regulatoryIntelligence": "Real-time Regulatory Intelligence • 47 Jurisdictions",
+    "defconSecure": "DEFCON 1 - SECURE",
+    "securityScore": "Security Score",
+    "vulnerabilities": "Vulnerabilities",
+    "monitoring": "24/7 Monitoring",
+    "threatResponse": "Threat Response",
+    "threatIntelligence": "Threat Intelligence",
     "audit": {
       "title": "Security Audit Dashboard",
       "subtitle": "Comprehensive security analysis and vulnerability management",
@@ -285,7 +347,8 @@
       "runScan": "Run Security Scan",
       "overallScore": "Security Score",
       "securityMetrics": "Security Metrics",
-      "recentThreats": "Recent Threats"
+      "recentThreats": "Recent Threats",
+      "criticalActions": "Critical Actions"
     },
     "levels": {
       "excellent": "Excellent",
