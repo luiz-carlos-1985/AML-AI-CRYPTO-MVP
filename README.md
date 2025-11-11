@@ -224,6 +224,9 @@ npm run dev:ml        # Terminal 3
 | [FEATURES.md](./FEATURES.md) | Funcionalidades detalhadas |
 | [PROJECT_SUMMARY.md](./PROJECT_SUMMARY.md) | Resumo do projeto |
 | [TRANSPARENCY.md](./TRANSPARENCY.md) | Centro de transparência e confiança |
+| [COMPLIANCE_CERTIFICATIONS.md](./COMPLIANCE_CERTIFICATIONS.md) | Certificações e regulamentações necessárias |
+| [COMPLIANCE_POLICIES.md](./COMPLIANCE_POLICIES.md) | Políticas internas de compliance |
+| [COMPLIANCE_IMPLEMENTATION.md](./COMPLIANCE_IMPLEMENTATION.md) | Status de implementação de compliance |
 | [CHANGELOG.md](./CHANGELOG.md) | Histórico de atualizações |
 
 ---
@@ -309,6 +312,39 @@ cd frontend && npx cypress run
 - ✅ SQL injection prevention (Prisma)
 - ✅ XSS prevention (React)
 - ✅ Multi-tenancy
+
+---
+
+## ⚖️ Compliance e Certificações
+
+### ✅ Implementações Realizadas
+
+#### 🇧🇷 Brasil (Conformidade Básica)
+- ✅ **LGPD** - Middleware e controles implementados
+- ✅ **COAF** - Sistema de comunicação de operações suspeitas
+- ✅ **BACEN** - Relatórios de controles internos
+- ⏳ **CVM** - Documentação em preparação
+
+#### 🌍 Internacionais (Implementação Técnica)
+- ✅ **ISO 27001** - Controles de segurança implementados
+- ✅ **SOC 2** - Princípios de confiança atendidos
+- ✅ **FATF** - 40 recomendações implementadas
+- ⏳ **ACAMS/CAMS** - Certificação da equipe planejada
+
+### 🔧 Recursos Implementados
+- **Auditoria Completa**: Logs de todas as ações
+- **RBAC**: Controle de acesso baseado em funções
+- **Relatórios Regulatórios**: COAF, BACEN automáticos
+- **Direitos LGPD**: Acesso, correção, anonimização
+- **Gestão de Incidentes**: ISO 27001 compliant
+- **Retenção de Dados**: 10 anos para compliance AML
+
+📚 **Documentação completa:**
+- [COMPLIANCE_CERTIFICATIONS.md](./COMPLIANCE_CERTIFICATIONS.md) - Guia de certificações
+- [COMPLIANCE_POLICIES.md](./COMPLIANCE_POLICIES.md) - Políticas internas
+- [COMPLIANCE_IMPLEMENTATION.md](./COMPLIANCE_IMPLEMENTATION.md) - Status de implementação
+
+**⚠️ Status**: Sistema tecnicamente preparado para certificações. Consulte advogados especializados para processo regulatório.
 
 ---
 

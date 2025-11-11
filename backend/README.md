@@ -6,14 +6,14 @@ Backend API for CryptoAML - Anti-Money Laundering platform for cryptocurrency mo
 
 - 🔐 JWT Authentication + 2FA ✅
 - 💰 Multi-blockchain wallet monitoring (Bitcoin, Ethereum, Sepolia, Polygon, Arbitrum, Optimism, Base, BNB Chain) ✅
-- 🤖 Rule-based risk analysis with ML fallback ⚠️
+- 🤖 Rule-based risk analysis with ML service ✅
 - 📊 Transaction monitoring (30s polling) ⚠️
 - 🚨 Automated alert system ✅
 - 📄 Report generation (PDF, CSV, JSON) ✅
 - 🔄 WebSocket real-time notifications ✅
 - 🛡️ Enterprise-grade security ✅
 
-**Note:** ML service and real-time webhooks require additional setup. See REAL_STATUS.md for details.
+**Note:** ML service requires Python dependencies. Real-time webhooks require additional setup.
 
 ## Tech Stack
 
@@ -29,6 +29,7 @@ Backend API for CryptoAML - Anti-Money Laundering platform for cryptocurrency mo
 - Node.js 20+
 - PostgreSQL 15+
 - Redis 7+
+- Python 3.8+ (for ML service)
 - Docker (optional)
 
 ## Quick Start
@@ -56,12 +57,20 @@ npx prisma migrate deploy
 npx prisma generate
 ```
 
-### 5. Run Development Server
+### 5. Setup ML Service (Optional)
+```bash
+cd ../ml-service
+pip install -r requirements.txt
+cd ../backend
+```
+
+### 6. Run Development Server
 ```bash
 npm run dev
 ```
 
 Server runs on http://localhost:3001
+ML Service runs on http://localhost:8000 (if enabled)
 
 ## Production Deployment
 

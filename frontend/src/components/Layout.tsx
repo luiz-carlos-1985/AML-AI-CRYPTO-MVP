@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Wallet, ArrowLeftRight, Bell, FileText, User, Settings, LogOut, Menu, X, BarChart3, Users, Wrench } from 'lucide-react';
+import { LayoutDashboard, Wallet, ArrowLeftRight, Bell, FileText, User, Settings, LogOut, Menu, X, BarChart3, Users, Wrench, Shield } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
 import NotificationCenter from './NotificationCenter';
+import ComplianceNotification from './ComplianceNotification';
 
 const Layout = () => {
   const { user, logout } = useAuth();
@@ -22,6 +23,7 @@ const Layout = () => {
     { name: 'Tools', href: '/tools', icon: Wrench },
     { name: t('nav.reports'), href: '/reports', icon: FileText },
     { name: 'Team', href: '/team', icon: Users },
+    { name: 'Compliance', href: '/compliance', icon: Shield },
     { name: 'API Keys', href: '/api-settings', icon: Settings },
     { name: 'Account', href: '/account', icon: User },
   ];
@@ -141,6 +143,9 @@ const Layout = () => {
         )}
       </nav>
 
+      {/* Compliance Notification */}
+      <ComplianceNotification />
+      
       {/* Main Content */}
       <main className="max-w-[2000px] 3xl:max-w-[2400px] tv:max-w-[3200px] mx-auto py-4 md:py-8 tv:py-16 px-4 sm:px-6 lg:px-8 tv:px-16">
         <Outlet />

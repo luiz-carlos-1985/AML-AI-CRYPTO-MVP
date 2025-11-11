@@ -132,6 +132,16 @@ model ApiConfiguration {
   @@unique([userId, provider])
 }
 
+model AuditLog {
+  id            String   @id @default(uuid())
+  action        String
+  userId        String?
+  resource      String?
+  ipAddress     String?
+  userAgent     String?
+  timestamp     DateTime @default(now())
+}
+
 enum Plan {
   STARTER
   GROWTH

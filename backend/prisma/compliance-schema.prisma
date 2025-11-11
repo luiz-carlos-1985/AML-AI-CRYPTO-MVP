@@ -1,0 +1,68 @@
+// LGPD - Data Processing Log
+model DataProcessingLog {
+  id            String   @id @default(uuid())
+  userId        String?
+  action        String
+  endpoint      String
+  ipAddress     String
+  userAgent     String
+  timestamp     DateTime
+  legalBasis    String   // legitimate_interest, consent, etc
+  purpose       String   // aml_monitoring, user_request, etc
+  createdAt     DateTime @default(now())
+}
+
+// COAF/BACEN - Compliance Reports
+model ComplianceReport {
+  id            String   @id @default(uuid())
+  type          String   // COAF, BACEN, CVM
+  reportId      String   @unique
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  generatedAt   DateTime
+  data          Json
+  createdAt     DateTime @default(now())
+}
+
+// ISO 27001 - Security Incidents
+model SecurityIncident {
+  id            String   @id @default(uuid())
+  type          String
+  severity      String   // LOW, MEDIUM, HIGH, CRITICAL
+  description   String
+  reportedBy    String
+  user          User     @relation(fields: [reportedBy], references: [id])
+  timestamp     DateTime
+  status        String   @default("OPEN") // OPEN, INVESTIGATING, RESOLVED
+  resolution    String?
+  resolvedAt    DateTime?
+  createdAt     DateTime @default(now())
+}
+
+// FATF - Suspicious Activity Reports
+model SuspiciousActivityReport {
+  id            String   @id @default(uuid())
+  reportId      String   @unique
+  transactionIds String[]
+  walletAddress String
+  suspicionType String
+  description   String
+  reportedAt    DateTime
+  status        String   @default("PENDING") // PENDING, SUBMITTED, ACKNOWLEDGED
+  submittedTo   String?  // COAF, FIU, etc
+  createdAt     DateTime @default(now())
+}
+
+// Audit Trail for all system actions
+model AuditLog {
+  id            String   @id @default(uuid())
+  userId        String?
+  action        String
+  resource      String
+  resourceId    String?
+  oldValues     Json?
+  newValues     Json?
+  ipAddress     String
+  userAgent     String
+  timestamp     DateTime @default(now())
+}

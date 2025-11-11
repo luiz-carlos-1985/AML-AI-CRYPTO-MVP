@@ -25,7 +25,9 @@ import notificationRoutes from './routes/notification.routes';
 import auditLogRoutes from './routes/auditLog.routes';
 import webhookRoutes from './routes/webhook.routes';
 import exportRoutes from './routes/export.routes';
+import complianceRoutes from './routes/compliance.routes';
 import { errorHandler } from './middleware/errorHandler';
+import { auditMiddleware } from './middleware/audit.middleware';
 import { blockchainMonitor } from './services/blockchain.service';
 import { initializeWebSocket } from './services/websocket.service';
 import { startMLService, stopMLService } from './services/ml-local.service';
@@ -45,6 +47,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(morgan('dev'));
 app.use(requestLogger);
+app.use(auditMiddleware);
 
 // Static files with proper MIME types
 app.use(express.static('public', {
@@ -72,6 +75,7 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/audit-logs', auditLogRoutes);
 app.use('/api/webhooks', webhookRoutes);
 app.use('/api/export', exportRoutes);
+app.use('/api/compliance', complianceRoutes);
 
 // Rate limiting
 const limiter = rateLimit({
