@@ -440,3 +440,21 @@ If you believe in CryptoAML's potential:
 [Quick Start](#-quick-start) • [Documentation](#-documentation) • [Contact](#-contact)
 
 </div>
+
+Screenshots:
+<img width="1838" height="1035" alt="image" src="https://github.com/user-attachments/assets/b8788b8c-4816-4e52-88fc-710a70609c8c" />
+<img width="1802" height="864" alt="image" src="https://github.com/user-attachments/assets/b493d8c0-2ace-4bfd-ae62-0b006a57fd7b" />
+<img width="1836" height="1035" alt="image" src="https://github.com/user-attachments/assets/ff5cb57e-64c7-499f-afa2-872a2e432f14" />
+<img width="1826" height="769" alt="image" src="https://github.com/user-attachments/assets/3165f2bf-409a-4091-b64a-225dde81fbb3" />
+<img width="1839" height="656" alt="image" src="https://github.com/user-attachments/assets/38185422-0dec-4e6b-aaf8-a3d7a341ecc0" />
+<img width="1814" height="1040" alt="image" src="https://github.com/user-attachments/assets/f7f28afd-5dfa-499a-b3cc-8da8c1e2d1ea" />
+<img width="1820" height="1037" alt="image" src="https://github.com/user-attachments/assets/24c8231a-3712-4175-a5d7-e7f93c41bbf2" />
+<img width="1817" height="1019" alt="image" src="https://github.com/user-attachments/assets/1062b897-5125-449e-bf43-48bc7ad986e7" />
+<img width="1820" height="1025" alt="image" src="https://github.com/user-attachments/assets/9ba6babb-655a-4484-a384-ce7efd8edd08" />
+<img width="1846" height="761" alt="image" src="https://github.com/user-attachments/assets/4a71a806-c81c-4e45-9f14-89182d8b18b5" />
+<img width="1834" height="1036" alt="image" src="https://github.com/user-attachments/assets/92675b7b-b44d-4b47-a710-3d87db6d33c1" />
+<img width="1832" height="1043" alt="image" src="https://github.com/user-attachments/assets/949da56f-cafc-492f-9bd7-5998c465ad8e" />
+<img width="1825" height="1041" alt="image" src="https://github.com/user-attachments/assets/9c4e1244-26a5-48ae-8871-55a42f38aeb6" />
+<img width="1829" height="1027" alt="image" src="https://github.com/user-attachments/assets/437403f6-2abb-47f1-ad4f-2ba06098ffa7" />
+<img width="1840" height="995" alt="image" src="https://github.com/user-attachments/assets/7525af1a-ba40-4233-b274-c5f4163b9558" />
+<img width="1835" height="1039" alt="image" src="https://github.com/user-attachments/assets/51f8e745-ca4b-4c70-a32d-d7369fc8c291" />
