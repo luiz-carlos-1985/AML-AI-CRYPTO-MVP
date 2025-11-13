@@ -47,47 +47,49 @@ const Layout = () => {
                 </div>
               </div>
               
-              {/* Desktop Navigation */}
-              <div className="hidden lg:ml-8 lg:flex lg:space-x-2 xl:space-x-3 tv:space-x-6">
-                {navigation.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = location.pathname === item.href;
-                  return (
-                    <Link
-                      key={item.name}
-                      to={item.href}
-                      className={`inline-flex items-center px-3 xl:px-4 tv:px-8 py-2 tv:py-4 rounded-lg text-sm xl:text-base tv:text-2xl font-medium transition-all duration-200 ${
-                        isActive
-                          ? item.special
-                            ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 border border-purple-500/30 shadow-lg shadow-purple-500/20'
-                            : 'bg-gradient-to-r from-emerald-500/20 to-blue-600/20 text-emerald-400 border border-emerald-500/30'
-                          : item.special
-                            ? 'text-purple-400 hover:text-purple-300 hover:bg-purple-800/20 border border-purple-500/20'
-                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
-                      }`}
-                    >
-                      <Icon className="w-4 h-4 xl:w-5 xl:h-5 tv:w-8 tv:h-8 mr-2" />
-                      {item.name}
-                    </Link>
-                  );
-                })}
+              {/* Desktop Navigation - Scrollable */}
+              <div className="hidden lg:flex lg:flex-1 lg:ml-6 lg:overflow-x-auto scrollbar-hide">
+                <div className="flex space-x-1 min-w-max">
+                  {navigation.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = location.pathname === item.href;
+                    return (
+                      <Link
+                        key={item.name}
+                        to={item.href}
+                        className={`inline-flex items-center px-2.5 py-2 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
+                          isActive
+                            ? item.special
+                              ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 border border-purple-500/30'
+                              : 'bg-gradient-to-r from-emerald-500/20 to-blue-600/20 text-emerald-400 border border-emerald-500/30'
+                            : item.special
+                              ? 'text-purple-400 hover:bg-purple-800/20'
+                              : 'text-slate-400 hover:bg-slate-800/50'
+                        }`}
+                      >
+                        <Icon className="w-3.5 h-3.5 mr-1.5" />
+                        {item.name}
+                      </Link>
+                    );
+                  })}
+                </div>
               </div>
             </div>
             
             {/* User Info & Logout */}
-            <div className="hidden md:flex items-center space-x-3 xl:space-x-4 tv:space-x-8">
+            <div className="hidden md:flex items-center space-x-2 flex-shrink-0 ml-4">
               <NotificationCenter />
               <AdvancedLanguageSwitcher />
-              <div className="text-sm xl:text-base tv:text-2xl text-right">
-                <p className="font-medium text-slate-200">{user?.name}</p>
-                <p className="text-emerald-400 text-xs xl:text-sm tv:text-xl">{user?.plan}</p>
+              <div className="text-xs text-right">
+                <p className="font-medium text-slate-200 truncate max-w-[100px]">{user?.name}</p>
+                <p className="text-emerald-400 text-[10px]">{user?.plan}</p>
               </div>
               <button
                 onClick={logout}
-                className="inline-flex items-center px-3 xl:px-4 tv:px-8 py-2 tv:py-4 text-sm xl:text-base tv:text-2xl font-medium rounded-lg text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-lg shadow-red-500/30 transition-all duration-200 transform hover:scale-105"
+                className="inline-flex items-center px-2.5 py-1.5 text-xs font-medium rounded-lg text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 transition-all"
               >
-                <LogOut className="w-4 h-4 tv:w-7 tv:h-7 mr-2" />
-                <span className="hidden xl:inline">{t('nav.logout')}</span>
+                <LogOut className="w-3.5 h-3.5 mr-1.5" />
+                {t('nav.logout')}
               </button>
             </div>
 
@@ -108,7 +110,7 @@ const Layout = () => {
         {mobileMenuOpen && (
           <div className="lg:hidden border-t border-slate-800/50 backdrop-blur-xl bg-slate-900/95">
             <div className="px-4 pt-2 pb-3 space-y-1">
-              {navigation.filter(item => item.href !== '/').map((item) => {
+              {navigation.map((item) => {
                 const Icon = item.icon;
                 const isActive = location.pathname === item.href;
                 return (

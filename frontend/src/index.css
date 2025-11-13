@@ -84,6 +84,16 @@ button, a, input, select, textarea {
   background: rgba(16, 185, 129, 0.7);
 }
 
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Responsive text scaling */
 @media screen and (min-width: 1920px) {
   html {
